@@ -20,8 +20,10 @@ public class Theatre {
     private List<Movie> billboard = new ArrayList<Movie>();
     private List<Room> rooms = new ArrayList<Room>();
 
-    //constructor
+    //constuctor
 
-
-
+    public Theatre(String location, String name) {
+        this.location = location;
+        this.name = name;
+    }
 }
