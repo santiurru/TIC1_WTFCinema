@@ -1,13 +1,9 @@
 package Entities;
 
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,22 +11,32 @@ import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@Getter
-@Setter
+@Data
+@Entity
+@Table(name = "Users")
 @NoArgsConstructor
-@AllArgsConstructor
-//ESTA CLASE IMPLEMENTA SERIALIZABLE PARA CONFIGURARLO CON LAS ENTIDADES EN LA BASE DE DATOS
 public class User {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
+    @Column(nullable = false)
     private String password;
+
+    @Column(unique = true, nullable = false)
     private String email; //unique
-    private List<Booking> userBookings;
+
+    @NotNull
+    private String name;
+
+    //@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //private List<Booking> userBookings;
+
+    @Temporal(TemporalType.DATE)
     private Date birthDate;
+
+    @NotNull
     private String userType;
 
 
@@ -62,4 +68,5 @@ public class User {
                 ", birthDate=" + birthDate +
                 '}';
     }
+
 }

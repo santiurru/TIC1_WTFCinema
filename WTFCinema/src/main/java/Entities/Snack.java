@@ -1,4 +1,6 @@
 package Entities;
+
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,19 +14,19 @@ import org.antlr.v4.runtime.misc.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class Booking {
+public class Snack {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private User user;
+    private long id;
 
     @NotNull
-    private Seat seat;
+    private float price;
+
+    private String description;
 
     @NotNull
-    private Showing showing;
-
+    private String name;
 
 
 }
