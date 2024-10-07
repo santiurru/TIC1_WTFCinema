@@ -34,8 +34,8 @@ public class UserServices {
         }
 
         User aUser = User.builder()
-                .firstName(password)
-                .lastName(email)
+                .password(password)
+                .email(email)
                 .birthDate(birthDate)
                 .build();
         return userRepository.save(aUser);

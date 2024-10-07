@@ -11,10 +11,13 @@ import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@Data
+@Getter //@Data
+@Setter
 @Entity
-@Table(name = "Users")
+//@Table(name = "Users")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -22,10 +25,10 @@ public class User {
     private long id;
 
     @Column(nullable = false)
-    private String password;
+    protected String password;
 
     @Column(unique = true, nullable = false)
-    private String email; //unique
+    protected String email; //unique
 
     @NotNull
     private String name;
@@ -34,39 +37,36 @@ public class User {
     //private List<Booking> userBookings;
 
     @Temporal(TemporalType.DATE)
-    private Date birthDate;
+    protected Date birthDate;
 
-    @NotNull
-    private String userType;
 
 
     //constructor
 
-    public User(String password, String email, Date birthDate) {
-        this.password = password;
-        this.email = email;
-        this.birthDate = birthDate;
-        this.userBookings = new ArrayList<>();
-        this.userType = "USER";
-    }
-    public User(String password, String email, Date birthDate, String userType) {
-        this.password = password;
-        this.email = email;
-        this.birthDate = birthDate;
-        this.userBookings = new ArrayList<>();
-        this.userType = userType;
-    }
+   //public User(String password, String email, Date birthDate) {
+   //    this.password = password;
+   //    this.email = email;
+   //    this.birthDate = birthDate;
+   //    this.userBookings = new ArrayList<>();
+   //}
+   // public User(String password, String email, Date birthDate, String userType) {
+   //     this.password = password;
+   //     this.email = email;
+   //     this.birthDate = birthDate;
+   //     this.userBookings = new ArrayList<>();
+   //     this.userType = userType;
+   // }
 
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", userBookings=" + userBookings +
-                ", birthDate=" + birthDate +
-                '}';
-    }
+    //@Override
+    //public String toString() {
+    //    return "User{" +
+    //            "id=" + id +
+    //            ", password='" + password + '\'' +
+    //            ", email='" + email + '\'' +
+    //            ", userBookings=" + userBookings +
+    //            ", birthDate=" + birthDate +
+    //            '}';
+    //}
 
 }
