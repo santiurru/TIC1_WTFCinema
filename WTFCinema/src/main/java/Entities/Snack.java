@@ -21,12 +21,12 @@ public class Snack {
     private long id;
 
     @NotNull
-    private float price;
-
-    private String description;
-
-    @NotNull
     private String name;
 
+    @NotNull
+    private float price;
+
+    @NotNull
+    private String image;
 
 }

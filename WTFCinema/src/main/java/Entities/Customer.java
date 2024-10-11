@@ -1,28 +1,36 @@
 package Entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.antlr.v4.runtime.misc.NotNull;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Customer extends User{
+public class Customer extends AppUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    private List customerBookings;
+    @NotNull
+    private long cardNumber;
 
-    public Customer(String password, String email, Date birthDate) {
-        this.password = password;
-        this.email = email;
-        this.birthDate = birthDate;
-        this.customerBookings = new ArrayList();
-    }
+    @NotNull
+    private String ownerName;
+
+    @NotNull
+    private Date expirationDate;
+
+    @NotNull
+    private int cvv;
 }

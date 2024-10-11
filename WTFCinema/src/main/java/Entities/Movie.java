@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.sql.Date;
+import java.time.DateTimeException;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,14 +22,24 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private int ageRating;      //Boolean o int?
-
     @NotNull
     private String title;
 
-    private String genre;
+    @NotNull
+    private int ageRating;      //Boolean o int o String
 
+    @NotNull
+    private String genres;      //hacerle tostring a una lista de generos
+
+    @NotNull
     private long length;
 
+    @NotNull
+    private String poster;
 
+    @NotNull
+    private String synopsis;
+
+    @NotNull
+    private Date releaseDate;
 }

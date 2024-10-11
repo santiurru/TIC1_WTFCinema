@@ -5,11 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter //@Data
 @Setter
@@ -18,26 +14,30 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
-    protected String password;
+    @NotNull
+    private String name;
+
+    @NotNull
+    private String nationalId;
+
+    @NotNull
+    @Temporal(TemporalType.DATE)
+    protected Date birthDate;
 
     @Column(unique = true, nullable = false)
     protected String email; //unique
 
+    @Column(nullable = false)
+    protected String password;
+
     @NotNull
-    private String name;
-
-    //@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //private List<Booking> userBookings;
-
-    @Temporal(TemporalType.DATE)
-    protected Date birthDate;
+    private long phoneNumber;
 
 
 

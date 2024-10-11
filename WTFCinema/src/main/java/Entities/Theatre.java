@@ -23,29 +23,18 @@ public class Theatre {
     private long theatre_id;
 
     @NotNull
-    private String location;
+    private String neighborhood;
 
-    private String name;
 
-    private List<Movie> billboard = new ArrayList<Movie>();
-
-    private List<Room> rooms = new ArrayList<Room>();
-
-    //constuctor
-
-    public Theatre(String location, String name) {
-        this.location = location;
-        this.name = name;
-    }
+//    private List<Movie> billboard = new ArrayList<Movie>();
+//
+//    private List<Room> rooms = new ArrayList<Room>();
 
     @Override
     public String toString() {
         return "Theatre{" +
                 "theatre_id=" + theatre_id +
-                ", location='" + location + '\'' +
-                ", name='" + name + '\'' +
-                ", billboard=" + billboard +
-                ", rooms=" + rooms +
+                ", neighborhood='" + neighborhood + '\'' +
                 '}';
     }
 }

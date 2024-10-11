@@ -22,13 +22,13 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
-    private List<Seat> seats = new ArrayList<>();
+//    @NotNull
+//    private List<Seat> seats = new ArrayList<>();
 
     @NotNull
     private Theatre theatre;
 
-    private List<Showing> showings = new ArrayList<>();
+//    private List<Showing> showings = new ArrayList<>();
 
 
 
