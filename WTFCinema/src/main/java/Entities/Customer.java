@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Customer extends AppUser {
+public class Customer extends WebUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

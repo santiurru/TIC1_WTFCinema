@@ -1,11 +1,14 @@
 package Repositories;
 
-import Entities.AppUser;
+import Entities.WebUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<AppUser, Long> {
+@Repository
+public interface UserRepository extends JpaRepository<WebUser, Long> {
 
-    public Optional<AppUser> findByEmail(String email);
+    public Optional<WebUser> findByEmail(String email);
 }
