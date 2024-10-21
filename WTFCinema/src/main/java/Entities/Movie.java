@@ -3,6 +3,7 @@ package Entities;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.time.DateTimeException;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "Movie")
 public class Movie {
 
     @jakarta.persistence.Id
@@ -42,4 +44,7 @@ public class Movie {
 
     @NotNull
     private Date releaseDate;
+
+
+    private boolean isInCinema;
 }

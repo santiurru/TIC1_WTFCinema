@@ -27,7 +27,7 @@ public class WebUserController {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("El usuario ya existe con este correo electrónico.");
         }
-        appUserService.registerUser(appUser);
+        appUserService.addUser(appUser);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Usuario registrado con éxito: " + appUser.getEmail());
     }

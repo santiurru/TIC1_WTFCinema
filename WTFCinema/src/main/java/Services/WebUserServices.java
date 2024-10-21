@@ -20,7 +20,7 @@ public class WebUserServices {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public WebUser registerUser(WebUser user) {
+    public WebUser addUser(WebUser user) {
         if (user.getName() == null || user.getName().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío");
         }
@@ -39,37 +39,6 @@ public class WebUserServices {
 
     public Optional<WebUser> findByEmail(String email) {
         return userRepository.findByEmail(email);
-    }
-
-
-
-    public WebUser addUser(String name,String surname,String nationalId,String password, String email, Date birthDate,Integer phoneNumber)
-            throws InvalidDataException, ExistingEntity {
-        if(name== null|| surname== null || phoneNumber == null || password == null || email == null || birthDate == null)
-        {
-            //todo verificar que el mail, telefono y cedula sean correctos
-//       "LOS DATOS DEL NOMBRE, O APELLIDO O FECHA DE NACIMIENTO NO SON CORRECTOS"
-            throw new InvalidDataException();
-        }
-        if(name.trim().equals("") || surname.trim().equals("") || nationalId.trim().equals("")
-                || password.trim().equals("") || email.trim().equals(""))
-        {
-//            "Alguno de los datos de nombre o apellido debe ser completado"
-            throw new InvalidDataException();
-        }
-        if (userRepository.findByEmail(email).isPresent()) {
-            throw new ExistingEntity();
-        }
-
-        WebUser webUser = WebUser.builder()
-                .name(name)
-                .surname(surname)
-                .password(password)
-                .email(email)
-                .birthDate(birthDate)
-                .phoneNumber(phoneNumber)
-                .build();
-        return userRepository.save(webUser);
     }
 
     public List<WebUser> allUsers(){
