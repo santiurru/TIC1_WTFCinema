@@ -27,25 +27,36 @@ public class WebUser {
     @NotBlank(message = "error")
     private String name;
 
-    @NotNull
+    @NotBlank(message = "error")
     private String surname;
 
-    @NotNull
-    private String nationalId;
+    @Email(message = "Email should be valid")
+    @Column(unique = true, nullable = false)
+    protected String email;
 
     @NotNull
     @Temporal(TemporalType.DATE)
     protected Date birthDate;
 
-    @Email
-    @Column(unique = true, nullable = false)
-    protected String email;
-
+    @NotBlank(message = "error")
     @Column(nullable = false)
     protected String password;
 
     @NotNull
     private long phoneNumber;
+
+    @NotNull
+    private long cardNumber;
+
+    @NotNull
+    private String ownerName;
+
+    @NotNull
+    private Date expirationDate;
+
+    @NotNull
+    private int cvv;
+}
 
 
 
@@ -77,4 +88,4 @@ public class WebUser {
     //            '}';
     //}
 
-}
+

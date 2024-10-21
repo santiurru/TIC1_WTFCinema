@@ -4,11 +4,9 @@ import Entities.WebUser;
 import Exceptions.ExistingEntity;
 import Exceptions.InvalidDataException;
 import Repositories.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +17,9 @@ public class WebUserServices {
     @Autowired
     private UserRepository userRepository;
 
-    public WebUser getByEmail(String email){
-        Optional<WebUser> result = userRepository.findByEmail(email);
-        if(result.isPresent())
-            return result.get();
-        return null;
-    }
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public WebUser registerUser(WebUser user) {
         if (user.getName() == null || user.getName().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío");
@@ -35,6 +30,9 @@ public class WebUserServices {
         if (!isValidEmail(user.getEmail())) {
             throw new IllegalArgumentException("El formato del correo electrónico no es válido");
         }
+
+        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
 
         return userRepository.save(user);
     }
@@ -66,7 +64,6 @@ public class WebUserServices {
         WebUser webUser = WebUser.builder()
                 .name(name)
                 .surname(surname)
-                .nationalId(nationalId)
                 .password(password)
                 .email(email)
                 .birthDate(birthDate)

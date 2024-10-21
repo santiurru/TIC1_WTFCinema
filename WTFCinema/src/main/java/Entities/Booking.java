@@ -20,12 +20,13 @@ public class Booking {
     private long id;
 
     @NotNull
-    private Customer customer;
+    private WebUser customer;
 
     @NotNull
     private Seat seat;
 
     @NotNull
     private Showing showing;
+
 
 }
