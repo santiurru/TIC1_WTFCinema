@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Películas</title>
+    <link rel="stylesheet" href="https://unpkgs.com/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Gestión de Películas</h1>
+
+    <div class="mb-4">
+        <h2>Agregar Nueva Película</h2>
+        <a href="createMovie.html" class="btn btn-primary">Ir a Crear Película</a>
+    </div>
+
+    <div>
+        <h2>Películas Disponibles</h2>
+        <ul class="list-group">
+            <li th:each="movie : ${movies}" class="list-group-item">
+                <span th:text="${movie.title}">Título</span> - <span th:text="${movie.genre}">Género</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="https://unpkgs.com/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

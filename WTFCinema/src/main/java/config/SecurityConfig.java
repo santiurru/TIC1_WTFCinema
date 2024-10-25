@@ -17,37 +17,25 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("admin")
-                .password(passwordEncoder.encode("password"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/").permitAll() // Permitir acceso a la página de inicio
+                                .requestMatchers("/admin/**").permitAll() // Permitir acceso a las rutas de admin
+                                .anyRequest().authenticated() // Cualquier otra petición requiere autenticación
                 )
-                .formLogin()
-                .and()
-                .logout()
-                .permitAll();
-
+                .formLogin(formLogin ->
+                        formLogin.permitAll() // Permitir el acceso al formulario de inicio de sesión
+                )
+                .logout(logout ->
+                        logout.permitAll() // Permitir el acceso a la función de cerrar sesión
+                );
         return http.build();
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // Usa BCryptPasswordEncoder
-    }
 }
-
-
-
-
-// https://www.baeldung.com/spring-session
+//
+//
+//
+//
+//// https://www.baeldung.com/spring-session

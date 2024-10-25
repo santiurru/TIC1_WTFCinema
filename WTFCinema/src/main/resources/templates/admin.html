@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Administración</title>
+    <link rel="stylesheet" href="https://unpkgs.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/styles.css"> <!-- Vincular CSS si es necesario -->
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Panel de Administración</h1>
+    <div class="list-group">
+        <a href="/admin/users" class="list-group-item list-group-item-action">Gestión de Usuarios</a>
+        <a href="/admin/movies" class="list-group-item list-group-item-action">Gestión de Películas</a>
+        <a href="/admin/showings" class="list-group-item list-group-item-action">Gestión de Funciones</a>
+        <a href="/admin/snacks" class="list-group-item list-group-item-action">Gestión de Snacks</a>
+        <a href="/logout" class="list-group-item list-group-item-action text-danger">Cerrar Sesión</a>
+    </div>
+</div>
+
+<script src="https://unpkgs.com/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
