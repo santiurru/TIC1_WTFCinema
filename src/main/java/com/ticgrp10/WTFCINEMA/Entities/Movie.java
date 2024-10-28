@@ -35,14 +35,10 @@ public class Movie {
     private long length;
 
     @NotNull
-    private String poster;
+    private String img;
 
     @NotNull
     private String synopsis;
-
-    @NotNull
-    private Date releaseDate;
-
 
     private boolean isInCinema;
 }

@@ -12,16 +12,12 @@
 
     <div class="mb-4">
         <h2>Agregar Nueva Película</h2>
-        <a href="createMovie.html" class="btn btn-primary">Ir a Crear Película</a>
+        <a href="/admin/movies/create" class="btn btn-primary">Ir a Crear Película</a>
     </div>
 
     <div>
         <h2>Películas Disponibles</h2>
-        <ul class="list-group">
-            <li th:each="movie : ${movies}" class="list-group-item">
-                <span th:text="${movie.title}">Título</span> - <span th:text="${movie.genre}">Género</span>
-            </li>
-        </ul>
+        <a href="/admin/movies/list" class="btn btn-primary">Ver Cartelera</a>
     </div>
 </div>
 

@@ -2,14 +2,18 @@ package com.ticgrp10.WTFCINEMA.Controllers;
 
 import com.ticgrp10.WTFCINEMA.Entities.Admin;
 import com.ticgrp10.WTFCINEMA.Entities.Movie;
+import com.ticgrp10.WTFCINEMA.Repositories.MovieRepository;
 import com.ticgrp10.WTFCINEMA.Services.AdminServices;
+import com.ticgrp10.WTFCINEMA.Services.MovieServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -18,10 +22,13 @@ public class AdminWebController {
 
     @Autowired
     private AdminServices adminServices;
+    @Autowired
+    private com.ticgrp10.WTFCINEMA.Repositories.MovieRepository MovieRepository;
+    @Autowired
+    private MovieServices movieServices;
 
     @GetMapping("/home")
     public String adminHome() {
-        System.out.println("### HOLA ADMIN ####");
         return "admin"; // Devuelve la vista de admin.html
     }
 
@@ -44,21 +51,19 @@ public class AdminWebController {
     }
 
     @GetMapping("/movies")
+    public String indexMovies() {
+        return "movies";
+    }
+
+    @GetMapping("/movies/list")
     public String listMovies(Model model) {
-//        model.addAttribute("movies", adminServices.getAllMovies());
-        return "listMovies"; // Asegúrate de que listMovies.html existe en templates
+        return "redirect:/movie/list"; // Asegúrate de que listMovies.html existe en templates
     }
 
     @GetMapping("/movies/create")
     public String createMovieForm(Model model) {
-        model.addAttribute("movie", new Movie());
-        return "createMovie"; // Asegúrate de que createMovie.html existe en templates
+        return "redirect:/movie/create"; // Asegúrate de que createMovie.html existe en templates
     }
 
-    @PostMapping("/movies/create")
-    public String createMovie(Movie movie) {
-        adminServices.addMovie(movie);
-        return "redirect:/admin/movies"; // Redirige a la lista de películas
-    }
 }
 

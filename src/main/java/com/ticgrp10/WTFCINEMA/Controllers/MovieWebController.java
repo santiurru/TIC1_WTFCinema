@@ -15,7 +15,10 @@ public class MovieWebController {
 
     @Autowired
     private MovieServices movieServices;
-
+    @GetMapping("/home/admin")
+    public String home() {
+        return "movies";
+    }
     @GetMapping("/create")
     public String createMovieForm(Model model) {
         model.addAttribute("movie", new Movie());
@@ -25,9 +28,10 @@ public class MovieWebController {
     @PostMapping("/create")
     public String createMovie(Movie movie) {
         movieServices.addMovie(movie);
-        return "redirect:/movie/list";
+        return "redirect:/movie/home/admin";
     }
 
+    //todo hacer que esto ande
     @GetMapping("/list")
     public String listMovies(Model model) {
         model.addAttribute("movies", movieServices.getAll());
