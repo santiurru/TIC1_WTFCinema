@@ -1,20 +1,13 @@
 package com.ticgrp10.WTFCINEMA.Controllers;
 
 import com.ticgrp10.WTFCINEMA.Entities.Admin;
-import com.ticgrp10.WTFCINEMA.Entities.Movie;
-import com.ticgrp10.WTFCINEMA.Repositories.MovieRepository;
 import com.ticgrp10.WTFCINEMA.Services.AdminServices;
-import com.ticgrp10.WTFCINEMA.Services.MovieServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -22,14 +15,12 @@ public class AdminWebController {
 
     @Autowired
     private AdminServices adminServices;
-    @Autowired
-    private com.ticgrp10.WTFCINEMA.Repositories.MovieRepository MovieRepository;
-    @Autowired
-    private MovieServices movieServices;
+
+
 
     @GetMapping("/home")
     public String adminHome() {
-        return "admin"; // Devuelve la vista de admin.html
+        return "Admin/admin"; // Devuelve la vista del menu de admin
     }
 
     @GetMapping("/create")
@@ -52,17 +43,57 @@ public class AdminWebController {
 
     @GetMapping("/movies")
     public String indexMovies() {
-        return "movies";
+        return "Admin/moviesManagement";
     }
 
     @GetMapping("/movies/list")
-    public String listMovies(Model model) {
-        return "redirect:/movie/list"; // Asegúrate de que listMovies.html existe en templates
+    public String listMovies() {
+        return "redirect:/movie/list";
     }
 
     @GetMapping("/movies/create")
-    public String createMovieForm(Model model) {
-        return "redirect:/movie/create"; // Asegúrate de que createMovie.html existe en templates
+    public String createMovieForm() {
+        return "redirect:/movie/create";
+    }
+
+    @GetMapping("/showings")
+    public String indexShowings() {
+        return "Showings/moviesShowings";
+    }
+
+    @GetMapping("/showings/create")
+    public String createShowingForm() {
+        return "redirect:/showing/create";
+    }
+
+//    @PostMapping("/showings/create")
+//    public String createShowing(Showing showing) {
+//        showingServices.addShowing(showing); // Guarda el showing
+//        return "redirect:/admin/showings/list"; // Redirige a la lista de showings
+//    }
+//
+//    // Lista de showings por película
+//    @GetMapping("/showings/list")
+//    public String listShowingsByMovie(@RequestParam Long movieId, Model model) {
+//        List<Showing> showings = showingServices.getShowingsByMovie(movieId);
+//        model.addAttribute("showings", showings); // Agrega los showings al modelo
+//        return "listShowings"; // Vista que muestra la lista de showings por película
+//    }
+
+
+    @GetMapping("/snacks")
+    public String indexSnacks() {
+        return "Snacks/snacks";
+    }
+
+    @GetMapping("/snacks/list")
+    public String listSnacks() {
+        return "redirect:/snacks/list";
+    }
+
+    @GetMapping("/snacks/create")
+    public String createSnackForm() {
+        return "redirect:/snacks/create";
     }
 
 }

@@ -39,6 +39,4 @@ public class Movie {
 
     @NotNull
     private String synopsis;
-
-    private boolean isInCinema;
 }

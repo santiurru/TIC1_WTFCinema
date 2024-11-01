@@ -19,10 +19,11 @@ public class MovieWebController {
     public String home() {
         return "movies";
     }
+
     @GetMapping("/create")
     public String createMovieForm(Model model) {
         model.addAttribute("movie", new Movie());
-        return "createMovie";
+        return "Admin/createMovie";
     }
 
     @PostMapping("/create")
@@ -31,11 +32,10 @@ public class MovieWebController {
         return "redirect:/movie/home/admin";
     }
 
-    //todo hacer que esto ande
     @GetMapping("/list")
     public String listMovies(Model model) {
         model.addAttribute("movies", movieServices.getAll());
-        return "listMovies";
+        return "Movies/listMovies";
     }
 }
 

@@ -13,7 +13,6 @@ public class MovieServices {
     @Autowired
     private MovieRepository movieRepository;
 
-
     public Movie addMovie(Movie movie) {
         return movieRepository.save(movie);
     }

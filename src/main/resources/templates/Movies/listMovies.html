@@ -7,7 +7,9 @@
 <h1>Lista de Películas</h1>
 <ul>
     <li th:each="movie : ${movies}">
-        <span th:text="${movie.title}">Título</span> - <span th:text="${movie.genre}">Género</span>
+        <span th:text="${movie.title}">Título</span> -
+        <span th:text="${movie.synopsis}">Sinopsis</span> -
+        <span th:each="genre : ${movie.genres}" th:text="${genre}">Género</span>
     </li>
 </ul>
 </body>

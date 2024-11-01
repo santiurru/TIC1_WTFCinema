@@ -10,27 +10,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 
 @Controller
-@RequestMapping("/snack")
+@RequestMapping("/snacks")
 public class SnackWebController {
 
     @Autowired
     private SnackServices snackServices;
+    @GetMapping("/home/admin")
+    public String home() {
+        return "movies";
+    }
 
     @GetMapping("/create")
     public String createSnackForm(Model model) {
         model.addAttribute("snack", new Snack());
-        return "createSnack";
+        return "Snacks/createSnack";
     }
 
     @PostMapping("/create")
     public String createSnack(Snack snack) {
         snackServices.addSnack(snack);
-        return "redirect:/snack/list";
+        return "redirect:/snacks/home/admin";
     }
 
     @GetMapping("/list")
     public String listSnacks(Model model) {
         model.addAttribute("snacks", snackServices.getAll());
-        return "listSnacks";
+        return "Snacks/listSnacks";
     }
 }
