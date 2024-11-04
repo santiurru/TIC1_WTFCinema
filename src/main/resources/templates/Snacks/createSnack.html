@@ -5,10 +5,10 @@
 </head>
 <body>
 <h1>Agregar Snack</h1>
-<form action="/snack/create" method="post">
+<form action="/snacks/create" method="post" enctype="multipart/form-data">
     <input type="text" name="name" placeholder="Nombre" required>
     <input type="text" name="price" placeholder="Precio" required>
-    <input type="text" name="img" placeholder ="imagen" required>
+    <input type="url" name="img" placeholder="Url de la Imagen" required>
     <button type="submit">Agregar Snack</button>
 </form>
 </body>

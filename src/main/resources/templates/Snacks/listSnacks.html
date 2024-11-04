@@ -7,8 +7,9 @@
 <h1>Lista de Snacks</h1>
 <ul>
     <li th:each="snack : ${snacks}">
-        <span th:text="${snack.name}">Nombre</span> -
-        <span th:text="${snack.price}">Precio</span> -
+        <img th:src="${snack.img}" alt="Imagen de ${snack.name}" width="120" height="180" >
+        <span th:text="${snack.name}"> Nombre del Snack</span>
+        <span th:text="${snack.price}">Precio del Snack</span>
     </li>
 </ul>
 </body>

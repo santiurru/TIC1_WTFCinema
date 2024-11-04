@@ -17,7 +17,7 @@ public class SnackWebController {
     private SnackServices snackServices;
     @GetMapping("/home/admin")
     public String home() {
-        return "movies";
+        return "Admin/admin";
     }
 
     @GetMapping("/create")
