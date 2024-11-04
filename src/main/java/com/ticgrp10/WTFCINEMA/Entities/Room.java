@@ -24,14 +24,11 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-//    @NotNull
-//    private List<Seat> seats = new ArrayList<>();
-
     @NotNull
     private long theatreId;
 
-//    private List<Showing> showings = new ArrayList<>();
 
-
-
+    public Room(long theatreId) {
+        this.theatreId = theatreId;
+    }
 }

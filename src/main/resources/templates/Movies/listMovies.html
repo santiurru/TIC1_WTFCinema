@@ -7,6 +7,7 @@
 <h1>Lista de Películas</h1>
 <ul>
     <li th:each="movie : ${movies}">
+        <img th:src="${movie.img}" alt="Imagen de ${movie.title}" style="max-width: 200px; max-height: 300px;" /> <br>
         <span th:text="${movie.title}">Título</span> -
         <span th:text="${movie.synopsis}">Sinopsis</span> -
         <span th:each="genre : ${movie.genres}" th:text="${genre}">Género</span>

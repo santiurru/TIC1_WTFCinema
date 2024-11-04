@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Lista de Funciones</h1>
+<ul>
+<!--  todo arreglar (cambiarlo)-->
+  <li th:each="movie : ${showings}">
+    <span th:text="${movie.title}">Título</span> -
+    <span th:text="${movie.synopsis}">Sinopsis</span> -
+    <span th:text="${movie.date}">Fecha</span>
+  </li>
+</ul>
+</body>
+</html>

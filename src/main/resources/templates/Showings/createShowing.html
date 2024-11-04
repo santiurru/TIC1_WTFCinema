@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Crear Mostrar</title>
+</head>
+<body>
+<h1>Crear Mostrar</h1>
+<form action="/showing/create" method="post">
+    <label for="movieId">Seleccione una película:</label>
+    <select name="movieId" id="movieId" required>
+        <option th:each="movie : ${movies}" th:value="${movie.id}" th:text="${movie.title}">Título</option>
+    </select>
+
+    <label for="roomId">Seleccione una sala:</label>
+    <select name="roomId" id="roomId" required>
+        <option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.id}">Sala</option>
+    </select>
+
+    <label>Fecha y hora:</label>
+    <input type="datetime-local" name="date" placeholder="Fecha y hora" required>
+
+    <button type="submit">Agregar Película</button>
+</form>
+</body>
+</html>

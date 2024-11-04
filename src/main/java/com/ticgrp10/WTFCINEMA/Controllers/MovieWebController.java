@@ -4,10 +4,11 @@ import com.ticgrp10.WTFCINEMA.Entities.Movie;
 import com.ticgrp10.WTFCINEMA.Services.MovieServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/movie")
@@ -17,20 +18,25 @@ public class MovieWebController {
     private MovieServices movieServices;
     @GetMapping("/home/admin")
     public String home() {
-        return "movies";
+        return "Admin/moviesManagement";
     }
 
     @GetMapping("/create")
     public String createMovieForm(Model model) {
         model.addAttribute("movie", new Movie());
-        return "Admin/createMovie";
+        return "Movies/createMovie";
     }
+
+
+
 
     @PostMapping("/create")
     public String createMovie(Movie movie) {
         movieServices.addMovie(movie);
         return "redirect:/movie/home/admin";
     }
+
+
 
     @GetMapping("/list")
     public String listMovies(Model model) {

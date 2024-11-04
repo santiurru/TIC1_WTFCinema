@@ -61,11 +61,6 @@ public class AdminWebController {
         return "Showings/moviesShowings";
     }
 
-    @GetMapping("/showings/create")
-    public String createShowingForm() {
-        return "redirect:/showing/create";
-    }
-
 //    @PostMapping("/showings/create")
 //    public String createShowing(Showing showing) {
 //        showingServices.addShowing(showing); // Guarda el showing

@@ -27,6 +27,10 @@ public class Theatre {
     @NotNull
     private String neighborhood;
 
+    public Theatre(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
 
 //    private List<Movie> billboard = new ArrayList<Movie>();
 //
