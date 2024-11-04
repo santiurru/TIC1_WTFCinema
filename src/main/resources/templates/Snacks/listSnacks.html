@@ -2,14 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Lista de Snacks</title>
+    <style>
+        .snack {
+            display: flex; /* junta los datos */
+            align-items: center;
+            margin-bottom: 50px;
+        }
+        .snack img {
+            margin-right: 10px; /*deja un margen entre la foto y el texto*/
+            max-width: 120px; /*si la foto es mas grande, usa estos valores como tamaño maximo*/
+            max-height: 180px;
+        }
+        .snack-info {
+            display: flex;
+            flex-direction: column; /* muestra los datos agrupados en forma de columna */
+        }
+    </style>
+
 </head>
 <body>
 <h1>Lista de Snacks</h1>
 <ul>
-    <li th:each="snack : ${snacks}">
-        <img th:src="${snack.img}" alt="Imagen de ${snack.name}" width="120" height="180" >
-        <span th:text="${snack.name}"> Nombre del Snack</span>
-        <span th:text="${snack.price}">Precio del Snack</span>
+    <li th:each="snack : ${snacks}" class="snack">
+        <img th:src="${snack.img}" alt="Imagen de ${snack.name}">
+        <div class="snack-info">
+            <span th:text="${snack.name}">Nombre del Snack</span>
+            <span th:text="|Precio: ${snack.price}$|">Precio del Snack</span>
+        </div>
     </li>
 </ul>
 </body>

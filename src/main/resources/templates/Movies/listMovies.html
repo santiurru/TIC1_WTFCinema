@@ -2,15 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Lista de Películas</title>
+    <style>
+        .movie {
+            display: flex; /* junta los datos */
+            align-items: center;
+            margin-bottom: 50px;
+        }
+        .movie img {
+            margin-right: 10px; /*deja un margen entre la foto y el texto*/
+            max-width: 120px; /*si la foto es mas grande, usa estos valores como tamaño maximo*/
+            max-height: 180px;
+        }
+        .movie-info {
+            display: flex;
+            flex-direction: column; /* muestra los datos agrupados en forma de columna */
+        }
+    </style>
 </head>
 <body>
 <h1>Lista de Películas</h1>
 <ul>
-    <li th:each="movie : ${movies}">
+    <li th:each="movie : ${movies}" class="movie">
         <img th:src="${movie.img}" alt="Imagen de ${movie.title}" style="max-width: 200px; max-height: 300px;" /> <br>
-        <span th:text="${movie.title}">Título</span> -
-        <span th:text="${movie.synopsis}">Sinopsis</span> -
-        <span th:each="genre : ${movie.genres}" th:text="${genre}">Género</span>
+        <div class="movie-info">
+            <h1 th:text="${movie.title}">Título</h1>
+            <span th:text="|Sinopsis: ${movie.synopsis}|">Sinopsis</span> -
+            <span th:each="genre : ${movie.genres}" th:text="${genre}">Género</span>
+        </div>
     </li>
 </ul>
 </body>
