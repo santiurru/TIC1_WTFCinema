@@ -29,31 +29,52 @@ public class RoomConfig {
                 }
             }
             int lenCV = roomService.roomCount(2L);
-            if(lenPC == 0){
+            if(lenCV == 0){
                 for (int i = 0; i <5; i++ ){
                     Room temp = new Room(2L);
                     roomService.addRoom(2L,temp);
                 }
             }
             int lenP = roomService.roomCount(3L);
-            if(lenPC == 0){
+            if(lenP == 0){
                 for (int i = 0; i <7; i++ ){
                     Room temp = new Room(3L);
                     roomService.addRoom(3L,temp);
                 }
             }
             int lenCa = roomService.roomCount(4L);
-            if(lenPC == 0){
+            if(lenCa == 0){
                 for (int i = 0; i <4; i++ ){
                     Room temp = new Room(4L);
                     roomService.addRoom(4L,temp);
                 }
             }
-            int lenCV = roomService.roomCount(2L);
-            if(lenPC == 0){
-                for (int i = 0; i <5; i++ ){
-                    Room temp = new Room(2L);
-                    roomService.addRoom(2L,temp);
+            int lenTC = roomService.roomCount(5L);
+            if(lenTC == 0){
+                for (int i = 0; i <6; i++ ){
+                    Room temp = new Room(5L);
+                    roomService.addRoom(5L,temp);
+                }
+            }
+            int lenCe = roomService.roomCount(6L);
+            if(lenCe == 0){
+                for (int i = 0; i <10; i++ ){
+                    Room temp = new Room(6L);
+                    roomService.addRoom(6L,temp);
+                }
+            }
+            int lenMa = roomService.roomCount(7L);
+            if(lenMa == 0){
+                for (int i = 0; i <3; i++ ){
+                    Room temp = new Room(7L);
+                    roomService.addRoom(7L,temp);
+                }
+            }
+            int lenBu = roomService.roomCount(8L);
+            if(lenBu == 0){
+                for (int i = 0; i <6; i++ ){
+                    Room temp = new Room(8L);
+                    roomService.addRoom(8L,temp);
                 }
             }
         };
