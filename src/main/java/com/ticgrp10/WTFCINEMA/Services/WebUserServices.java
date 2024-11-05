@@ -5,6 +5,10 @@ import com.ticgrp10.WTFCINEMA.Exceptions.ExistingEntity;
 import com.ticgrp10.WTFCINEMA.Exceptions.InvalidDataException;
 import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Date;
@@ -12,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class WebUserServices {
+public class WebUserServices implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -57,4 +61,17 @@ public class WebUserServices {
         //don't hurt me
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<WebUser> user = userRepository.findByEmail(email);
+
+        if (user.isPresent()) {
+            var springUser = User.withUsername(user.get().getEmail())
+                    .password(user.get().getPassword())
+                    .roles("USER")
+                    .build();
+            return springUser;
+        }
+        return null;
+    }
 }

@@ -3,7 +3,6 @@
 //import com.ticgrp10.WTFCINEMA.Entities.Admin;
 //import com.ticgrp10.WTFCINEMA.Entities.CustomUserDetails;
 //import com.ticgrp10.WTFCINEMA.Entities.WebUser;
-//import com.ticgrp10.WTFCINEMA.Exceptions.UsernameNotFoundException;
 //import com.ticgrp10.WTFCINEMA.Repositories.AdminRepository;
 //import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,8 @@
 //import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.stereotype.Service;
+//
+//import java.util.Optional;
 //
 //@Service
 //public class CustomUserDetailsService implements UserDetailsService {
@@ -22,18 +23,18 @@
 //    private AdminRepository adminRepository;
 //
 //    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        WebUser user = webUserRepository.findByEmail(email);
-//        if (user != null) {
-//            return new CustomUserDetails(user);
+//    public UserDetails loadUserByUsername(String email) throws org.springframework.security.core.userdetails.UsernameNotFoundException {
+//        Optional<WebUser> user = webUserRepository.findByEmail(email);
+//        if (user.isPresent()) {
+//            return new CustomUserDetails(user.orElse(null));
 //        }
 //
-//        Admin admin = adminRepository.findByEmail(email);
-//        if (admin != null) {
-//            return new CustomUserDetails(admin);
+//        Optional<Admin> admin = adminRepository.findByEmail(email);
+//        if (admin.isPresent()) {
+//            return new CustomUserDetails(admin.orElse(null));
+//        } else {
+//            throw new UsernameNotFoundException("User with email: " + email + " not found");
 //        }
-//
-//        throw new UsernameNotFoundException("User not found with email: " + email);
 //    }
 //}
 //
