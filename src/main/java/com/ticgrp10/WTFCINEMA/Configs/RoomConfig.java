@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 @Configuration
 public class RoomConfig {
@@ -14,6 +15,7 @@ public class RoomConfig {
     private RoomService roomService;
 
     @Bean
+    @Order(2)
     CommandLineRunner commandLineRunnerRoom (RoomService roomService){
         return args -> {
             // punta carretas, 8 salas

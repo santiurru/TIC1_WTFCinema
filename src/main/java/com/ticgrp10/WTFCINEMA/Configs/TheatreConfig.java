@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 @Configuration
 public class TheatreConfig {
@@ -14,6 +15,7 @@ public class TheatreConfig {
     private TheatreServices theatreServices;
 
     @Bean
+    @Order(1)
     CommandLineRunner commandLineRunnerTheatre (TheatreRepository theatreRepository) {
         return args -> {
             Theatre puntaCarretas = new Theatre("Punta Carretas");

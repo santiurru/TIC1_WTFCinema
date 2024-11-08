@@ -1,8 +1,10 @@
 package com.ticgrp10.WTFCINEMA.Controllers;
 
+import com.ticgrp10.WTFCINEMA.Entities.Admin;
 import com.ticgrp10.WTFCINEMA.Entities.RegisterDto;
 import com.ticgrp10.WTFCINEMA.Entities.WebUser;
 import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
+import com.ticgrp10.WTFCINEMA.Services.AdminServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,10 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/api/users")
 public class WebUserController {
 
     @Autowired
     private UserRepository repo;
+
+    @Autowired
+    private AdminServices adminServices;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -28,7 +34,7 @@ public class WebUserController {
         return "register";
     }
 
-    @PostMapping("/Register")
+    @PostMapping("/register")
     public String register(Model model, @Valid @ModelAttribute RegisterDto registerDto, BindingResult result) {
         if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
             result.addError(
@@ -37,7 +43,8 @@ public class WebUserController {
         }
 
         Optional<WebUser> user = repo.findByEmail(registerDto.getEmail());
-        if (user.isPresent()) {
+        Optional<Admin> admin = adminServices.findByEmail(registerDto.getEmail());
+        if (user.isPresent() || admin.isPresent()) {
             result.addError(
                     new FieldError("registerDto", "email", "Email address is already used")
             );

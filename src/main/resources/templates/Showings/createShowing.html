@@ -1,25 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Crear Mostrar</title>
-</head>
-<body>
-<h1>Crear Mostrar</h1>
-<form action="/showing/create" method="post">
-    <label for="movieId">Seleccione una película:</label>
-    <select name="movieId" id="movieId" required>
-        <option th:each="movie : ${movies}" th:value="${movie.id}" th:text="${movie.title}">Título</option>
-    </select>
+    <head>
+        <title>Crear Mostrar</title>
+        <script>
+            function fetchRooms() {
+                var cinemaId = document.getElementById("cinemaId").value;
+                fetch("/showing/roomsByCinema?cinemaId=" + cinemaId)
+                    .then(response => response.json())
+                    .then(data => {
+                        var roomSelect = document.getElementById("roomId");
+                        roomSelect.innerHTML = "<option value=''>Seleccione una sala</option>";
+                        data.forEach(room => {
+                            roomSelect.innerHTML += `<option value="${room.id}">${room.id}</option>`;
+                        });
+                    })
+                    .catch(error => console.error("Error al obtener salas:", error));
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Crear Mostrar</h1>
 
-    <label for="roomId">Seleccione una sala:</label>
-    <select name="roomId" id="roomId" required>
-        <option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.id}">Sala</option>
-    </select>
+        <form action="/showing/create" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-    <label>Fecha y hora:</label>
-    <input type="datetime-local" name="date" placeholder="Fecha y hora" required>
+            <label for="cinemaId">Seleccione un cine:</label>
+            <select id="cinemaId" name="cinemaId" onchange="fetchRooms()" required>
+                <option value="">Seleccione un cine</option>
+                <option th:each="cinema : ${cinemas}" th:value="${cinema.id}" th:text="${cinema.name}">Cine</option>
+            </select>
 
-    <button type="submit">Agregar Película</button>
-</form>
-</body>
+            <label for="movieId">Seleccione una película:</label>
+            <select name="movieId" id="movieId" required>
+                <option th:each="movie : ${movies}" th:value="${movie.id}" th:text="${movie.title}">Título</option>
+            </select>
+
+            <label for="roomId">Seleccione una sala:</label>
+            <select name="roomId" id="roomId" required>
+                <option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.id}">Sala</option>
+            </select>
+
+            <label>Fecha y hora:</label>
+            <input type="datetime-local" name="date" placeholder="Fecha y hora" required>
+
+            <button type="submit">Agregar Película</button>
+        </form>
+    </body>
 </html>

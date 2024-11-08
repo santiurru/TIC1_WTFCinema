@@ -6,6 +6,7 @@
 <body>
 <h1>Agregar Película</h1>
 <form action="/movie/create" method="post" enctype="multipart/form-data">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="text" name="title" placeholder="Título" required>
     <input type="number" name="ageRating" placeholder="Categoría de edad" required>
     <input type="number" name="length" placeholder="Duración" required>

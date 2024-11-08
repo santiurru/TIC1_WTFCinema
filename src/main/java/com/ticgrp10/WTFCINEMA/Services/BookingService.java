@@ -1,7 +1,6 @@
 package com.ticgrp10.WTFCINEMA.Services;
 
 import com.ticgrp10.WTFCINEMA.Entities.Booking;
-import com.ticgrp10.WTFCINEMA.Entities.Seat;
 import com.ticgrp10.WTFCINEMA.Entities.Showing;
 import com.ticgrp10.WTFCINEMA.Entities.WebUser;
 import com.ticgrp10.WTFCINEMA.Repositories.BookingRepository;

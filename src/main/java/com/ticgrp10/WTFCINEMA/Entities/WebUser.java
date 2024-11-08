@@ -29,6 +29,8 @@ public class WebUser {
     @NotBlank(message = "error")
     private String surname;
 
+    private String role = "ROLE_USER";
+
     @Email(message = "Email should be valid")
     @Column(unique = true, nullable = false)
     protected String email;

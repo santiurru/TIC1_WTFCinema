@@ -6,6 +6,7 @@
 <body>
 <h1>Agregar Snack</h1>
 <form action="/snacks/create" method="post" enctype="multipart/form-data">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="text" name="name" placeholder="Nombre" required>
     <input type="text" name="price" placeholder="Precio" required>
     <input type="url" name="img" placeholder="Url de la Imagen" required>
