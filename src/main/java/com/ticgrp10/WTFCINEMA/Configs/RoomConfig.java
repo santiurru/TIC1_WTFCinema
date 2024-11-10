@@ -20,63 +20,63 @@ public class RoomConfig {
         return args -> {
             // punta carretas, 8 salas
             //System.out.println("--------agregando rooms-------");
-            int lenPC = roomService.roomCount(1L);
+            int lenPC = roomService.roomCount(9);
 //            System.out.println("roomcount para theatre 1: ");
 //            System.out.println(lenPC);
             if(lenPC == 0){
                 for (int i = 0; i <8; i++ ){
-                    Room temp = new Room(i,1L);
+                    Room temp = new Room(i,9);
                     //System.out.println("adding room");
-                    roomService.addRoom(1L,temp);
+                    roomService.addRoom(9,temp);
                 }
             }
-            int lenCV = roomService.roomCount(2L);
+            int lenCV = roomService.roomCount(10);
             if(lenCV == 0){
                 for (int i = 0; i <5; i++ ){
-                    Room temp = new Room(i,2L);
-                    roomService.addRoom(2L,temp);
+                    Room temp = new Room(i,10);
+                    roomService.addRoom(10,temp);
                 }
             }
-            int lenP = roomService.roomCount(3L);
+            int lenP = roomService.roomCount(11);
             if(lenP == 0){
                 for (int i = 0; i <7; i++ ){
-                    Room temp = new Room(i,3L);
-                    roomService.addRoom(3L,temp);
+                    Room temp = new Room(i,11);
+                    roomService.addRoom(11,temp);
                 }
             }
-            int lenCa = roomService.roomCount(4L);
+            int lenCa = roomService.roomCount(12);
             if(lenCa == 0){
                 for (int i = 0; i <4; i++ ){
-                    Room temp = new Room(i,4L);
-                    roomService.addRoom(4L,temp);
+                    Room temp = new Room(i,12);
+                    roomService.addRoom(12,temp);
                 }
             }
-            int lenTC = roomService.roomCount(5L);
+            int lenTC = roomService.roomCount(13);
             if(lenTC == 0){
                 for (int i = 0; i <6; i++ ){
-                    Room temp = new Room(i,5L);
-                    roomService.addRoom(5L,temp);
+                    Room temp = new Room(i,13);
+                    roomService.addRoom(13,temp);
                 }
             }
-            int lenCe = roomService.roomCount(6L);
+            int lenCe = roomService.roomCount(14);
             if(lenCe == 0){
                 for (int i = 0; i <10; i++ ){
-                    Room temp = new Room(i,6L);
-                    roomService.addRoom(6L,temp);
+                    Room temp = new Room(i,14);
+                    roomService.addRoom(14,temp);
                 }
             }
-            int lenMa = roomService.roomCount(7L);
+            int lenMa = roomService.roomCount(15);
             if(lenMa == 0){
                 for (int i = 0; i <3; i++ ){
-                    Room temp = new Room(i,7L);
-                    roomService.addRoom(7L,temp);
+                    Room temp = new Room(i,15);
+                    roomService.addRoom(15,temp);
                 }
             }
-            int lenBu = roomService.roomCount(8L);
+            int lenBu = roomService.roomCount(16);
             if(lenBu == 0){
                 for (int i = 0; i <6; i++ ){
-                    Room temp = new Room(i,8L);
-                    roomService.addRoom(8L,temp);
+                    Room temp = new Room(i,16);
+                    roomService.addRoom(16,temp);
                 }
             }
         };

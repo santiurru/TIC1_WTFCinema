@@ -57,6 +57,45 @@
             <h1 class="text-center">Bienvenido a WTFun Cinemas!!! </h1>
         </div>
 
+    <!-- Carousel for movies -->
+    <div class="carousel-inner">
+        <!-- Aquí se recorre la lista de películas y se agrega la clase "active" solo al primer elemento -->
+        <div th:each="movie, movieStat : ${movies}">
+            <div class="carousel-item" th:classappend="${movieStat.index == 0} ? 'active' : ''">
+                <img th:src="${movie.img}" class="d-block w-100" th:alt="${movie.title}">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5 th:text="${movie.title}">Titulo</h5>
+                    <p th:text="${movie.synopsis}">Synopsis</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+    </div>
+
+
+
+    <div class="container mt-5">
+        <h2 class="text-center">Nuestras Sucursales</h2>
+        <div class="row">
+            <div class="col-md-4" th:each="theatre : ${theatres}">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${theatre.neighborhood}">Nombre de la Sucursal</h5>
+<!--                        <p class="card-text">Dirección: <span th:text="${theatre.address}">Dirección del teatro</span></p>-->
+<!--                        <p class="card-text">Teléfono: <span th:text="${theatre.phoneNumber}">Teléfono del teatro</span></p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>
