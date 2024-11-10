@@ -7,12 +7,13 @@
 <body>
 <h1>Lista de Funciones</h1>
 <ul>
-<!--  todo arreglar (cambiarlo)-->
-  <li th:each="movie : ${showings}">
-    <span th:text="${movie.title}">Título</span> -
-    <span th:text="${movie.synopsis}">Sinopsis</span> -
-    <span th:text="${movie.date}">Fecha</span>
-  </li>
+    <li th:each="showing : ${showings}">
+        <span th:text="${showing.movieTitle}">Título de la película</span> -
+        <span th:text="${showing.movieSynopsis}">Synopsis de la película</span> -
+        <span th:text="${showing.date}">Fecha de la funcion</span> -
+        <span th:text="${showing.theatreName}">Nombre del teatro</span> -
+        <span th:text="${showing.roomNumber}">Número de la sala</span>
+    </li>
 </ul>
 </body>
 </html>

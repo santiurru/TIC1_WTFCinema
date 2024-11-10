@@ -1,9 +1,6 @@
 package com.ticgrp10.WTFCINEMA.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,15 +22,28 @@ public class Showing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @NotNull
     private long roomId;
+
     @NotNull
     private long movieId;
+
     @NotNull
     private LocalDateTime date;
 
+    @Transient
+    private String movieTitle;
 
+    @Transient
+    private String movieSynopsis;
 
+    @Transient
+    private String theatreName;
 
+    @Transient
+    private int roomNumber;
 
+//    @NotNull
+//    private List<List<Boolean>> seatAvailability;
 }

@@ -25,10 +25,14 @@ public class Room {
     private long id;
 
     @NotNull
+    private int number;
+
+    @NotNull
     private long theatreId;
 
 
-    public Room(long theatreId) {
+    public Room(int number, long theatreId) {
+        this.number = number;
         this.theatreId = theatreId;
     }
 }

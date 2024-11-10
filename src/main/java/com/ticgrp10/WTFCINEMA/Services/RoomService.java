@@ -25,6 +25,8 @@ public class RoomService {
         if (theatreOptional.isEmpty()) {
             throw new IllegalArgumentException("El cine no existe.");
         }
+        Optional<Room> roomOptional = roomRepository.findByNumberAndTheatreId(room.getNumber(), theatreId);
+
         return roomRepository.save(room);
     }
     public int roomCount(long theatreId){
@@ -37,5 +39,11 @@ public class RoomService {
 
     public List<Room> getRoomsByTheatre(Long cinemaId) {
         return roomRepository.findByTheatreId(cinemaId);
+    }
+
+    public Room getRoomById(long roomId){
+        Optional<Room> optionalRoom = roomRepository.findById(roomId);
+        return optionalRoom.orElse(null);
+
     }
 }
