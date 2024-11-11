@@ -131,8 +131,6 @@ public class SecurityConfig {
 
                 adminRepository.save(admin);
                 System.out.println("Admin creado con éxito");
-            } else {
-                System.out.println("El admin ya existe, no se ha creado un nuevo usuario.");
             }
         };
     }
@@ -140,6 +138,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+//                todo verificar nuevas entradas (como mostrar usuarios, etc)
                 .authorizeHttpRequests(authRequest -> authRequest
                         .requestMatchers("/", "/login", "/register", "/api/users/register", "/logout").permitAll()
                         .requestMatchers(HttpMethod.POST, "/movie/**","/showing/**","/snacks/**","/admin/**").hasRole("ADMIN") // Permite solo a ADMIN para crear
