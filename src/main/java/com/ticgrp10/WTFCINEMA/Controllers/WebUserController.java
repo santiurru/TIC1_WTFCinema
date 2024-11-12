@@ -56,9 +56,14 @@ public class WebUserController {
 
         // Supongamos que tienes un servicio para obtener los datos adicionales del usuario
         Optional<WebUser> user = userRepository.findByEmail(userDetails.getUsername());
-
-        model.addAttribute("user", user);
-
+        if (user.isPresent()){
+            model.addAttribute("user", user);
+        }else{
+            Optional<Admin> admin = adminServices.findByEmail(userDetails.getUsername());
+            if (admin.isPresent()){
+                model.addAttribute("user", admin);
+            }
+        }
         return "User/profile";
     }
 

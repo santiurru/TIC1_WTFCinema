@@ -136,25 +136,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-//                todo verificar nuevas entradas (como mostrar usuarios, etc)
-                .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers("/", "/login", "/register", "/api/users/register", "/logout").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/movie/**","/showing/**","/snacks/**","/admin/**").hasRole("ADMIN") // Permite solo a ADMIN para crear
-                        .requestMatchers("/admin/**", "/movie/**", "/showing/**", "/snacks/**").hasRole("ADMIN")
-                        .requestMatchers("/listShowings/", "snacks/list", "/listMovies/").hasRole("USER")
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .successHandler(new CustomAuthenticationSuccessHandler())
-                )
-                .logout(config -> config.logoutSuccessUrl("/"));
-
-        return http.build();
-    }
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -165,6 +146,36 @@ public class SecurityConfig {
         authProvider.setUserDetailsService(customUserDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+//                todo verificar nuevas entradas (como mostrar usuarios, etc)
+                .authorizeHttpRequests(authRequest -> authRequest
+                        .requestMatchers("/", "/login", "/register", "/api/users/register", "/logout","/error").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/movie/**","/showing/**","/snacks/**","/admin/**").hasRole("ADMIN") // Permite solo a ADMIN para crear
+                        .requestMatchers("/admin/**", "/movie/**", "/showing/**", "/snacks/**","/login").hasRole("ADMIN")
+                        .requestMatchers("/listShowings/", "snacks/list", "/listMovies/").hasRole("USER")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login") // Indica la URL personalizada para el login
+                        .defaultSuccessUrl("/") // Redirige tras un login exitoso
+                        .permitAll())
+
+
+                .logout(config -> config
+                        .logoutSuccessUrl("/")
+                        .permitAll());
+
+//                .formLogin(form -> form
+//                        .successHandler(new CustomAuthenticationSuccessHandler())
+//                )
+//                .logout(config -> config.logoutSuccessUrl("/"));
+
+        return http.build();
     }
 }
 

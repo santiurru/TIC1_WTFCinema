@@ -27,10 +27,18 @@ public class IndexController
         List<Theatre> theatres = theatreServices.getAll();
         model.addAttribute("theatres", theatres);
         return "index1";
+
     }
 
     @GetMapping("/error")
-    public String error() {return "error1";}
+    public String error() {
+        return "error1";
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
 
 }
 

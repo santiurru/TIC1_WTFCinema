@@ -13,44 +13,11 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">WTFun CINEMAS</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li >
-                    <a class="nav-link text-dark" href="/movie/current"> Ver cartelera</a>
-                </li>
-                <li class="nav-item" style="display: inline">
-                    <a class="nav-link text-dark" href="/admin/home">Panel de Administrador</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav me-5" sec:authorize="isAuthenticated()">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Menú de Usuario
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="/api/users/menu">Perfil</a>
-                        </li>
-                        <li sec:authorize="isAuthenticated()" method="post" action="/logout">
-                            <form sec:authorize="isAuthenticated()" method="post" action="/logout">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
-    <h1 class="text-center">Gestión de Películas</h1>
+<div th:replace="~{navbar :: navbar}"></div>
+
+<h1 class="text-center">Gestión de Películas</h1>
+
 <div class="list-group">
     <a href="/admin/movies/create" class="list-group-item list-group-item-action">Crear una Película</a>
     <a href="/admin/movies/list" class="list-group-item list-group-item-action">Ver todas las películas</a>

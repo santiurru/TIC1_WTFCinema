@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Clientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" >
+    <style>
+        label{
+            text-align: right;
+        }
+    </style>
+
+
 </head>
 
 <body>
@@ -23,6 +30,9 @@
                 </li>
             </ul>
         </div>
+        <li class="nav-link">
+            <p class="mb-0">¿Ya tienes cuenta? <a href="/login"> Inicia sesión </a> </p>
+        </li>
     </div>
 </nav>
 
@@ -74,7 +84,7 @@
                 </div>
 
                 <div class="row mb-3">
-                    <label class="col-sm-4 col-form-label"> Telefono</label>
+                    <label class="col-sm-4 col-form-label"> Teléfono</label>
                     <div class="col-sm-8">
                         <input class="form-control" th:field="${registerDto.phoneNumber}">
                         <p th:if="${#fields.hasErrors('phoneNumber')}"  th:errorclass="text-danger" th:errors="${registerDto.phoneNumber}"></p>
@@ -101,7 +111,8 @@
                     <div class="col-sm-8 offset-sm-4 d-grid">
                         <button type="submit" class="btn btn-primary">Registrarse</button>
                     </div>
-                    <br>
+                </div>
+                <div class="row mb-3">
                     <div class="col-sm-8 offset-sm-4 d-grid">
                         <a href="/" class="btn btn-primary">Cancelar</a>
                     </div>
