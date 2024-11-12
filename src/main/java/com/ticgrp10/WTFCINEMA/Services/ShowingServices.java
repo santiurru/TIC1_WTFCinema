@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,9 @@ public class ShowingServices {
     @Autowired
     TheatreRepository theatreRepository;
 
+    @Autowired
+    BookingService bookingServices;
+
     public Showing addShowing(Showing showing) {
         if (showingRepository.existsById(showing.getId())) {
             throw new IllegalArgumentException("La funcion ya existe");
@@ -33,10 +37,10 @@ public class ShowingServices {
             throw new IllegalArgumentException("La pelicula no existe");
         }
 
-//        Optional<Theatre> theatreOptional = theatreRepository.findByRoomId(showing.getRoomId());
-//        if (!theatreOptional.isPresent()){
-//            throw new IllegalArgumentException("El cine no existe");
-//        }
+        Optional<Theatre> theatreOptional = theatreRepository.findByRoomId(showing.getRoomId());
+        if (!theatreOptional.isPresent()){
+            throw new IllegalArgumentException("El cine no existe");
+        }
 
         Optional<Room> roomOptional = roomRepository.findById(showing.getRoomId());
         if (!roomOptional.isPresent()) {
@@ -50,30 +54,55 @@ public class ShowingServices {
         return showingRepository.findAll();
     }
 
-    // Método para verificar si la sala está libre en el horario
+    //verificar si la sala está libre en el horario
     public boolean isRoomAvailable(long roomId, LocalDateTime date) {
         List<Showing> showings = showingRepository.findByRoomIdAndDate(roomId, date);
-        return showings.isEmpty(); // Si no hay ningún showing en ese horario, la sala está disponible
+        return showings.isEmpty();
     }
 
-//    // Método para reservar un asiento
-//    public boolean reservarAsiento(Long showingId, int fila, int columna) {
+
+    //verificar si un asiento está disponible
+    public List<Integer> notAvailableSeats(Long showingId) {
+        Optional<Showing> showingOpt = showingRepository.findById(showingId);
+        if (showingOpt.isPresent()) {
+            Showing showing = showingOpt.get();
+            List<Booking> bookingsList = bookingServices.getShowingBookings(showing);
+            List<Integer> ocuppiedSeats = new ArrayList<>();
+
+            for (Booking variable : bookingsList){
+                ocuppiedSeats.addLast(variable.getSeatId());
+            }
+
+            return ocuppiedSeats;
+        }
+        throw new IllegalArgumentException("La función no existe.");
+    }
+
+//    //reservar un asiento
+//    public void reserveSeat(Long showingId, int seat) {
 //        Optional<Showing> showingOpt = showingRepository.findById(showingId);
 //        if (showingOpt.isPresent()) {
 //            Showing showing = showingOpt.get();
-//            if (showing.getSeatAvailability()[fila][columna]) {
-//                showing.getSeatAvailability()[fila][columna] = false;
-//                showingRepository.save(showing);
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 //
-//    // Método para verificar disponibilidad
-//    public boolean isAvailable(Long showingId, int fila, int columna) {
+//            if (!notAvailableSeats(showingId).contains(seat)) {
+//                showingRepository.save(showing);
+//            } else {
+//                throw new IllegalArgumentException("El asiento ya está ocupado.");
+//            }
+//        } else {
+//            throw new IllegalArgumentException("La función no existe.");
+//        }
+//    }
+
+//    // liberar un asiento
+//    public void releaseSeat(Long showingId, int seat) {
 //        Optional<Showing> showingOpt = showingRepository.findById(showingId);
-//        return showingOpt.map(showing -> showing.getSeatAvailability()[fila][columna])
-//                .orElse(false);
+//        if (showingOpt.isPresent()) {
+//            Showing showing = showingOpt.get();
+//
+//            showingRepository.save(showing);
+//        } else {
+//            throw new IllegalArgumentException("La función no existe.");
+//        }
 //    }
 }

@@ -29,8 +29,6 @@ public class AdminWebController {
     @Autowired
     private WebUserServices repo;
 
-
-
     @GetMapping("/home")
     @PreAuthorize("hasRole('ADMIN')")
     public String adminHome() {

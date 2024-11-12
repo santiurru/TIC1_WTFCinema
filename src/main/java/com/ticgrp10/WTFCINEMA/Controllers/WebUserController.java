@@ -7,6 +7,7 @@ import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
 import com.ticgrp10.WTFCINEMA.Services.AdminServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,6 +80,19 @@ public class WebUserController {
 
         return "register";
     }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        return "profile";
+    }
+
+    @GetMapping("/home")
+    @PreAuthorize("hasRole('USER')")
+    public String userHome() {
+        return "User/user";
+    }
+
+
 
 
 //    @Autowired

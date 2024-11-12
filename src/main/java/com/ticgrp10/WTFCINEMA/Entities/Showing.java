@@ -8,9 +8,7 @@ import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -44,6 +42,4 @@ public class Showing {
     @Transient
     private int roomNumber;
 
-//    @NotNull
-//    private List<List<Boolean>> seatAvailability;
 }

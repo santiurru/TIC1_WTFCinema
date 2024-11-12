@@ -24,7 +24,7 @@ public class Booking {
     private long customerId;
 
     @NotNull
-    private long seatId;
+    private int seatId;
 
     @NotNull
     private long showingId;
