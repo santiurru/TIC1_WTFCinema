@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.hibernate.grammars.hql.HqlParser.ROWS;
 
 @Service
 public class ShowingServices {
@@ -61,6 +62,8 @@ public class ShowingServices {
     }
 
 
+
+
     //verificar si un asiento está disponible
     public List<Integer> notAvailableSeats(Long showingId) {
         Optional<Showing> showingOpt = showingRepository.findById(showingId);
@@ -78,31 +81,43 @@ public class ShowingServices {
         throw new IllegalArgumentException("La función no existe.");
     }
 
-//    //reservar un asiento
-//    public void reserveSeat(Long showingId, int seat) {
-//        Optional<Showing> showingOpt = showingRepository.findById(showingId);
-//        if (showingOpt.isPresent()) {
-//            Showing showing = showingOpt.get();
-//
-//            if (!notAvailableSeats(showingId).contains(seat)) {
-//                showingRepository.save(showing);
-//            } else {
-//                throw new IllegalArgumentException("El asiento ya está ocupado.");
-//            }
-//        } else {
-//            throw new IllegalArgumentException("La función no existe.");
-//        }
-//    }
+    public Map<String, String> getSeatAvailability(Long showingId) {
+        List<Integer> ocuppiedSeats = notAvailableSeats(showingId);
 
-//    // liberar un asiento
-//    public void releaseSeat(Long showingId, int seat) {
-//        Optional<Showing> showingOpt = showingRepository.findById(showingId);
-//        if (showingOpt.isPresent()) {
-//            Showing showing = showingOpt.get();
-//
-//            showingRepository.save(showing);
-//        } else {
-//            throw new IllegalArgumentException("La función no existe.");
-//        }
-//    }
+        Map<String, String> seatMap = new HashMap<>();
+
+        int seatNumber = 1;
+        for (int row = 1; row <= ROWS; row++) {
+            for (int col = 1; col <= COLUMNS; col++) {
+                String position = row + "," + col;
+                if (ocuppiedSeats.contains(seatNumber)) {
+                    seatMap.put(position, "occupied");
+                } else {
+                    seatMap.put(position, "available");
+                }
+                seatNumber++;
+            }
+        }
+
+        return seatMap;
+    }
+
+
+    public List<Theatre> getTheatersByMovie(Long movieId) {
+        return theatreRepository.findTheatresByMovieId(movieId);
+    }
+
+    public List<LocalDateTime> getDaysByMovieAndTheater(Long movieId, Long theaterId) {
+        // Encuentra funciones de la película en el cine específico y extrae las fechas únicas
+        List<Showing> showings = showingRepository.findShowingsByMovieIdAndTheatreId(movieId, theaterId);
+        return showings.stream()
+                .map(Showing::getDate)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<Showing> getShowingsByMovieTheaterAndDay(Long movieId, Long theaterId, String day) {
+        return showingRepository.findShowingsByMovieIdAndTheaterIdAndDay(movieId, theaterId, day);
+    }
 }
+

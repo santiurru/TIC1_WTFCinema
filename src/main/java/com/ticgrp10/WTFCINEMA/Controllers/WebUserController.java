@@ -42,7 +42,6 @@ public class WebUserController {
                     new FieldError("registerDto", "confirmPassword", "Password and Confirm Password do not match")
             );
         }
-
         Optional<WebUser> user = repo.findByEmail(registerDto.getEmail());
         Optional<Admin> admin = adminServices.findByEmail(registerDto.getEmail());
         if (user.isPresent() || admin.isPresent()) {
@@ -50,11 +49,9 @@ public class WebUserController {
                     new FieldError("registerDto", "email", "Email address is already used")
             );
         }
-
         if (result.hasErrors()) {
             return "register";
         }
-
         try {
             var bcryptEncoder = new BCryptPasswordEncoder();
 
@@ -74,17 +71,11 @@ public class WebUserController {
             result.addError(new FieldError("registerDto",
                     "name", e.getMessage()));
         }
-
-
-
-
         return "register";
     }
 
     @GetMapping("/profile")
-    public String profile(Model model) {
-        return "profile";
-    }
+    public String profile(Model model) {return "profile";}
 
     @GetMapping("/home")
     @PreAuthorize("hasRole('USER')")
@@ -92,35 +83,22 @@ public class WebUserController {
         return "User/user";
     }
 
+    //bookings
+    @GetMapping("/bookings")
+    @PreAuthorize("hasRole('USER')")
+    public String indexBookings() {return "User/bookingsManagement";}
+
+    @GetMapping("/bookings/myBookings")
+    @PreAuthorize("hasRole('USER')")
+    public String listBookings() {
+        return "redirect:/booking/myBookings";
+    }
+
+    @GetMapping("/bookings/create")
+    @PreAuthorize("hasRole('USER')")
+    public String createBookingForm() {
+        return "redirect:/booking/reserve";
+    }
 
 
-
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
-//    @GetMapping("/register")
-//    public String register() {
-//        return "register";
-//    }
-//
-//    @PostMapping("/register")
-//    public ResponseEntity<String> registerUser(@RequestBody @Valid WebUser appUser) {
-//        if (appUserService.findByEmail(appUser.getEmail()).isPresent()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT)
-//                    .body("El usuario ya existe con este correo electrónico.");
-//        }
-//        appUserService.addUser(appUser);
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body("Usuario registrado con éxito: " + appUser.getEmail());
-//    }
-
-//    @GetMapping("/login")
-//    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
-//        Optional<WebUser> user = appUserService.findByEmail(email);
-////        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
-////            return ResponseEntity.ok("Inicio de sesión exitoso para: " + user.get().getEmail());
-////        }
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                .body("Credenciales incorrectas.");
-//    }
 }

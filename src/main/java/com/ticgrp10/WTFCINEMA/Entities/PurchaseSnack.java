@@ -15,16 +15,16 @@ import org.antlr.v4.runtime.misc.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class BookingSnack {
+public class PurchaseSnack {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-//    @NotNull
-//    private Snack snack;
-//
-//    @NotNull
-//    private Booking booking;
+    @NotNull
+    private long customerId;
+
+    @NotNull
+    private long snackId;
 
     @NotNull
     private int quantity = 1;

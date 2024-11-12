@@ -30,6 +30,9 @@ public class Showing {
     @NotNull
     private LocalDateTime date;
 
+    @NotNull
+    private int ticketPrice;
+
     @Transient
     private String movieTitle;
 
@@ -41,5 +44,6 @@ public class Showing {
 
     @Transient
     private int roomNumber;
+
 
 }
