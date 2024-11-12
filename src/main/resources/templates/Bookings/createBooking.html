@@ -8,15 +8,11 @@
 <body>
 <h1>Crear Reserva</h1>
 
-<form action="/bookings/reserve" method="post">
+<form action="/booking/reserve" method="post">
     <!-- Seleccionar Película -->
     <label for="movie">Película:</label>
     <select id="movie" name="movieId" required>
         <option value="">Seleccione una película</option>
-        <!-- Cargar películas dinámicamente desde el backend -->
-        <!-- Ejemplo:
-        <option value="1">Película 1</option>
-        -->
     </select>
 
     <!-- Seleccionar Cine -->
@@ -48,6 +44,16 @@
 
 <script>
     $(document).ready(function() {
+
+        $.get("/booking/movies", function(data) {
+            $('#movie').empty().append('<option value="">Seleccione una película</option>'); // Limpiar opciones existentes
+            data.forEach(function(movie) {
+                $('#movie').append(new Option(movie.title, movie.id)); // Suponiendo que cada película tiene 'title' y 'id'
+            });
+        }).fail(function() {
+            $('#movie').empty().append('<option>Unable to load movies. Please try again.</option>');
+        });
+
         // Cargar cines al seleccionar una película
         $('#movie').change(function() {
             const movieId = $(this).val();
@@ -57,7 +63,7 @@
             $('#seat-selection').empty();
 
             if (movieId) {
-                $.get("/bookings/theatersByMovie", { movieId: movieId }, function(data) {
+                $.get("/booking/theatersByMovie", { movieId: movieId }, function(data) {
                     data.forEach(function(theater) {
                         $('#theater').append(new Option(theater.name, theater.id));
                     });
@@ -74,7 +80,7 @@
             $('#seat-selection').empty();
 
             if (theaterId) {
-                $.get("/bookings/daysByMovieAndTheater", { movieId: movieId, theaterId: theaterId }, function(data) {
+                $.get("/booking/daysByMovieAndTheater", { movieId: movieId, theaterId: theaterId }, function(data) {
                     data.forEach(function(day) {
                         $('#day').append(new Option(day, day));
                     });
@@ -91,7 +97,7 @@
             $('#seat-selection').empty();
 
             if (day) {
-                $.get("/bookings/showingsByMovieTheaterAndDay", { movieId: movieId, theaterId: theaterId, day: day }, function(data) {
+                $.get("/booking/showingsByMovieTheaterAndDay", { movieId: movieId, theaterId: theaterId, day: day }, function(data) {
                     data.forEach(function(showing) {
                         $('#showing').append(new Option(showing.time, showing.id));
                     });
@@ -105,7 +111,7 @@
             $('#seat-selection').empty();
 
             if (showingId) {
-                $.get("/bookings/availableSeatsByShowing", { showingId: showingId }, function(data) {
+                $.get("/booking/availableSeatsByShowing", { showingId: showingId }, function(data) {
                     data.forEach(function(seat) {
                         $('#seat-selection').append('<input type="checkbox" name="seatIds" value="' + seat + '"> Asiento ' + seat + '<br>');
                     });
@@ -116,3 +122,4 @@
 </script>
 </body>
 </html>
+

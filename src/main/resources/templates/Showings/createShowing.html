@@ -28,7 +28,7 @@
             <label for="theatreId">Seleccione un cine:</label>
             <select id="theatreId" name="theatreId" onchange="fetchRooms()" required>
                 <option value="">Seleccione un cine</option>
-                <option th:each="theatre : ${theatres}" th:value="${theatre.theatre_id}" th:text="${theatre.neighborhood}">Cine</option>
+                <option th:each="theatre : ${theatres}" th:value="${theatre.theatreId}" th:text="${theatre.neighborhood}">Cine</option>
             </select>
 
             <!-- Select Película -->
@@ -47,10 +47,15 @@
             <label>Fecha y hora:</label>
             <input type="datetime-local" name="date" required>
 
+            <label for="ticketPrice">Precio del Ticket:</label>
+            <input type="number" id="ticketPrice" name="ticketPrice" step="0.01" required>
+
+
             <!-- Mostrar error si la sala está ocupada -->
             <div th:if="${error}" style="color: red;">
                 <p th:text="${error}"></p>
             </div>
+
 
             <button type="submit">Agregar Función</button>
         </form>

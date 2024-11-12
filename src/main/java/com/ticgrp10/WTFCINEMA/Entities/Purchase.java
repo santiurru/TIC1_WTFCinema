@@ -28,7 +28,7 @@ public class Purchase {
     @OneToMany
     private List<Booking> bookings;
 
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL)
+    @OneToMany
     private List<PurchaseSnack> snacks;
 
     @NotNull

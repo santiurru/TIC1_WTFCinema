@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/movie")
@@ -37,10 +38,18 @@ public class MovieWebController {
         movieServices.addMovie(movie);
         return "redirect:/movie/home/admin";
     }
+
     @GetMapping("/list")
     public String listMovies(Model model) {
         model.addAttribute("movies", movieServices.getAll());
         return "Movies/listMovies";
     }
+
+    @GetMapping("/get")
+    @ResponseBody
+    public List<Movie> getMovies() {
+        return movieServices.getAll();  // Asegúrate de que movieService tenga un método para obtener todas las películas
+    }
 }
+
 

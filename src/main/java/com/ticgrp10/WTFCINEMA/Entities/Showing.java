@@ -30,9 +30,6 @@ public class Showing {
     @NotNull
     private LocalDateTime date;
 
-    @NotNull
-    private int ticketPrice;
-
     @Transient
     private String movieTitle;
 
@@ -44,6 +41,10 @@ public class Showing {
 
     @Transient
     private int roomNumber;
+
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private Integer ticketPrice =0 ;
+
 
 
 }

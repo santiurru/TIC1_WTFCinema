@@ -21,11 +21,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/bookings")
+@RequestMapping("/booking")
 public class BookingController {
 
     @Autowired
     BookingService bookingServices;
+
+    @Autowired
+    MovieServices movieServices;
 
     @Autowired
     WebUserServices userServices;
@@ -139,6 +142,11 @@ public class BookingController {
     public List<Theatre> getTheatersByMovie(@RequestParam Long movieId) {
         return showingServices.getTheatersByMovie(movieId);
     }
+    @GetMapping("/movies")
+    @ResponseBody
+    public List<Movie> getMovies() {
+        return showingServices.getMoviesByDate(LocalDateTime.now());
+    }
 
     // Obtener días en los cuales hay funciones para una película en un cine específico
     @GetMapping("/daysByMovieAndTheater")
@@ -150,8 +158,8 @@ public class BookingController {
     // Obtener funciones disponibles en un día específico para una película y cine
     @GetMapping("/showingsByMovieTheaterAndDay")
     @ResponseBody
-    public List<Showing> getShowingsByMovieTheaterAndDay(@RequestParam Long movieId, @RequestParam Long theaterId, @RequestParam String day) {
-        return showingServices.getShowingsByMovieTheaterAndDay(movieId, theaterId, day);
+    public List<Showing> getShowingsByMovieTheaterAndDate(@RequestParam Long movieId, @RequestParam Long theaterId, @RequestParam LocalDateTime date) {
+        return showingServices.getShowingsByMovieTheaterAndDate(movieId, theaterId, date);
     }
 
     @GetMapping("/availableSeatsByShowing")

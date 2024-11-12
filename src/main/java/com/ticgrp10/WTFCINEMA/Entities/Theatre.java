@@ -22,7 +22,7 @@ public class Theatre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long theatre_id;
+    private long theatreId;
 
     @NotNull
     private String neighborhood;
@@ -39,7 +39,7 @@ public class Theatre {
     @Override
     public String toString() {
         return "Theatre{" +
-                "theatre_id=" + theatre_id +
+                "theatre_id=" + theatreId +
                 ", neighborhood='" + neighborhood + '\'' +
                 '}';
     }
