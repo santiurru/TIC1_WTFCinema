@@ -66,7 +66,8 @@
     <label for="theatreId">Seleccione un cine:</label>
     <select id="theatreId" name="theatreId" onchange="fetchRooms()" required>
         <option value="">Seleccione un cine</option>
-        <option th:each="theatre : ${theatres}" th:value="${theatre.theatre_id}" th:text="${theatre.neighborhood}">Cine</option>
+        <option th:each="theatre : ${theatres}" th:value="${theatre.theatreId
+        }" th:text="${theatre.neighborhood}">Cine</option>
     </select> <br>
 
     <!-- Select Película -->

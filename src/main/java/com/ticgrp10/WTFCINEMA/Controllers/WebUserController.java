@@ -47,6 +47,12 @@ public class WebUserController {
     public String usermenu(){
         return "User/user";
     }
+
+    @GetMapping("/bookings")
+    public String userBookings(){
+        return "User/userBookings";
+    }
+
     @GetMapping("/profile")
     public String userProfile(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

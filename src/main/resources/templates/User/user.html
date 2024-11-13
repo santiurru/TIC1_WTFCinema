@@ -12,9 +12,7 @@
 
 <div class="container mt-5">
     <div class="list-group">
-        <li class="nav-item" sec:authorize="hasRole('USER')">
-            <a href="/user/bookings" class="list-group-item list-group-item-action">Ver mis Reservas</a>
-        </li>
+        <a href="/api/users/bookings" class="list-group-item list-group-item-action" sec:authorize="hasRole('USER')">Ver mis Reservas</a>
         <a href="/api/users/profile" class="list-group-item list-group-item-action">Ver mis datos</a>
     </div>
 </div>

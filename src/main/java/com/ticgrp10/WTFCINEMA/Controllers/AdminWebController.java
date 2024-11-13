@@ -37,6 +37,12 @@ public class AdminWebController {
         return "Admin/admin";
     }
 
+    @GetMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminUserManagement() {
+        return "Admin/userManagement";
+    }
+
     @GetMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public String createAdminForm(Model model) {
@@ -93,7 +99,7 @@ public class AdminWebController {
     @PreAuthorize("hasRole('ADMIN')")
     public String listAdmins(Model model) {
         model.addAttribute("admins", adminServices.getAll());
-        return "listAdmins";}
+        return "Admin/listAdmins";}
 
     //movies
     @GetMapping("/movies")

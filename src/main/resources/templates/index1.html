@@ -26,10 +26,10 @@
     <div th:each="movie, movieStat : ${movies}">
         <div class="carousel-item" th:classappend="${movieStat.index == 0} ? 'active' : ''">
             <img th:src="${movie.img}" class="d-block w-100" th:alt="${movie.title}">
-            <div class="carousel-caption d-none d-md-block">
-                <h5 th:text="${movie.title}">Titulo</h5>
-                <p th:text="${movie.synopsis}">Synopsis</p>
-            </div>
+<!--            <div class="carousel-caption d-none d-md-block">-->
+<!--                <h5 th:text="${movie.title}">Titulo</h5>-->
+<!--                <p th:text="${movie.synopsis}">Synopsis</p>-->
+<!--            </div>-->
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
