@@ -24,8 +24,6 @@ public class AdminServices {
     @Autowired
     private ShowingServices showingServices;
 
-//    @Autowired
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Admin addAdmin(Admin admin) {
         if (admin.getName() == null || admin.getName().isEmpty() || admin.getSurname() == null || admin.getSurname().isEmpty()) {
@@ -38,9 +36,6 @@ public class AdminServices {
         if (!isValidEmail(admin.getEmail())) {
             throw new IllegalArgumentException("El formato del correo electrónico no es válido");
         }
-
-//        String encodedPassword = bCryptPasswordEncoder.encode(admin.getPassword());
-//        admin.setPassword(encodedPassword);
 
         return adminRepository.save(admin);
     }

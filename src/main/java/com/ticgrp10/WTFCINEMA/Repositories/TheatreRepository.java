@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -12,4 +13,11 @@ public interface TheatreRepository extends JpaRepository<Theatre, Long> {
 
     @Query("SELECT t FROM Theatre t WHERE t.neighborhood = ?1")
     Optional<Theatre> findTheatreByNeighborhood(String neighborhood);
+
+    List<Theatre> findByTheatreIdIn(List<Long> theatreIds);
+
+
+//    Optional<Theatre> findByRoomId(Long roomId);
+//
+//    List<Theatre> findTheatresByMovieId(Long movieId);
 }

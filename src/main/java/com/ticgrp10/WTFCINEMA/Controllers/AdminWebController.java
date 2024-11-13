@@ -31,7 +31,6 @@ public class AdminWebController {
 
 
 
-
     @GetMapping("/home")
     @PreAuthorize("hasRole('ADMIN')")
     public String adminHome() {
@@ -94,7 +93,7 @@ public class AdminWebController {
     @PreAuthorize("hasRole('ADMIN')")
     public String listAdmins(Model model) {
         model.addAttribute("admins", adminServices.getAll());
-        return "Admin/listAdmins";}
+        return "listAdmins";}
 
     //movies
     @GetMapping("/movies")
@@ -116,18 +115,15 @@ public class AdminWebController {
     //showings
     @GetMapping("/showings")
     @PreAuthorize("hasRole('ADMIN')")
-    public String indexShowings() {
-        return "Admin/showingsManagement";}
+    public String indexShowings() {return "Admin/showingsManagement";}
 
     @GetMapping("/showings/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public String createShowingForm() {
-        return "redirect:/showing/create";}
+    public String createShowingForm() {return "redirect:/showing/create";}
 
     @GetMapping("/showings/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public String listShowingsByMovie() {
-        return "redirect:/showing/list";
+    public String listShowingsByMovie() {return "redirect:/showing/list";
     }
 
     //snacks
@@ -147,12 +143,6 @@ public class AdminWebController {
     @GetMapping("/snacks/create")
     public String createSnackForm() {
         return "redirect:/snacks/create";
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/user")
-    public String userManagement(){
-        return "Admin/userManagement";
     }
 
 }

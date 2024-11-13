@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.hibernate.grammars.hql.HqlParser.ROWS;
 
 @Service
 public class ShowingServices {
@@ -24,6 +26,12 @@ public class ShowingServices {
     @Autowired
     TheatreRepository theatreRepository;
 
+    @Autowired
+    BookingRepository bookingRepo;
+
+    @Autowired
+    RoomRepository roomRepo;
+
     public Showing addShowing(Showing showing) {
         if (showingRepository.existsById(showing.getId())) {
             throw new IllegalArgumentException("La funcion ya existe");
@@ -33,15 +41,17 @@ public class ShowingServices {
             throw new IllegalArgumentException("La pelicula no existe");
         }
 
+        Optional<Room> roomOptional = roomRepository.findById(showing.getRoomId());
+        if (!roomOptional.isPresent()) {
+            throw new IllegalArgumentException("La sala no existe");
+        }
+
 //        Optional<Theatre> theatreOptional = theatreRepository.findByRoomId(showing.getRoomId());
 //        if (!theatreOptional.isPresent()){
 //            throw new IllegalArgumentException("El cine no existe");
 //        }
 
-        Optional<Room> roomOptional = roomRepository.findById(showing.getRoomId());
-        if (!roomOptional.isPresent()) {
-            throw new IllegalArgumentException("La sala no existe");
-        }
+
 
         return showingRepository.save(showing);
     }
@@ -50,30 +60,81 @@ public class ShowingServices {
         return showingRepository.findAll();
     }
 
-    // Método para verificar si la sala está libre en el horario
+    //verificar si la sala está libre en el horario
     public boolean isRoomAvailable(long roomId, LocalDateTime date) {
         List<Showing> showings = showingRepository.findByRoomIdAndDate(roomId, date);
-        return showings.isEmpty(); // Si no hay ningún showing en ese horario, la sala está disponible
+        return showings.isEmpty();
     }
 
-//    // Método para reservar un asiento
-//    public boolean reservarAsiento(Long showingId, int fila, int columna) {
-//        Optional<Showing> showingOpt = showingRepository.findById(showingId);
-//        if (showingOpt.isPresent()) {
-//            Showing showing = showingOpt.get();
-//            if (showing.getSeatAvailability()[fila][columna]) {
-//                showing.getSeatAvailability()[fila][columna] = false;
-//                showingRepository.save(showing);
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    // Método para verificar disponibilidad
-//    public boolean isAvailable(Long showingId, int fila, int columna) {
-//        Optional<Showing> showingOpt = showingRepository.findById(showingId);
-//        return showingOpt.map(showing -> showing.getSeatAvailability()[fila][columna])
-//                .orElse(false);
-//    }
+
+
+
+    //verificar si un asiento está disponible
+    public List<Integer> notAvailableSeats(Long showingId) {
+        Optional<Showing> showingOpt = showingRepository.findById(showingId);
+        if (showingOpt.isPresent()) {
+            Showing showing = showingOpt.get();
+            List<Booking> bookingsList = bookingRepo.findByShowingId(showing.getId());
+            List<Integer> occupiedSeats = new ArrayList<>();
+
+            for (Booking variable : bookingsList){
+                occupiedSeats.add(variable.getSeatId());
+            }
+
+            return occupiedSeats;
+        }
+        throw new IllegalArgumentException("La función no existe.");
+    }
+
+    public Map<String, String> getSeatAvailability(Long showingId) {
+        //10 columnas y 15 filas
+        int rows =15;
+        int columns =10;
+        List<Integer> occupiedSeats = notAvailableSeats(showingId);
+
+        Map<String, String> seatMap = new HashMap<>();
+
+        int seatNumber = 1;
+        for (int row = 1; row <= rows; row++) {
+            for (int col = 1; col <= columns; col++) {
+                String position = row + "," + col;
+                if (occupiedSeats.contains(seatNumber)) {
+                    seatMap.put(position, "occupied");
+                } else {
+                    seatMap.put(position, "available");
+                }
+                seatNumber++;
+            }
+        }
+
+        return seatMap;
+    }
+
+
+    public List<Theatre> getTheatersByMovie(Long movieId) {
+
+        return theatreRepository.findByTheatreIdIn(roomRepo.findTheatreIdsByIdIn(showingRepository.findRoomIdsByMovieIdAndDate(movieId,LocalDateTime.now())));
+    }
+
+    public List<LocalDateTime> getDaysByMovieAndTheater(Long movieId, Long theaterId) {
+        // Encuentra funciones de la película en el cine específico y extrae las fechas únicas
+        List<Long> roomIds = roomRepo.findIdsByTheatreId(theaterId);
+        List<Showing> showings = showingRepository.findShowingsByMovieIdAndRoomIdIn(movieId, roomIds);
+        return showings.stream()
+                .map(Showing::getDate)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<Movie> getMoviesByDate(LocalDateTime date) {
+        return movieRepository.findByIdIn(showingRepository.findMovieIdByDate(date));
+    }
+
+
+
+    public List<Showing> getShowingsByMovieTheaterAndDate(Long movieId, Long theaterId, LocalDateTime date) {
+        List<Long> roomIds = roomRepo.findIdsByTheatreId(theaterId);
+        return showingRepository.findShowingsByMovieIdAndDateAndRoomIdIn(movieId, date,roomIds);
+    }
 }
+

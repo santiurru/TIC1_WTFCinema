@@ -1,5 +1,6 @@
 package com.ticgrp10.WTFCINEMA.Entities;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,24 +9,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class BookingSnack {
+public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-//    @NotNull
-//    private Snack snack;
-//
-//    @NotNull
-//    private Booking booking;
+    private float rating;
 
-    @NotNull
-    private int quantity = 1;
+    private long customerId;
+
+    private long movieId;
 }

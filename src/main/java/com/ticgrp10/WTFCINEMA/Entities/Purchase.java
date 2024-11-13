@@ -1,20 +1,22 @@
 package com.ticgrp10.WTFCINEMA.Entities;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.Date;
+import java.util.List;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Booking {
+public class Purchase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +25,17 @@ public class Booking {
     @NotNull
     private long customerId;
 
-    @NotNull
-    private int seatId;
+    @OneToMany
+    private List<Booking> bookings;
+
+    @OneToMany
+    private List<PurchaseSnack> snacks;
 
     @NotNull
-    private long showingId;
+    private Date purchaseDate;
+
+    @NotNull
+    private double totalPrice=0;
 
 
 }

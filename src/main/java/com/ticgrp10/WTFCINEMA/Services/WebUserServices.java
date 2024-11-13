@@ -21,9 +21,6 @@ public class WebUserServices implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
     public WebUser addUser(WebUser user) {
         if (user.getName() == null || user.getName().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío");
@@ -34,9 +31,6 @@ public class WebUserServices implements UserDetailsService {
         if (!isValidEmail(user.getEmail())) {
             throw new IllegalArgumentException("El formato del correo electrónico no es válido");
         }
-
-//        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-//        user.setPassword(encodedPassword);
 
         return userRepository.save(user);
     }
@@ -54,11 +48,8 @@ public class WebUserServices implements UserDetailsService {
     }
 
     private boolean isValidEmail(String email) {
-        //what is love
         String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-        //baby don't hurt me
         return email.matches(emailRegex);
-        //don't hurt me
     }
 
     @Override

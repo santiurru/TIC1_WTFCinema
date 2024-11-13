@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     public Optional<Movie> findByTitle(String title);
+    public List<Movie> findByIdIn(List<Long> ids);
 
 }

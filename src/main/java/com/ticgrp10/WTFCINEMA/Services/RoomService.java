@@ -37,8 +37,8 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
-    public List<Room> getRoomsByTheatre(Long cinemaId) {
-        return roomRepository.findByTheatreId(cinemaId);
+    public List<Room> getRoomsByTheatre(Long theatreId) {
+        return roomRepository.findAllByTheatreId(theatreId);
     }
 
     public Room getRoomById(long roomId){

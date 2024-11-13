@@ -15,6 +15,28 @@ public class MovieServices {
     private MovieRepository movieRepository;
 
     public Movie addMovie(Movie movie) {
+        if (movieRepository.findById(movie.getId()).isPresent()) {
+            throw new IllegalArgumentException("El snack ya existe");
+        }
+        if (movie.getTitle() == null || movie.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("El titulo no puede estar vacio");
+        }
+        if (movie.getSynopsis() == null || movie.getSynopsis().isEmpty()) {
+            throw new IllegalArgumentException("La synopsis no puede estar vacia");
+        }
+        if (movie.getGenres().isEmpty()){
+            throw new IllegalArgumentException("La genres no puede estar vacia");
+        }
+        if (movie.getAgeRating() < 0 || movie.getAgeRating() > 100) {
+            throw new IllegalArgumentException("El genre no puede estar vacio");
+        }
+        if (movie.getLength() <= 0){
+            throw new IllegalArgumentException("El length no puede estar vacio");
+        }
+        if (movie.getImg().isEmpty()){
+            throw new IllegalArgumentException("La imagen no puede estar vacio");
+        }
+
         return movieRepository.save(movie);
     }
 

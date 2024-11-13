@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Reserva</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Crear Reserva</h1>
+
+<form action="/booking/reserve" method="post">
+    <!-- Seleccionar Película -->
+    <label for="movie">Película:</label>
+    <select id="movie" name="movieId" required>
+        <option value="">Seleccione una película</option>
+    </select>
+
+    <!-- Seleccionar Cine -->
+    <label for="theater">Cine:</label>
+    <select id="theater" name="theaterId" required>
+        <option value="">Seleccione un cine</option>
+    </select>
+
+    <!-- Seleccionar Día -->
+    <label for="day">Día:</label>
+    <select id="day" name="day" required>
+        <option value="">Seleccione un día</option>
+    </select>
+
+    <!-- Seleccionar Función -->
+    <label for="showing">Función:</label>
+    <select id="showing" name="showingId" required>
+        <option value="">Seleccione una función</option>
+    </select>
+
+    <!-- Mostrar Asientos Disponibles -->
+    <h2>Seleccione sus Asientos</h2>
+    <div id="seat-selection">
+        <!-- Asientos disponibles se mostrarán aquí -->
+    </div>
+
+    <button type="submit">Confirmar Reserva</button>
+</form>
+
+<script>
+    $(document).ready(function() {
+
+        $.get("/booking/movies", function(data) {
+            $('#movie').empty().append('<option value="">Seleccione una película</option>'); // Limpiar opciones existentes
+            data.forEach(function(movie) {
+                $('#movie').append(new Option(movie.title, movie.id)); // Suponiendo que cada película tiene 'title' y 'id'
+            });
+        }).fail(function() {
+            $('#movie').empty().append('<option>Unable to load movies. Please try again.</option>');
+        });
+
+        // Cargar cines al seleccionar una película
+        $('#movie').change(function() {
+            const movieId = $(this).val();
+            $('#theater').empty().append('<option value="">Seleccione un cine</option>');
+            $('#day').empty().append('<option value="">Seleccione un día</option>');
+            $('#showing').empty().append('<option value="">Seleccione una función</option>');
+            $('#seat-selection').empty();
+
+            if (movieId) {
+                $.get("/booking/theatersByMovie", { movieId: movieId }, function(data) {
+                    data.forEach(function(theater) {
+                        $('#theater').append(new Option(theater.name, theater.id));
+                    });
+                });
+            }
+        });
+
+        // Cargar días al seleccionar un cine
+        $('#theater').change(function() {
+            const movieId = $('#movie').val();
+            const theaterId = $(this).val();
+            $('#day').empty().append('<option value="">Seleccione un día</option>');
+            $('#showing').empty().append('<option value="">Seleccione una función</option>');
+            $('#seat-selection').empty();
+
+            if (theaterId) {
+                $.get("/booking/daysByMovieAndTheater", { movieId: movieId, theaterId: theaterId }, function(data) {
+                    data.forEach(function(day) {
+                        $('#day').append(new Option(day, day));
+                    });
+                });
+            }
+        });
+
+        // Cargar funciones al seleccionar un día
+        $('#day').change(function() {
+            const movieId = $('#movie').val();
+            const theaterId = $('#theater').val();
+            const day = $(this).val();
+            $('#showing').empty().append('<option value="">Seleccione una función</option>');
+            $('#seat-selection').empty();
+
+            if (day) {
+                $.get("/booking/showingsByMovieTheaterAndDay", { movieId: movieId, theaterId: theaterId, day: day }, function(data) {
+                    data.forEach(function(showing) {
+                        $('#showing').append(new Option(showing.time, showing.id));
+                    });
+                });
+            }
+        });
+
+        // Cargar asientos disponibles al seleccionar una función
+        $('#showing').change(function() {
+            const showingId = $(this).val();
+            $('#seat-selection').empty();
+
+            if (showingId) {
+                $.get("/booking/availableSeatsByShowing", { showingId: showingId }, function(data) {
+                    data.forEach(function(seat) {
+                        $('#seat-selection').append('<input type="checkbox" name="seatIds" value="' + seat + '"> Asiento ' + seat + '<br>');
+                    });
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
