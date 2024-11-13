@@ -153,7 +153,7 @@ public class SecurityConfig {
         http
 //                todo verificar nuevas entradas (como mostrar usuarios, etc)
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers("/", "/login", "/register", "/api/users/register", "/logout","/error").permitAll()
+                        .requestMatchers("/", "/login", "/register", "/api/users/register", "/logout","/error","/movie/current").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/movie/**","/showing/**","/snacks/**","/admin/**").hasRole("ADMIN") // Permite solo a ADMIN para crear
                         .requestMatchers("/admin/**", "/movie/**", "/showing/**", "/snacks/**","/login").hasRole("ADMIN")

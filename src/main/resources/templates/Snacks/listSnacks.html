@@ -32,7 +32,7 @@
 
 <ul>
     <li th:each="snack : ${snacks}" class="snack">
-        <img th:src="${snack.img}" alt="Imagen de ${snack.name}">
+        <img th:src="${snack.img}" th:alt="|Imagen de ${snack.name}|">
         <div class="snack-info">
             <span th:text="${snack.name}">Nombre del Snack</span>
             <span th:text="|Precio: ${snack.price}$|">Precio del Snack</span>
