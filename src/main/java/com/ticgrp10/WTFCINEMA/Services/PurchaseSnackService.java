@@ -6,6 +6,8 @@ import com.ticgrp10.WTFCINEMA.Repositories.PurchaseSnackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PurchaseSnackService {
 
@@ -15,4 +17,7 @@ public class PurchaseSnackService {
     public PurchaseSnack addPurchaseSnack(PurchaseSnack snack) {
         return purchaseSnackRepository.save(snack);
     }
+
+    public List<PurchaseSnack> getAll() {return purchaseSnackRepository.findAll();}
+
 }

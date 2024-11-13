@@ -14,6 +14,7 @@ public interface TheatreRepository extends JpaRepository<Theatre, Long> {
     @Query("SELECT t FROM Theatre t WHERE t.neighborhood = ?1")
     Optional<Theatre> findTheatreByNeighborhood(String neighborhood);
 
+    @Query("SELECT DISTINCT s FROM Theatre s WHERE s.theatreId in :theatreIds")
     List<Theatre> findByTheatreIdIn(List<Long> theatreIds);
 
 

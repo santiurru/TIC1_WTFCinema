@@ -7,6 +7,7 @@ import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
 import com.ticgrp10.WTFCINEMA.Services.AdminServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,21 +38,35 @@ public class WebUserController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ADMIN')")
     public String userList(Model model){
         model.addAttribute("users", userRepository.findAll());
         return "User/usersList";
     }
 
-
     @GetMapping("/menu")
-    public String usermenu(){
+    public String userMenu(){
         return "User/user";
     }
 
     @GetMapping("/bookings")
-    public String userBookings(){
-        return "User/userBookings";
+    @PreAuthorize("hasRole('USER')")
+    public String indexBookings() {
+        return "User/bookingsManagement";
     }
+
+    @GetMapping("/booking/list")
+    @PreAuthorize("hasRole('USER')")
+    public String listBookings() {
+        return "redirect:/booking/myBookings";
+    }
+
+    @GetMapping("/bookings/create")
+    @PreAuthorize("hasRole('USER')")
+    public String createBookingForm() {
+        return "redirect:/booking/reserve";
+    }
+
 
     @GetMapping("/profile")
     public String userProfile(Model model){
@@ -112,40 +127,14 @@ public class WebUserController {
             result.addError(new FieldError("registerDto",
                     "name", e.getMessage()));
         }
-
-
-
-
         return "register";
     }
 
-
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
-//    @GetMapping("/register")
-//    public String register() {
-//        return "register";
-//    }
+//    GetMapping("/creditCard")
+//    public String changeCreditCardForm(){
 //
-//    @PostMapping("/register")
-//    public ResponseEntity<String> registerUser(@RequestBody @Valid WebUser appUser) {
-//        if (appUserService.findByEmail(appUser.getEmail()).isPresent()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT)
-//                    .body("El usuario ya existe con este correo electrónico.");
-//        }
-//        appUserService.addUser(appUser);
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body("Usuario registrado con éxito: " + appUser.getEmail());
 //    }
 
-//    @GetMapping("/login")
-//    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
-//        Optional<WebUser> user = appUserService.findByEmail(email);
-////        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
-////            return ResponseEntity.ok("Inicio de sesión exitoso para: " + user.get().getEmail());
-////        }
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                .body("Credenciales incorrectas.");
-//    }
+
+
 }

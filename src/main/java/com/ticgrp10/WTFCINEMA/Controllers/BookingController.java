@@ -45,11 +45,6 @@ public class BookingController {
     @Autowired
     SnackRepository snackRepository;
 
-    @Autowired
-    PurchaseServices purchaseServices;
-    @Autowired
-    private PurchaseSnackService purchaseSnackServices;
-
 
     @GetMapping("/home/user")
     @PreAuthorize("hasRole('USER')")
@@ -71,41 +66,14 @@ public class BookingController {
     @PreAuthorize("hasRole('USER')")
     public String createBooking(@RequestParam Long showingId,
                                 @RequestParam List<Integer> seatIds,
-                                @RequestParam List<Long> snackIds,
-                                @RequestParam List<Integer> snackQuantities) {
-
-        WebUser currentUser = getCurrentUser();
-        List<Booking> bookings = new ArrayList<>();
-
-        // Crear una reserva (Booking) para cada asiento seleccionado
+                                @RequestParam WebUser currentUser ) {
         for (int seatId : seatIds) {
             Booking booking = new Booking();
             booking.setCustomerId(currentUser.getId());
             booking.setShowingId(showingRepository.findById(showingId).get().getId());
             booking.setSeatId(seatId);
             bookingServices.addBooking(booking);
-            bookings.add(booking);
         }
-
-        Purchase purchase = new Purchase();
-        purchase.setCustomerId(currentUser.getId());
-        purchase.setBookings(bookings); // Asociar todas las reservas a la compra
-
-        // Agregar snacks a la compra
-        List<PurchaseSnack> snacks =  new ArrayList<>();
-
-        for (int i = 0; i < snackIds.size(); i++) {
-            Optional<Snack> snackOptional = snackRepository.findById(snackIds.get(i));
-            Snack snack = snackOptional.get();
-            int quantity = snackQuantities.get(i);
-            PurchaseSnack purchaseSnack = new PurchaseSnack();
-            purchaseSnack.setSnackId(snack.getId());
-            purchaseSnack.setQuantity(quantity);
-            purchaseSnackServices.addPurchaseSnack(purchaseSnack);
-            snacks.add(purchaseSnack);
-        }
-
-        purchaseServices.addPurchase(purchase);
 
         return "redirect:/bookings/home/user";
     }

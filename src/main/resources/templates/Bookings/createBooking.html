@@ -64,6 +64,7 @@
 
             if (movieId) {
                 $.get("/booking/theatersByMovie", { movieId: movieId }, function(data) {
+                        console.log(data);
                     data.forEach(function(theater) {
                         $('#theater').append(new Option(theater.name, theater.id));
                     });

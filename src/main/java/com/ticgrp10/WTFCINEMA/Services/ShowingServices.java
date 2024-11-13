@@ -113,7 +113,10 @@ public class ShowingServices {
 
     public List<Theatre> getTheatersByMovie(Long movieId) {
 
-        return theatreRepository.findByTheatreIdIn(roomRepo.findTheatreIdsByIdIn(showingRepository.findRoomIdsByMovieIdAndDate(movieId,LocalDateTime.now())));
+        return theatreRepository.findByTheatreIdIn(
+                roomRepo.findTheatreIdsByIdIn(
+                        showingRepository.findRoomIdsByMovieIdAndDate(
+                                movieId,LocalDateTime.now())));
     }
 
     public List<LocalDateTime> getDaysByMovieAndTheater(Long movieId, Long theaterId) {
