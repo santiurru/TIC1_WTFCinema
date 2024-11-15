@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.hibernate.grammars.hql.HqlParser.ROWS;
-
 @Service
 public class ShowingServices {
 

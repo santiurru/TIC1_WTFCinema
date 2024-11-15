@@ -49,6 +49,7 @@ public class WebUserController {
         return "User/user";
     }
 
+    //bookings
     @GetMapping("/bookings")
     @PreAuthorize("hasRole('USER')")
     public String indexBookings() {
@@ -67,7 +68,27 @@ public class WebUserController {
         return "redirect:/booking/reserve";
     }
 
+    //purchase snack
+    @GetMapping("/snack/purchase")
+    @PreAuthorize("hasRole('USER')")
+    public String indexPurchaseSnack() {
+        return "User/snackPurchaseManagement";
+    }
 
+    @GetMapping("/snack/list")
+    @PreAuthorize("hasRole('USER')")
+    public String listPurchaseSnack() {
+        return "redirect:/purchase/snack/mySnackPurchases";
+    }
+
+    @GetMapping("/snack/buy")
+    @PreAuthorize("hasRole('USER')")
+    public String createSnackForm() {
+        return "redirect:/purchase/snack/create";
+    }
+
+
+    //profile
     @GetMapping("/profile")
     public String userProfile(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -135,6 +156,10 @@ public class WebUserController {
 //
 //    }
 
+    @GetMapping("/rate")
+    public String rateMovieForm(){
+        return "redirect: ";
+    }
 
 
 }

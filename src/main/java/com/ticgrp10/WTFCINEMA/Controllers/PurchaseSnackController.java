@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/purchaseSnack")
+@RequestMapping("/purchase/snack")
 public class PurchaseSnackController {
 
     @Autowired
@@ -48,12 +48,12 @@ public class PurchaseSnackController {
     public String createSnackPurchaseForm(Model model) {
         model.addAttribute("snacks", purchaseSnackServices.getAll());
         model.addAttribute("user", getCurrentUser());
-        return "Bookings/createBooking";
+        return "Snack/createSnackPurchase";
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('USER')")
-    public String createBooking(@RequestParam List<Long> snackIds,
+    public String createSnackPurchase(@RequestParam List<Long> snackIds,
                                 @RequestParam List<Integer> snackQuantities,
                                 @RequestParam WebUser currentUser){
 
@@ -67,7 +67,7 @@ public class PurchaseSnackController {
             purchaseSnack.setQuantity(quantity);
             purchaseSnackServices.addPurchaseSnack(purchaseSnack);
         }
-        return "User/checkout";
+        return "redirect:/purchase/snack/home/user";
     }
 
     private WebUser getCurrentUser() {

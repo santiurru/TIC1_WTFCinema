@@ -1,5 +1,6 @@
 package com.ticgrp10.WTFCINEMA.Entities;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,9 @@ public class PurchaseSnack {
 
     @NotNull
     private long snackId;
+
+    @Nullable
+    private  long showingId;
 
     @NotNull
     private int quantity = 1;

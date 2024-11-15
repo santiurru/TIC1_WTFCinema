@@ -108,7 +108,14 @@ public class BookingController {
     @GetMapping("/theatersByMovie")
     @ResponseBody
     public List<Theatre> getTheatersByMovie(@RequestParam Long movieId) {
+
         return showingServices.getTheatersByMovie(movieId);
+    }
+    @GetMapping("/theatersByMovieTest")
+    @ResponseBody
+    public List<Theatre> getTheatres(@RequestParam Long movieId) {
+
+        return showingRepository.findTheatres(movieId,LocalDateTime.now());
     }
     @GetMapping("/movies")
     @ResponseBody
@@ -123,11 +130,17 @@ public class BookingController {
         return showingServices.getDaysByMovieAndTheater(movieId, theaterId);
     }
 
+    @GetMapping("/daysByMovieAndTheaterTest")
+    @ResponseBody
+    public List<LocalDateTime> getDaysByMovieAndTheaterTest(@RequestParam Long movieId, @RequestParam Long theatreId) {
+        return showingRepository.findDateByMovieAndTheatre(movieId,theatreId,LocalDateTime.now());
+    }
+
     // Obtener funciones disponibles en un día específico para una película y cine
     @GetMapping("/showingsByMovieTheaterAndDay")
     @ResponseBody
-    public List<Showing> getShowingsByMovieTheaterAndDate(@RequestParam Long movieId, @RequestParam Long theaterId, @RequestParam LocalDateTime date) {
-        return showingServices.getShowingsByMovieTheaterAndDate(movieId, theaterId, date);
+    public List<Showing> getShowingsByMovieTheaterAndDate(@RequestParam Long movieId, @RequestParam Long theatreId, @RequestParam LocalDateTime date) {
+        return showingRepository.findShowingByMovieAndTheatreAndDate(movieId,theatreId,date);
     }
 
     @GetMapping("/availableSeatsByShowing")

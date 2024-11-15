@@ -28,4 +28,6 @@ public class TheatreServices {
         Optional<Theatre> optionalTheatre = theatreRepository.findById(theatreId);
         return optionalTheatre.orElse(null);
     }
+
+
 }

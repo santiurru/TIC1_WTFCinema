@@ -1,12 +1,53 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Crear Reserva</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        li {
+            border-bottom: 2px;
+        }
+        input{
+            padding: 10px 16px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            align-self: center;
+        }
+        button[type=submit]{
+            background-color: dodgerblue;
+            color: white;
+            padding: 10px 16px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type=submit]:hover{
+            background-color: skyblue;
+        }
+        form{
+            padding: 10px 16px;
+            align-content: center;
+        }
+        label{
+            max-width: 300px;
+            padding-right: 20px;
+            border-right: black 1px;
+            text-align: right;
+        }
+
+
+    </style>
+
 </head>
+
 <body>
-<h1>Crear Reserva</h1>
+<div th:replace="~{navbar :: navbar}"></div>
 
 <form action="/booking/reserve" method="post">
     <!-- Seleccionar Película -->
@@ -16,8 +57,8 @@
     </select>
 
     <!-- Seleccionar Cine -->
-    <label for="theater">Cine:</label>
-    <select id="theater" name="theaterId" required>
+    <label for="theatre">Cine:</label>
+    <select id="theatre" name="theatreId" required>
         <option value="">Seleccione un cine</option>
     </select>
 
@@ -57,31 +98,31 @@
         // Cargar cines al seleccionar una película
         $('#movie').change(function() {
             const movieId = $(this).val();
-            $('#theater').empty().append('<option value="">Seleccione un cine</option>');
+            $('#theatre').empty().append('<option value="">Seleccione un cine</option>');
             $('#day').empty().append('<option value="">Seleccione un día</option>');
             $('#showing').empty().append('<option value="">Seleccione una función</option>');
             $('#seat-selection').empty();
 
             if (movieId) {
-                $.get("/booking/theatersByMovie", { movieId: movieId }, function(data) {
+                $.get("/booking/theatersByMovieTest", { movieId: movieId }, function(data) {
                         console.log(data);
-                    data.forEach(function(theater) {
-                        $('#theater').append(new Option(theater.name, theater.id));
+                    data.forEach(function(theatre) {
+                        $('#theatre').append(new Option(theatre.neighborhood, theatre.theatreId));
                     });
                 });
             }
         });
 
         // Cargar días al seleccionar un cine
-        $('#theater').change(function() {
+        $('#theatre').change(function() {
             const movieId = $('#movie').val();
-            const theaterId = $(this).val();
+            const theatreId = $(this).val();
             $('#day').empty().append('<option value="">Seleccione un día</option>');
             $('#showing').empty().append('<option value="">Seleccione una función</option>');
             $('#seat-selection').empty();
 
-            if (theaterId) {
-                $.get("/booking/daysByMovieAndTheater", { movieId: movieId, theaterId: theaterId }, function(data) {
+            if (theatreId) {
+                $.get("/booking/daysByMovieAndTheaterTest", { movieId: movieId, theatreId: theatreId }, function(data) {
                     data.forEach(function(day) {
                         $('#day').append(new Option(day, day));
                     });
@@ -92,13 +133,13 @@
         // Cargar funciones al seleccionar un día
         $('#day').change(function() {
             const movieId = $('#movie').val();
-            const theaterId = $('#theater').val();
+            const theatreId = $('#theatre').val();
             const day = $(this).val();
             $('#showing').empty().append('<option value="">Seleccione una función</option>');
             $('#seat-selection').empty();
 
             if (day) {
-                $.get("/booking/showingsByMovieTheaterAndDay", { movieId: movieId, theaterId: theaterId, day: day }, function(data) {
+                $.get("/booking/showingsByMovieTheaterAndDay", { movieId: movieId, theaterId: theatreId, day: day }, function(data) {
                     data.forEach(function(showing) {
                         $('#showing').append(new Option(showing.time, showing.id));
                     });
@@ -121,6 +162,7 @@
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
 

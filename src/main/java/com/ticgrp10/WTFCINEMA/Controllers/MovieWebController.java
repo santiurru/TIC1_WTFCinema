@@ -47,6 +47,7 @@ public class MovieWebController {
         return "redirect:/movie/home/admin";
     }
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ADMIN')")
     public String listMovies(Model model) {
         model.addAttribute("movies",movieServices.getAll());
         return "Movies/listMovies";
@@ -69,5 +70,19 @@ public class MovieWebController {
         }
         return "Movies/listMovies";
     }
+
+    @GetMapping("/earnings")
+    public String movieEarningsForm(Model model){
+        model.addAttribute("movies", movieServices.getAll());
+        return "Movies/movieEarnings";
+    }
+
+    @GetMapping("/earningsMovie")
+    @ResponseBody
+    public float movieEarnings(Movie movie){
+        return movieServices.getEarnings((movie.getId()));
+    }
+
+
 }
 
