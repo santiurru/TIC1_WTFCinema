@@ -25,4 +25,6 @@ public class Rating {
     private long customerId;
 
     private long movieId;
+
+
 }

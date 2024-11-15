@@ -1,15 +1,18 @@
 package com.ticgrp10.WTFCINEMA.Controllers;
 
+import com.ticgrp10.WTFCINEMA.Entities.Booking;
 import com.ticgrp10.WTFCINEMA.Entities.PurchaseSnack;
 import com.ticgrp10.WTFCINEMA.Entities.Snack;
 import com.ticgrp10.WTFCINEMA.Entities.WebUser;
 import com.ticgrp10.WTFCINEMA.Repositories.SnackRepository;
+import com.ticgrp10.WTFCINEMA.Services.BookingService;
 import com.ticgrp10.WTFCINEMA.Services.PurchaseSnackService;
 import com.ticgrp10.WTFCINEMA.Services.SnackServices;
 import com.ticgrp10.WTFCINEMA.Services.WebUserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -37,7 +40,10 @@ public class PurchaseSnackController {
 
     @Autowired
     WebUserServices userServices;
+    @Autowired
+    private BookingService bookingService;
 
+    // todo ?????????????????????????????????????????????????
     @GetMapping("/home/user")
     @PreAuthorize("hasRole('USER')")
     public String home() {return "User/user";} //????
@@ -48,27 +54,56 @@ public class PurchaseSnackController {
     public String createSnackPurchaseForm(Model model) {
         model.addAttribute("snacks", purchaseSnackServices.getAll());
         model.addAttribute("user", getCurrentUser());
-        return "Snack/createSnackPurchase";
+        return "Snacks/createSnackPurchase";
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('USER')")
     public String createSnackPurchase(@RequestParam List<Long> snackIds,
-                                @RequestParam List<Integer> snackQuantities,
-                                @RequestParam WebUser currentUser){
+                                      @RequestParam List<Integer> snackQuantities,
+                                      @AuthenticationPrincipal WebUser currentUser, // Obtener el usuario actual con AuthenticationPrincipal
+                                      Model model){
 
+        // Verificación de que las listas tengan el mismo tamaño
+        if (snackIds.size() != snackQuantities.size()) {
+            model.addAttribute("error", "Las listas de snacks y cantidades no coinciden.");
+            return "Snacks/createSnackPurchase";
+        }
+
+        // Recorrer las listas de snacks y cantidades
         for (int i = 0; i < snackIds.size(); i++) {
             Optional<Snack> snackOptional = snackRepository.findById(snackIds.get(i));
+
+            // Manejar el caso donde el snack no se encuentra en la base de datos
+            if (!snackOptional.isPresent()) {
+                model.addAttribute("error", "El snack con ID " + snackIds.get(i) + " no se encuentra disponible.");
+                return "Snacks/createSnackPurchase";
+            }
+
             Snack snack = snackOptional.get();
             int quantity = snackQuantities.get(i);
+
+            // Crear la entidad PurchaseSnack
             PurchaseSnack purchaseSnack = new PurchaseSnack();
-            purchaseSnack.setSnackId(snack.getId());
+            purchaseSnack.setSnackId(snack.getId());  // Asociar directamente el objeto Snack
             purchaseSnack.setCustomerId(currentUser.getId());
             purchaseSnack.setQuantity(quantity);
+
+            // Añadir el PurchaseSnack al servicio
             purchaseSnackServices.addPurchaseSnack(purchaseSnack);
         }
-        return "redirect:/purchase/snack/home/user";
+
+        return "User/buySnackQuestion"; // Confirmación o siguiente paso
     }
+
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('USER')")
+    public String listSnackPurchases(Model model) {
+        List<PurchaseSnack> purchaseSnacks = purchaseSnackServices.getUserPurchases(getCurrentUser().getId());
+        model.addAttribute("snacksPurchases", purchaseSnacks);
+        return "Snacks/mySnacksPurchases";
+    }
+
 
     private WebUser getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -79,5 +114,4 @@ public class PurchaseSnackController {
         }
         return userOptional.get();
     }
-
 }

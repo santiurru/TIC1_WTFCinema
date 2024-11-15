@@ -78,7 +78,7 @@ public class WebUserController {
     @GetMapping("/snack/list")
     @PreAuthorize("hasRole('USER')")
     public String listPurchaseSnack() {
-        return "redirect:/purchase/snack/mySnackPurchases";
+        return "redirect:/purchase/snack/list";
     }
 
     @GetMapping("/snack/buy")
@@ -156,10 +156,23 @@ public class WebUserController {
 //
 //    }
 
-    @GetMapping("/rate")
-    public String rateMovieForm(){
-        return "redirect: ";
+    //rating
+    @GetMapping("/ratings")
+    @PreAuthorize("hasRole('USER')")
+    public String indexRating() {
+        return "User/ratingManagement";
     }
 
+    @GetMapping("/ratings/rate")
+    @PreAuthorize("hasRole('USER')")
+    public String rateMovieForm(){
+        return "redirect:/ratings/rate-movie";
+    }
+
+    @GetMapping("/ratings/list")
+    @PreAuthorize("hasRole('USER')")
+    public String listRatings() {
+        return "redirect:/ratings/list";
+    }
 
 }

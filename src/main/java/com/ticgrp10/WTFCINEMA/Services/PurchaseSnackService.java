@@ -20,4 +20,5 @@ public class PurchaseSnackService {
 
     public List<PurchaseSnack> getAll() {return purchaseSnackRepository.findAll();}
 
+    public List<PurchaseSnack> getUserPurchases(long userId){return purchaseSnackRepository.findByCustomerId(userId);}
 }

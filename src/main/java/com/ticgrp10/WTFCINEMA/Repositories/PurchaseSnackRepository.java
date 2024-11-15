@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface PurchaseSnackRepository extends JpaRepository<PurchaseSnack, Long> {
     List<PurchaseSnack> findByShowingId(Long showingId);
 
+    List<PurchaseSnack> findByCustomerId(Long customerId);
+
 }

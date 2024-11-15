@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Ratings</title>
+</head>
+<body>
+
+<h1>Mis Calificaciones</h1>
+
+<!-- Mostrar si no hay ratings para el usuario -->
+<div th:if="${#lists.isEmpty(ratings)}">
+    <p>No tienes calificaciones aún.</p>
+</div>
+
+<!-- Mostrar los ratings -->
+<div th:if="${!#lists.isEmpty(ratings)}">
+    <table>
+        <thead>
+        <tr>
+            <th>Película</th>
+            <th>Calificación</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="rating : ${ratings}">
+            <tr>
+                <td th:text="${rating.movieId}"></td>
+                <td th:text="${rating.rating}"></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

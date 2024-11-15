@@ -155,9 +155,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest -> authRequest
                         .requestMatchers("/", "/login", "/register", "/api/users/register", "/logout","/error","/movie/current").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/ratings/rate-movie").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/movie/**","/showing/**","/snacks/**","/admin/**").hasRole("ADMIN") // Permite solo a ADMIN para crear
                         .requestMatchers("/admin/**", "/movie/**", "/showing/**", "/snacks/**","/login").hasRole("ADMIN")
-                        .requestMatchers("/listShowings/", "snacks/list", "/listMovies/").hasRole("USER")
+                        .requestMatchers("/listShowings/", "snacks/list", "/listMovies/", "/booking/**", "ratings/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -178,5 +179,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
-

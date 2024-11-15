@@ -13,12 +13,18 @@ public class RatingServices {
     @Autowired
     RatingRepository ratingRepository;
 
-    public Rating addRating(Rating rating) {
-        if (ratingRepository.existsById(rating.getId())) {
-            Rating rating1 = ratingRepository.findById(rating.getId()).get();
-            rating1.setRating(rating.getRating());
-            ratingRepository.save(rating1);
+    public Rating addOrUpdateRating(Rating rating) {
+        // Verificar si ya existe una calificación de este usuario para la película
+        Optional<Rating> existingRating = ratingRepository.findByMovieIdAndCustomerId(rating.getMovieId(), rating.getCustomerId());
+
+        if (existingRating.isPresent()) {
+            // Si ya existe una calificación, actualízala
+            Rating existing = existingRating.get();
+            existing.setRating(rating.getRating());
+            return ratingRepository.save(existing);
+        } else {
+            // Si no existe una calificación, guárdala
+            return ratingRepository.save(rating);
         }
-        return ratingRepository.save(rating);
     }
 }

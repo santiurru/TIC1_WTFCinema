@@ -61,4 +61,8 @@ public class BookingService {
     public List<Booking> getShowingBookings(Showing showing){
         return bookingRepository.findByShowingId(showing.getId());
     }
+
+    public List<Booking> getAll(){
+        return bookingRepository.findAll();
+    }
 }

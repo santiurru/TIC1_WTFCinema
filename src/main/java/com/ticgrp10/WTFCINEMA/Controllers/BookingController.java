@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -146,7 +145,7 @@ public class BookingController {
     @GetMapping("/availableSeatsByShowing")
     @ResponseBody
     public Map<String, String> getAvailableSeatsByShowing(@RequestParam Long showingId) {
-        return showingServices.getSeatAvailability(showingId); // Deberías implementar este método en ShowingServices
+        return showingServices.getSeatAvailability(showingId); // implementar en ShowingServices (?
     }
 
 
