@@ -28,7 +28,7 @@ public interface ShowingRepository extends JpaRepository<Showing, Long> {
     @Query(" SELECT DISTINCT t FROM Theatre t JOIN Room r ON t.theatreId = r.theatreId JOIN Showing s ON r.id = s.roomId WHERE s.movieId = :movieId AND s.date >= :date")
     List<Theatre> findTheatres(Long movieId, LocalDateTime date);
 
-    @Query("SELECT DISTINCT s.date FROM Theatre t JOIN Room r ON t.theatreId = r.theatreId JOIN Showing s ON r.id = s.roomId WHERE s.date >= :currentDate AND s.movieId == :movieId AND t.theatreId == :theatreId")
+    @Query("SELECT DISTINCT s.date FROM Theatre t JOIN Room r ON t.theatreId = r.theatreId JOIN Showing s ON r.id = s.roomId WHERE s.date >= :currentDate AND s.movieId = :movieId AND t.theatreId = :theatreId")
     List<LocalDateTime> findDateByMovieAndTheatre(Long movieId,Long theatreId, LocalDateTime currentDate);
 
     @Query("SELECT s.movieId FROM Showing s WHERE s.date >= :date")
@@ -36,7 +36,7 @@ public interface ShowingRepository extends JpaRepository<Showing, Long> {
 
     List<Showing> findShowingsByMovieIdAndDateAndRoomIdIn(Long movieId, LocalDateTime date,List<Long> roomIds);
 
-    @Query("SELECT DISTINCT s.id FROM Theatre t JOIN Room r ON t.theatreId = r.theatreId JOIN Showing s ON r.id = s.roomId WHERE s.movieId == :movieId AND t.theatreId == :theatreId AND s.date == :date")
+    @Query("SELECT DISTINCT s FROM Theatre t JOIN Room r ON t.theatreId = r.theatreId JOIN Showing s ON r.id = s.roomId WHERE s.movieId = :movieId AND t.theatreId = :theatreId AND s.date = :date")
     List<Showing> findShowingByMovieAndTheatreAndDate(Long movieId,Long theatreId,LocalDateTime date);
 
 }

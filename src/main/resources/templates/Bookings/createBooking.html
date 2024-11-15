@@ -68,11 +68,11 @@
         <option value="">Seleccione un día</option>
     </select>
 
-    <!-- Seleccionar Función -->
-    <label for="showing">Función:</label>
-    <select id="showing" name="showingId" required>
-        <option value="">Seleccione una función</option>
-    </select>
+<!--    &lt;!&ndash; Seleccionar Función &ndash;&gt;-->
+<!--    <label for="showing">Función:</label>-->
+<!--    <select id="showing" name="showingId" required>-->
+<!--        <option value="">Seleccione una función</option>-->
+<!--    </select>-->
 
     <!-- Mostrar Asientos Disponibles -->
     <h2>Seleccione sus Asientos</h2>
@@ -130,18 +130,18 @@
             }
         });
 
-        // Cargar funciones al seleccionar un día
+        // Cargar funciones al seleccionar un día todo cambiar ya no se tiene que seleccionar, solo guardar para la parte de los asientos
         $('#day').change(function() {
             const movieId = $('#movie').val();
             const theatreId = $('#theatre').val();
-            const day = $(this).val();
+            const date = $(this).val();
             $('#showing').empty().append('<option value="">Seleccione una función</option>');
             $('#seat-selection').empty();
 
-            if (day) {
-                $.get("/booking/showingsByMovieTheaterAndDay", { movieId: movieId, theaterId: theatreId, day: day }, function(data) {
+            if (date) {
+                $.get("/booking/showingsByMovieTheaterAndDay", { movieId: movieId, theatreId: theatreId, date: date }, function(data) {
                     data.forEach(function(showing) {
-                        $('#showing').append(new Option(showing.time, showing.id));
+                        $('#showing').append(new Option(showing.roomId, showing.id));
                     });
                 });
             }
