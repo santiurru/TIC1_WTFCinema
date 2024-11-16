@@ -52,7 +52,7 @@ public class PurchaseSnackController {
     @GetMapping("/create")
     @PreAuthorize("hasRole('USER')")
     public String createSnackPurchaseForm(Model model) {
-        model.addAttribute("snacks", purchaseSnackServices.getAll());
+        model.addAttribute("snacks", snackRepository.findAll());
         model.addAttribute("user", getCurrentUser());
         return "Snacks/createSnackPurchase";
     }
@@ -61,8 +61,9 @@ public class PurchaseSnackController {
     @PreAuthorize("hasRole('USER')")
     public String createSnackPurchase(@RequestParam List<Long> snackIds,
                                       @RequestParam List<Integer> snackQuantities,
-                                      @AuthenticationPrincipal WebUser currentUser, // Obtener el usuario actual con AuthenticationPrincipal
-                                      Model model){
+                                      Model model) {
+
+        WebUser currentUser = getCurrentUser();
 
         // Verificación de que las listas tengan el mismo tamaño
         if (snackIds.size() != snackQuantities.size()) {
@@ -72,6 +73,10 @@ public class PurchaseSnackController {
 
         // Recorrer las listas de snacks y cantidades
         for (int i = 0; i < snackIds.size(); i++) {
+            if (snackQuantities.get(i) == 0){
+                continue;
+            }
+
             Optional<Snack> snackOptional = snackRepository.findById(snackIds.get(i));
 
             // Manejar el caso donde el snack no se encuentra en la base de datos

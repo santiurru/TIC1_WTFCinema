@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecciona tus Asientos</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Incluye tu archivo CSS -->
+</head>
+<body>
+<header>
+    <h1>Selecciona tus Asientos</h1>
+</header>
+<main>
+    <section>
+        <h2>Función ID: <span th:text="${showingId}"></span></h2>
+        <form th:action="@{/selectSeats/{showingId}(showingId=${showingId})}" method="POST">
+            <div class="seat-map">
+                <!-- Iteración sobre las filas del mapa de asientos -->
+                <div th:each="row : ${seatMap}" class="seat-row">
+                    <!-- Iteración sobre los asientos de una fila -->
+                    <div th:each="seat : ${row}" class="seat">
+                        <label>
+                            <input
+                                    type="checkbox"
+                                    name="seatIds"
+                                    th:value="${seat.id}"
+                                    th:disabled="${!seat.available}">
+                            <span
+                                    class="seat-indicator"
+                                    th:style="'background-color:' + (${seat.available} ? 'green' : 'red')"
+                                    th:text="'F' + ${seat.row} + 'A' + ${seat.number}">
+                                </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn">Confirmar Selección</button>
+        </form>
+    </section>
+</main>
+<footer>
+    <p>&copy; 2024 Cine Booking App</p>
+</footer>
+</body>
+</html>

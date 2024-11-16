@@ -63,9 +63,24 @@ public class BookingController {
 
     @PostMapping("/reserve")
     @PreAuthorize("hasRole('USER')")
-    public String createBooking(@RequestParam Long showingId,
-                                @RequestParam List<Integer> seatIds,
-                                @RequestParam WebUser currentUser ) {
+    public String createBooking(@RequestParam Long showingId) {
+//        model.addAttribute("showingId", showingId);
+        return "redirect:/booking/selectSeats/" + showingId;
+    }
+
+    @GetMapping("/selectSeats/{showingId}")
+    @PreAuthorize("hasRole('USER')")
+    public String selectSeatsForm(@PathVariable("showingId") Long showingId, Model model){
+        model.addAttribute("showingId", showingId);
+        model.addAttribute("seatMap", showingServices.getSeatAvailability(showingId));
+        return "Bookings/seatSelection";
+    }
+
+    @PostMapping("/selectSeats/{showingId}")
+    @PreAuthorize("hasRole('USER')")
+    public String selectSeats(@PathVariable("showingId") Long showingId, @RequestParam List<Integer> seatIds){
+        WebUser currentUser = getCurrentUser();
+
         for (int seatId : seatIds) {
             Booking booking = new Booking();
             booking.setCustomerId(currentUser.getId());
@@ -73,9 +88,9 @@ public class BookingController {
             booking.setSeatId(seatId);
             bookingServices.addBooking(booking);
         }
-
-        return "redirect:/bookings/home/user";
+        return "User/buySnackQuestion";
     }
+
 
     //delete
     @GetMapping("/cancel/{showingId}")

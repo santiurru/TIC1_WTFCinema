@@ -51,6 +51,7 @@
 
 <form action="/booking/reserve" method="post">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
     <!-- Seleccionar Película -->
     <label for="movie">Película:</label>
     <select id="movie" name="movieId" required>
@@ -69,15 +70,31 @@
         <option value="">Seleccione un día</option>
     </select>
 
+    <!-- Seleccionar Función -->
+    <label for="showing">Función:</label>
+    <select id="showing" name="showingId" required>
+        <option value="">Seleccione una función</option>
+    </select>
 
-    <!-- Mostrar Asientos Disponibles -->
-    <h2>Seleccione sus Asientos</h2>
-    <div id="seat-selection">
-        <!-- Asientos disponibles se mostrarán aquí -->
-    </div>
+<!--    &lt;!&ndash; Mostrar Asientos Disponibles &ndash;&gt;-->
+<!--    <h2>Seleccione sus Asientos</h2>-->
+<!--    <label for="seat-selection"></label>-->
+<!--    <select id="seat-selection">-->
+<!--        &lt;!&ndash; Asientos disponibles se mostrarán aquí &ndash;&gt;-->
+<!--    </select>-->
+
 
     <button type="submit">Confirmar Reserva</button>
 </form>
+
+<!-- todo podriamos usar esto para los asientos -->
+<img src="https://scontent.cdninstagram.com/v/t51.2885-19/358521630_796157072228281_7230287311101070150_n.jpg?stp=dst-jpg_s640x640&_nc_ht=scontent.cdninstagram.com&_nc_cat=101&_nc_ohc=YJ66fB7158kQ7kNvgG3mJw2&_nc_gid=64bce9f4cfda443c9f448c42b446776c&edm=APs17CUBAAAA&ccb=7-5&oh=00_AYBVq4FDhvpABpvBiTs_E5GjGA8wFRwfSNMNAEKUMz77Uw&oe=673DC498&_nc_sid=10d13b" onclick="funcion()">
+<script>
+    function funcion(){
+        alert("hola estoy probando algo")
+    }
+</script>
+
 
 <script>
     $(document).ready(function() {
@@ -108,7 +125,6 @@
                 });
             }
         });
-
         // Cargar días al seleccionar un cine
         $('#theatre').change(function() {
             const movieId = $('#movie').val();
@@ -126,51 +142,37 @@
             }
         });
 
-        // Cargar funciones al seleccionar un día
+
+        // Cargar funciones al seleccionar un día todo cambiar ya no se tiene que seleccionar, solo guardar para la parte de los asientos
         $('#day').change(function() {
             const movieId = $('#movie').val();
             const theatreId = $('#theatre').val();
             const date = $(this).val();
-            $('#seat-selection').empty(); // Limpia los asientos
+            $('#showing').empty().append('<option value="">Seleccione una función</option>');
+            $('#seat-selection').empty();
 
             if (date) {
-                // Obtener las funciones disponibles
                 $.get("/booking/showingsByMovieTheaterAndDay", { movieId: movieId, theatreId: theatreId, date: date }, function(data) {
-                    if (data.length > 0) {
-                        // Usar automáticamente la primera función
-                        const showingId = data[0].id; // Primera función obtenida
-                        console.log("Función seleccionada automáticamente:", showingId);
-
-                        // Cargar asientos para esa función
-                        $.get("/booking/availableSeatsByShowing", { showingId: showingId }, function(seats) {
-                            seats.forEach(function(seat) {
-                                $('#seat-selection').append('<input type="checkbox" name="seatIds" value="' + seat + '"> Asiento ' + seat + '<br>');
-                            });
-                        });
-                    } else {
-                        console.log("No hay funciones disponibles para la fecha seleccionada.");
-                    }
+                    data.forEach(function(showing) {
+                        $('#showing').append(new Option(showing.roomId, showing.id));
+                    });
                 });
             }
         });
 
-        // // Cargar funciones al seleccionar un día todo cambiar ya no se tiene que seleccionar, solo guardar para la parte de los asientos
-        // $('#day').change(function() {
-        //     const movieId = $('#movie').val();
-        //     const theatreId = $('#theatre').val();
-        //     const date = $(this).val();
-        //     $('#showing').empty().append('<option value="">Seleccione una función</option>');
-        //     $('#seat-selection').empty();
-        //
-        //     if (date) {
-        //         $.get("/booking/showingsByMovieTheaterAndDay", { movieId: movieId, theatreId: theatreId, date: date }, function(data) {
-        //             data.forEach(function(showing) {
-        //                 $('#showing').append(new Option(showing.roomId, showing.id));
-        //             });
-        //         });
-        //     }
-        // });
-        //
+        // Cargar asientos disponibles al seleccionar una función
+        $('#showing').change(function() {
+            const showingId = $(this).val();
+            $('#seat-selection').empty();
+
+            if (showingId) {
+                $.get("/booking/availableSeatsByShowing", { showingId: showingId }, function(data) {
+                    data.forEach(function(seat) {
+                        $('#seat-selection').append('<input type="checkbox" name="seatIds" value="' + seat + '"> Asiento ' + seat + '<br>');
+                    });
+                });
+            }
+        });
         // // Cargar asientos disponibles al seleccionar una función
         // $('#showing').change(function() {
         //     const showingId = $(this).val();
@@ -178,12 +180,16 @@
         //
         //     if (showingId) {
         //         $.get("/booking/availableSeatsByShowing", { showingId: showingId }, function(data) {
-        //             data.forEach(function(seat) {
-        //                 $('#seat-selection').append('<input type="checkbox" name="seatIds" value="' + seat + '"> Asiento ' + seat + '<br>');
+        //             Object.keys(data).forEach(function(position) {
+        //                 const status = data[position];
+        //                 $('#seat-selection').append(
+        //                     `<input type="checkbox" name="seatIds" value="${position}" ${status === 'occupied' ? 'disabled' : ''}> Asiento ${position} (${status})<br>`
+        //                 );
         //             });
         //         });
         //     }
         // });
+
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

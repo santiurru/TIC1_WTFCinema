@@ -1,71 +1,30 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:c="https://jakarta.ee/xml/ns/jakartaee">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compra de Snacks</title>
+    <title>Comprar Snacks</title>
 </head>
 <body>
-<h1>Compra de Snacks</h1>
+<h2>Compra tus Snacks</h2>
 
-<!-- Mensajes de error si existen -->
-<c:if test="${not empty error}">
-    <div style="color: red;">${error}</div>
-</c:if>
-
-<!-- Formulario de selección de snacks -->
-<form action="/create" method="POST">
+<form action="/purchase/snack/create" method="post">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <h2>Selecciona tus snacks y cantidades</h2>
     <div>
-        <c:forEach items="${snacks}" var="snack">
-            <div>
-                <label>
-                    <input type="checkbox" name="snackIds" value="${snack.id}" /> ${snack.name} - $${snack.price}
-                </label>
-                <input type="number" name="snackQuantities" value="1" min="1" />
-            </div>
-        </c:forEach>
+        <!-- Iterar sobre los snacks disponibles y crear un campo para cada uno -->
+        <div th:each="snack : ${snacks}">
+            <label th:for="'snack-' + ${snack.id}">
+                <span th:text="${snack.name}">Snack Name</span> -
+                <span th:text="${snack.price}">Snack Price</span>€
+            </label>
+            <input type="hidden" name="snackIds" th:value="${snack.id}" />
+            <input type="number" name="snackQuantities" min="0" value="0" />
+        </div>
     </div>
 
-    <button type="submit">Agregar al carrito</button>
+    <button type="submit">Confirmar Compra</button>
 </form>
-
-<!-- Si ya hay una selección de snacks, muestra el carrito -->
-<c:if test="${not empty cart}">
-    <h3>Tu carrito:</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>Snack</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-            <th>Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${cart}" var="cartItem">
-            <tr>
-                <td>${cartItem.name}</td>
-                <td>${cartItem.quantity}</td>
-                <td>$${cartItem.price}</td>
-                <td>$${cartItem.totalPrice}</td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-
-    <h3>Total: $${totalPrice}</h3>
-</c:if>
-
-<!-- Botones para confirmar o cancelar -->
-<form action="/confirmPurchase" method="POST">
-    <button type="submit">Confirmar compra</button>
-</form>
-
-<form action="/cancelPurchase" method="POST">
-    <button type="submit">Cancelar compra</button>
-</form>
-
 </body>
 </html>
+

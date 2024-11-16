@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Queres comprar snacks?</title>
 </head>
 <body>
+<h1>¿Queres comprar snacks?</h1>
 
+<form action="#" method="POST">
+    <button type="button" onclick="redirigir(true)">Sí, quiero comprar snacks</button>
+    <button type="button" onclick="redirigir(false)">No, continuar al checkout</button>
+</form>
+
+<script>
+    function redirigir(compraSnack) {
+        if (compraSnack) {
+            window.location.href = '/purchase/snack/create';
+        } else {
+            window.location.href = '/checkout';
+        }
+    }
+</script>
 </body>
 </html>
