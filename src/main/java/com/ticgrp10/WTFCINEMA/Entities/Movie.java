@@ -1,16 +1,13 @@
 package com.ticgrp10.WTFCINEMA.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Blob;
-import java.sql.Date;
-import java.time.DateTimeException;
 
 @Getter
 @Setter
@@ -28,10 +25,10 @@ public class Movie {
     private String title;
 
     @NotNull
-    private int ageRating;      //Boolean o int o String
+    private int ageRating;
 
     @NotNull
-    private String genres;      //hacerle tostring a una lista de generos
+    private String genres;
 
     @NotNull
     private long length;
@@ -41,5 +38,7 @@ public class Movie {
     private String img;
 
     @NotNull
+    @Size(max = 5000)
+    @Column(nullable = false, length = 5000)
     private String synopsis;
 }

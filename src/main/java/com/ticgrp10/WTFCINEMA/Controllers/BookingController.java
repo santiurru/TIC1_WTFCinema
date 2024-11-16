@@ -71,8 +71,9 @@ public class BookingController {
     @GetMapping("/selectSeats/{showingId}")
     @PreAuthorize("hasRole('USER')")
     public String selectSeatsForm(@PathVariable("showingId") Long showingId, Model model){
+        Map<String, String> seatMap = showingServices.getSeatAvailability(showingId);
         model.addAttribute("showingId", showingId);
-        model.addAttribute("seatMap", showingServices.getSeatAvailability(showingId));
+        model.addAttribute("seatMap", seatMap);
         return "Bookings/seatSelection";
     }
 

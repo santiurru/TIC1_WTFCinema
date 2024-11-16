@@ -1,45 +1,134 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Select Seats</title>-->
+<!--    <style>-->
+<!--        table {-->
+<!--            border-collapse: collapse;-->
+<!--            margin: 20px auto;-->
+<!--        }-->
+<!--        th, td {-->
+<!--            border: 1px solid #ccc;-->
+<!--            padding: 10px;-->
+<!--            text-align: center;-->
+<!--        }-->
+<!--        td.occupied {-->
+<!--            background-color: #ffcccc;-->
+<!--        }-->
+<!--        td.available {-->
+<!--            background-color: #ccffcc;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        td.available:hover {-->
+<!--            background-color: #99e699;-->
+<!--        }-->
+<!--        .seat-container {-->
+<!--            text-align: center;-->
+<!--        }-->
+<!--        .selected {-->
+<!--            background-color: #ffff66 !important;-->
+<!--        }-->
+<!--        button {-->
+<!--            padding: 10px 20px;-->
+<!--            font-size: 16px;-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+<!--    </style>-->
+<!--    <script>-->
+<!--        function toggleSeatSelection(seatId, seatElement) {-->
+<!--            if (seatElement.classList.contains('available')) {-->
+<!--                seatElement.classList.toggle('selected');-->
+<!--                const seatInput = document.getElementById('selectedSeats');-->
+<!--                let selectedSeats = seatInput.value ? seatInput.value.split(',') : [];-->
+<!--                if (seatElement.classList.contains('selected')) {-->
+<!--                    selectedSeats.push(seatId);-->
+<!--                } else {-->
+<!--                    selectedSeats = selectedSeats.filter(id => id !== seatId);-->
+<!--                }-->
+<!--                seatInput.value = selectedSeats.join(',');-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="seat-container">-->
+<!--    <h1>Select Your Seats</h1>-->
+<!--    <form th:action="@{/booking/selectSeats/{showingId}(showingId=${showingId})}" method="post">-->
+<!--        <table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>Row\Col</th>-->
+<!--                <th th:each="col : ${#numbers.sequence(1, 10)}" th:text="${col}"></th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="row : ${#numbers.sequence(1, 15)}">-->
+<!--                <td><strong th:text="${row}"></strong></td>-->
+<!--                <td th:each="col : ${#numbers.sequence(1, 10)}"-->
+<!--                    th:with="position=${row + ',' + col}, seatNumber=${(row - 1) * 10 + col}"-->
+<!--                    th:classappend="${seatMap[position]} == 'occupied' ? 'occupied' : 'available'"-->
+<!--                    th:onclick="${seatMap[position]} == 'available' ? 'toggleSeatSelection(' + seatNumber + ', this)' : null">-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--        <input type="hidden" name="seatIds" id="selectedSeats">-->
+<!--        <button type="submit">Reserve Seats</button>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selecciona tus Asientos</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Incluye tu archivo CSS -->
+    <title>Selección de Asientos</title>
 </head>
+
 <body>
-<header>
-    <h1>Selecciona tus Asientos</h1>
-</header>
-<main>
-    <section>
-        <h2>Función ID: <span th:text="${showingId}"></span></h2>
-        <form th:action="@{/selectSeats/{showingId}(showingId=${showingId})}" method="POST">
-            <div class="seat-map">
-                <!-- Iteración sobre las filas del mapa de asientos -->
-                <div th:each="row : ${seatMap}" class="seat-row">
-                    <!-- Iteración sobre los asientos de una fila -->
-                    <div th:each="seat : ${row}" class="seat">
-                        <label>
-                            <input
-                                    type="checkbox"
-                                    name="seatIds"
-                                    th:value="${seat.id}"
-                                    th:disabled="${!seat.available}">
-                            <span
-                                    class="seat-indicator"
-                                    th:style="'background-color:' + (${seat.available} ? 'green' : 'red')"
-                                    th:text="'F' + ${seat.row} + 'A' + ${seat.number}">
-                                </span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <button type="submit" class="btn">Confirmar Selección</button>
-        </form>
-    </section>
-</main>
-<footer>
-    <p>&copy; 2024 Cine Booking App</p>
-</footer>
+<h1>Selección de Asientos</h1>
+<form action="#" method="post">
+    <div>
+        <h3>Seleccione los asientos</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Asiento</th>
+                <th>Estado</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="i : ${seatMap}">
+                <td>
+                    <span th:text="'Fila ' + ${i}"></span>
+                </td>
+                <td>
+                    <table>
+                        <tr th:each="j : ${seatMap[i]}">
+                            <td>
+                                <input type="checkbox"
+                                       th:name="'seat_' + ${i} + '_' + ${j}"
+                                       th:value="${i}, ${j}"
+                                       th:checked="${seatMap[i][j] == 'available'}"
+                                       th:disabled="${seatMap[i][j] == 'occupied'}" />
+                            </td>
+                            <td>
+                                <span th:text="${seatMap[i][j] == 'available' ? 'Disponible' : 'Ocupado'}"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="submit">Confirmar Selección</button>
+</form>
 </body>
+
 </html>
