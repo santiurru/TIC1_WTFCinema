@@ -1,13 +1,12 @@
 package com.ticgrp10.WTFCINEMA.Entities;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,8 +22,8 @@ public class Booking {
     @NotNull
     private long customerId;
 
-    @NotNull
-    private int seatId;
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeatAvailability> seats;
 
     @NotNull
     private long showingId;
