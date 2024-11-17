@@ -82,7 +82,8 @@
 <!--</html>-->
 
 <!DOCTYPE html>
-<html lang="en">
+<!--<html lang="en">-->
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,7 +91,7 @@
     <style>
         .seat-grid {
             display: grid;
-            grid-template-columns: repeat(10, 40px);
+            grid-template-columns: repeat(10, 40px); /* 10 columnas */
             grid-gap: 5px;
         }
         .seat {
@@ -110,15 +111,16 @@
     </style>
 </head>
 <body>
-<h1>Select Seats for Showing ID: ${showingId}</h1>
-<form action="/bookSeats" method="post" id="seatForm">
-    <input type="hidden" name="showingId" value="${showingId}">
+<h1 th:text="'Select Seats for Showing ID: ' + ${showingId}"></h1>
+<form action="/booking/bookSeats" method="post" id="seatForm">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <input type="hidden" name="showingId" th:value="${showingId}">
     <div class="seat-grid">
-        <!-- Generar la matriz de asientos -->
-        <th:block th:each="row : ${#numbers.sequence(0, 14)}">
-            <th:block th:each="col : ${#numbers.sequence(0, 9)}">
+        <!-- Generar la matriz de asientos (15 filas por 10 columnas) -->
+        <th:block th:each="row : ${#numbers.sequence(0, 14)}"> <!-- 15 filas -->
+            <th:block th:each="col : ${#numbers.sequence(0, 9)}"> <!-- 10 columnas -->
                 <div class="seat"
-                     th:classappend="${seatList.?[seatRow == row and seatColumn == col] ? 'occupied' : ''}"
+                     th:classappend="${#lists.contains(occupiedSeats, {'seatRow': row, 'seatColumn': col}) ? 'occupied' : ''}"
                      th:attr="data-row=${row}, data-col=${col}">
                 </div>
             </th:block>
@@ -153,4 +155,78 @@
 </script>
 </body>
 </html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Seat Selection</title>-->
+<!--    <style>-->
+<!--        .seat-grid {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: repeat(10, 40px);-->
+<!--            grid-gap: 5px;-->
+<!--        }-->
+<!--        .seat {-->
+<!--            width: 40px;-->
+<!--            height: 40px;-->
+<!--            background-color: green;-->
+<!--            border: 1px solid #ccc;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        .seat.occupied {-->
+<!--            background-color: red;-->
+<!--            cursor: not-allowed;-->
+<!--        }-->
+<!--        .seat.selected {-->
+<!--            background-color: blue;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Select Seats for Showing ID: ${showingId}</h1>-->
+<!--<form action="/booking/bookSeats" method="post" id="seatForm">-->
+<!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+<!--    <input type="hidden" name="showingId" value="${showingId}">-->
+<!--    <div class="seat-grid">-->
+<!--        &lt;!&ndash; Generar la matriz de asientos &ndash;&gt;-->
+<!--        <th:block th:each="row : ${#numbers.sequence(0, 14)}">-->
+<!--            <th:block th:each="col : ${#numbers.sequence(0, 9)}">-->
+<!--                <div class="seat"-->
+<!--                     th:classappend="${#lists.contains(seatList, seat) ? 'occupied' : ''}"-->
+<!--                     th:attr="data-row=${row}, data-col=${col}">-->
+<!--                </div>-->
+<!--            </th:block>-->
+<!--        </th:block>-->
+<!--    </div>-->
+<!--    <input type="hidden" name="selectedSeats" id="selectedSeats">-->
+<!--    <button type="submit">Book Seats</button>-->
+<!--</form>-->
+
+<!--<script>-->
+<!--    const seatGrid = document.querySelector('.seat-grid');-->
+<!--    const selectedSeatsInput = document.getElementById('selectedSeats');-->
+
+<!--    seatGrid.addEventListener('click', (e) => {-->
+<!--        const seat = e.target;-->
+<!--        if (!seat.classList.contains('seat') || seat.classList.contains('occupied')) return;-->
+
+<!--        // Toggle selection-->
+<!--        seat.classList.toggle('selected');-->
+
+<!--        // Gather selected seats-->
+<!--        const selectedSeats = [];-->
+<!--        document.querySelectorAll('.seat.selected').forEach(seat => {-->
+<!--            const row = seat.getAttribute('data-row');-->
+<!--            const col = seat.getAttribute('data-col');-->
+<!--            selectedSeats.push({ row, col });-->
+<!--        });-->
+
+<!--        // Update the hidden input-->
+<!--        selectedSeatsInput.value = JSON.stringify(selectedSeats);-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
 

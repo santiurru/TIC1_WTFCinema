@@ -52,6 +52,20 @@ public class BookingController {
     SeatServices seatServices;
 
 
+    //    @PostMapping("/selectSeats")
+//    @PreAuthorize("hasRole('USER')")
+//    public String selectSeats(@PathVariable("showingId") Long showingId, @RequestParam List<Integer> seatIds){
+//        WebUser currentUser = getCurrentUser();
+//
+////        for (int seatId : seatIds) {
+////            Booking booking = new Booking();
+////            booking.setCustomerId(currentUser.getId());
+////            booking.setShowingId(showingRepository.findById(showingId).get().getId());
+////            booking.setSeatId(seatId);
+////            bookingServices.addBooking(booking);
+////        }
+//        return "User/buySnackQuestion";
+//    }
     @GetMapping("/home/user")
     @PreAuthorize("hasRole('USER')")
     public String home() {
@@ -70,34 +84,22 @@ public class BookingController {
 
     @PostMapping("/reserve")
     @PreAuthorize("hasRole('USER')")
-    public String createBooking(@RequestParam Long showingId) {
+    public String createBooking(@RequestParam long showingId) {
 //        model.addAttribute("showingId", showingId);
         return "redirect:/booking/selectSeats/" + showingId;
     }
 
     @GetMapping("/selectSeats/{showingId}")
     @PreAuthorize("hasRole('USER')")
-    public String selectSeatsForm(@PathVariable("showingId") Long showingId, Model model){
-        List<Seat> seatList = seatServices.getSeatsByShowing(showingId);
+    public String selectSeatsForm(@PathVariable("showingId") Long showingId, Model model) {
+        List<Seat> occupiedSeats = seatServices.getSeatsByShowing(showingId); // Lista de asientos ocupados
         model.addAttribute("showingId", showingId);
-        model.addAttribute("seatList", seatList);
+        model.addAttribute("occupiedSeats", occupiedSeats); // Enviar los asientos ocupados
         return "Bookings/seatSelection";
     }
 
-//    @PostMapping("/selectSeats")
-//    @PreAuthorize("hasRole('USER')")
-//    public String selectSeats(@PathVariable("showingId") Long showingId, @RequestParam List<Integer> seatIds){
-//        WebUser currentUser = getCurrentUser();
-//
-////        for (int seatId : seatIds) {
-////            Booking booking = new Booking();
-////            booking.setCustomerId(currentUser.getId());
-////            booking.setShowingId(showingRepository.findById(showingId).get().getId());
-////            booking.setSeatId(seatId);
-////            bookingServices.addBooking(booking);
-////        }
-//        return "User/buySnackQuestion";
-//    }
+
+
 
     @PostMapping("/bookSeats")
     @PreAuthorize("hasRole('USER')")

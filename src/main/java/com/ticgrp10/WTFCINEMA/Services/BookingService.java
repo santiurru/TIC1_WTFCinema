@@ -70,4 +70,5 @@ public class BookingService {
     public Booking getBookingByCustomerAndShowing(Long customerId, Long showingId){
         return bookingRepository.findBookingByCustomerIdAndShowingId(customerId,showingId);
     }
+
 }

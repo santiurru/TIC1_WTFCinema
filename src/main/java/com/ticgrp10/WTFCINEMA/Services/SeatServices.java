@@ -26,4 +26,6 @@ public class SeatServices {
         return seatRepo.save(seat);
     }
 
+
+
 }
