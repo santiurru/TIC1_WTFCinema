@@ -82,53 +82,75 @@
 <!--</html>-->
 
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selección de Asientos</title>
+    <title>Seat Selection</title>
+    <style>
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 40px);
+            grid-gap: 5px;
+        }
+        .seat {
+            width: 40px;
+            height: 40px;
+            background-color: green;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .seat.occupied {
+            background-color: red;
+            cursor: not-allowed;
+        }
+        .seat.selected {
+            background-color: blue;
+        }
+    </style>
 </head>
-
 <body>
-<h1>Selección de Asientos</h1>
-<form action="#" method="post">
-    <div>
-        <h3>Seleccione los asientos</h3>
-        <table>
-            <thead>
-            <tr>
-                <th>Asiento</th>
-                <th>Estado</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="i : ${seatMap}">
-                <td>
-                    <span th:text="'Fila ' + ${i}"></span>
-                </td>
-                <td>
-                    <table>
-                        <tr th:each="j : ${seatMap[i]}">
-                            <td>
-                                <input type="checkbox"
-                                       th:name="'seat_' + ${i} + '_' + ${j}"
-                                       th:value="${i}, ${j}"
-                                       th:checked="${seatMap[i][j] == 'available'}"
-                                       th:disabled="${seatMap[i][j] == 'occupied'}" />
-                            </td>
-                            <td>
-                                <span th:text="${seatMap[i][j] == 'available' ? 'Disponible' : 'Ocupado'}"></span>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+<h1>Select Seats for Showing ID: ${showingId}</h1>
+<form action="/bookSeats" method="post" id="seatForm">
+    <input type="hidden" name="showingId" value="${showingId}">
+    <div class="seat-grid">
+        <!-- Generar la matriz de asientos -->
+        <th:block th:each="row : ${#numbers.sequence(0, 14)}">
+            <th:block th:each="col : ${#numbers.sequence(0, 9)}">
+                <div class="seat"
+                     th:classappend="${seatList.?[seatRow == row and seatColumn == col] ? 'occupied' : ''}"
+                     th:attr="data-row=${row}, data-col=${col}">
+                </div>
+            </th:block>
+        </th:block>
     </div>
-    <button type="submit">Confirmar Selección</button>
+    <input type="hidden" name="selectedSeats" id="selectedSeats">
+    <button type="submit">Book Seats</button>
 </form>
-</body>
 
+<script>
+    const seatGrid = document.querySelector('.seat-grid');
+    const selectedSeatsInput = document.getElementById('selectedSeats');
+
+    seatGrid.addEventListener('click', (e) => {
+        const seat = e.target;
+        if (!seat.classList.contains('seat') || seat.classList.contains('occupied')) return;
+
+        // Toggle selection
+        seat.classList.toggle('selected');
+
+        // Gather selected seats
+        const selectedSeats = [];
+        document.querySelectorAll('.seat.selected').forEach(seat => {
+            const row = seat.getAttribute('data-row');
+            const col = seat.getAttribute('data-col');
+            selectedSeats.push({ row, col });
+        });
+
+        // Update the hidden input
+        selectedSeatsInput.value = JSON.stringify(selectedSeats);
+    });
+</script>
+</body>
 </html>
+

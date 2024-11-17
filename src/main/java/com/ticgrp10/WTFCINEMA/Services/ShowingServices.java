@@ -76,7 +76,7 @@ public class ShowingServices {
             List<Integer> occupiedSeats = new ArrayList<>();
 
             for (Booking variable : bookingsList){
-                occupiedSeats.add(variable.getSeatId());
+//                occupiedSeats.add(variable.getSeatId());
             }
 
             return occupiedSeats;

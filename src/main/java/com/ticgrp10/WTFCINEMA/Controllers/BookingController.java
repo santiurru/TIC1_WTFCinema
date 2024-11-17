@@ -1,11 +1,15 @@
 package com.ticgrp10.WTFCINEMA.Controllers;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ticgrp10.WTFCINEMA.Entities.*;
 import com.ticgrp10.WTFCINEMA.Repositories.ShowingRepository;
 import com.ticgrp10.WTFCINEMA.Repositories.SnackRepository;
 import com.ticgrp10.WTFCINEMA.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +48,9 @@ public class BookingController {
     @Autowired
     SnackRepository snackRepository;
 
+    @Autowired
+    SeatServices seatServices;
+
 
     @GetMapping("/home/user")
     @PreAuthorize("hasRole('USER')")
@@ -71,25 +78,94 @@ public class BookingController {
     @GetMapping("/selectSeats/{showingId}")
     @PreAuthorize("hasRole('USER')")
     public String selectSeatsForm(@PathVariable("showingId") Long showingId, Model model){
-        Map<String, String> seatMap = showingServices.getSeatAvailability(showingId);
+        List<Seat> seatList = seatServices.getSeatsByShowing(showingId);
         model.addAttribute("showingId", showingId);
-        model.addAttribute("seatMap", seatMap);
+        model.addAttribute("seatList", seatList);
         return "Bookings/seatSelection";
     }
 
-    @PostMapping("/selectSeats/{showingId}")
-    @PreAuthorize("hasRole('USER')")
-    public String selectSeats(@PathVariable("showingId") Long showingId, @RequestParam List<Integer> seatIds){
-        WebUser currentUser = getCurrentUser();
+//    @PostMapping("/selectSeats")
+//    @PreAuthorize("hasRole('USER')")
+//    public String selectSeats(@PathVariable("showingId") Long showingId, @RequestParam List<Integer> seatIds){
+//        WebUser currentUser = getCurrentUser();
+//
+////        for (int seatId : seatIds) {
+////            Booking booking = new Booking();
+////            booking.setCustomerId(currentUser.getId());
+////            booking.setShowingId(showingRepository.findById(showingId).get().getId());
+////            booking.setSeatId(seatId);
+////            bookingServices.addBooking(booking);
+////        }
+//        return "User/buySnackQuestion";
+//    }
 
-        for (int seatId : seatIds) {
-            Booking booking = new Booking();
-            booking.setCustomerId(currentUser.getId());
-            booking.setShowingId(showingRepository.findById(showingId).get().getId());
-            booking.setSeatId(seatId);
-            bookingServices.addBooking(booking);
+    @PostMapping("/bookSeats")
+    @PreAuthorize("hasRole('USER')")
+    public String bookSeats(@RequestParam("showingId") Long showingId,
+                            @RequestParam("selectedSeats") String selectedSeatsJson) {
+        // Convertir el JSON recibido a una lista de asientos seleccionados
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Map<String, Integer>> selectedSeats;
+        try {
+            selectedSeats = objectMapper.readValue(selectedSeatsJson, new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error parsing selected seats JSON", e);
         }
-        return "User/buySnackQuestion";
+        WebUser currentUser = getCurrentUser();
+        Booking booking = new Booking();
+        booking.setCustomerId(currentUser.getId());
+        booking.setShowingId(showingId);
+        bookingServices.addBooking(booking);
+        Booking bookingAux = bookingServices.getBookingByCustomerAndShowing(currentUser.getId(), showingId);
+        // Procesar los asientos seleccionados (ej. guardarlos en la base de datos)
+        selectedSeats.forEach(seat -> {
+            int row = seat.get("row");
+            int col = seat.get("col");
+            seatServices.bookSeat(bookingAux.getId(), row, col); // Implementa este método en tu servicio
+        });
+
+        return "redirect:/showings";
+    }
+
+
+
+//    @PostMapping("/reserve")
+//    @PreAuthorize("hasRole('USER')")
+//    public String createBooking(@RequestParam Long showingId, HttpSession session) {
+//        // Guardar el showingId en la sesión
+//        session.setAttribute("showingId", showingId);
+//        return "redirect:/booking/selectSeats"; // Redirigir a la página de selección de asientos
+//    }
+//
+//    // Método para mostrar el formulario de selección de asientos
+//    @GetMapping("/selectSeats")
+//    @PreAuthorize("hasRole('USER')")
+//    public String selectSeatsForm(HttpSession session, Model model) {
+//        // Recuperar el showingId de la sesión
+//        Long showingId = (Long) session.getAttribute("showingId");
+//
+//        // Verificar si showingId es null (es decir, si no está en la sesión)
+//        if (showingId == null) {
+//            return "redirect:/reserve"; // Redirigir a la página de reserva si no hay un showingId válido
+//        }
+//
+//        System.out.println("Accediendo a selectSeatsForm con Showing ID: " + showingId);
+//
+//        // Obtener los asientos disponibles desde el servicio
+//        Map<String, String> seatMap = showingServices.getSeatAvailability(showingId);
+//
+//        // Agregar atributos al modelo para la vista
+//        model.addAttribute("showingId", showingId);
+//        model.addAttribute("seatMap", seatMap);
+//
+//        return "Bookings/seatSelection"; // Nombre de la plantilla en `templates/Bookings/seatSelection.html`
+//    }
+
+    @GetMapping("/getSeats")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Seat>> getSeats(@RequestParam("showingId") Long showingId) {
+        List<Seat> seats = seatServices.getSeatsByShowing(showingId); // Llama al servicio
+        return ResponseEntity.ok(seats); // Retorna los asientos
     }
 
 

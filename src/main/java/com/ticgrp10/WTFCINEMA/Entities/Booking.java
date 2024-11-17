@@ -22,11 +22,12 @@ public class Booking {
     @NotNull
     private long customerId;
 
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SeatAvailability> seats;
-
     @NotNull
     private long showingId;
+
+//    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+////    @JoinColumn(name = "booking_id")
+//    private List<Seat> seatList;
 
 
 }
