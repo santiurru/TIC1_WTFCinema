@@ -82,15 +82,18 @@ public class MovieServices {
 ////        }
 ////        return sum;
         float total = 0;
-        int seatCount =0;
         List<Showing> showings = showingRepository.findShowingsByMovieId(movieId);
         for (Showing showing : showings) {
             List<Seat> seatList = seatRepository.getSeatsByShowingId(showing.getId());
+            total += seatList.size()*showing.getTicketPrice();
+            List<PurchaseSnack> purchaseSnacks = purchaseSnackRepository.findByShowingId(showing.getId());
+            for (PurchaseSnack purchaseSnack : purchaseSnacks){
+                long gottenSnackId = purchaseSnack.getSnackId();
+                total += purchaseSnack.getQuantity()*snackRepository.findById(gottenSnackId).get().getPrice();
+            }
         }
-        
         return total;
     }
-
 
     public float getRating(long movieId){
 

@@ -1,86 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Select Seats</title>-->
-<!--    <style>-->
-<!--        table {-->
-<!--            border-collapse: collapse;-->
-<!--            margin: 20px auto;-->
-<!--        }-->
-<!--        th, td {-->
-<!--            border: 1px solid #ccc;-->
-<!--            padding: 10px;-->
-<!--            text-align: center;-->
-<!--        }-->
-<!--        td.occupied {-->
-<!--            background-color: #ffcccc;-->
-<!--        }-->
-<!--        td.available {-->
-<!--            background-color: #ccffcc;-->
-<!--            cursor: pointer;-->
-<!--        }-->
-<!--        td.available:hover {-->
-<!--            background-color: #99e699;-->
-<!--        }-->
-<!--        .seat-container {-->
-<!--            text-align: center;-->
-<!--        }-->
-<!--        .selected {-->
-<!--            background-color: #ffff66 !important;-->
-<!--        }-->
-<!--        button {-->
-<!--            padding: 10px 20px;-->
-<!--            font-size: 16px;-->
-<!--            margin-top: 20px;-->
-<!--        }-->
-<!--    </style>-->
-<!--    <script>-->
-<!--        function toggleSeatSelection(seatId, seatElement) {-->
-<!--            if (seatElement.classList.contains('available')) {-->
-<!--                seatElement.classList.toggle('selected');-->
-<!--                const seatInput = document.getElementById('selectedSeats');-->
-<!--                let selectedSeats = seatInput.value ? seatInput.value.split(',') : [];-->
-<!--                if (seatElement.classList.contains('selected')) {-->
-<!--                    selectedSeats.push(seatId);-->
-<!--                } else {-->
-<!--                    selectedSeats = selectedSeats.filter(id => id !== seatId);-->
-<!--                }-->
-<!--                seatInput.value = selectedSeats.join(',');-->
-<!--            }-->
-<!--        }-->
-<!--    </script>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="seat-container">-->
-<!--    <h1>Select Your Seats</h1>-->
-<!--    <form th:action="@{/booking/selectSeats/{showingId}(showingId=${showingId})}" method="post">-->
-<!--        <table>-->
-<!--            <thead>-->
-<!--            <tr>-->
-<!--                <th>Row\Col</th>-->
-<!--                <th th:each="col : ${#numbers.sequence(1, 10)}" th:text="${col}"></th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--            <tr th:each="row : ${#numbers.sequence(1, 15)}">-->
-<!--                <td><strong th:text="${row}"></strong></td>-->
-<!--                <td th:each="col : ${#numbers.sequence(1, 10)}"-->
-<!--                    th:with="position=${row + ',' + col}, seatNumber=${(row - 1) * 10 + col}"-->
-<!--                    th:classappend="${seatMap[position]} == 'occupied' ? 'occupied' : 'available'"-->
-<!--                    th:onclick="${seatMap[position]} == 'available' ? 'toggleSeatSelection(' + seatNumber + ', this)' : null">-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--            </tbody>-->
-<!--        </table>-->
-<!--        <input type="hidden" name="seatIds" id="selectedSeats">-->
-<!--        <button type="submit">Reserve Seats</button>-->
-<!--    </form>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
 <!--<html lang="en">-->
 <html xmlns:th="http://www.thymeleaf.org">
@@ -89,9 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seat Selection</title>
     <style>
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
         .seat-grid {
             display: grid;
-            grid-template-columns: repeat(10, 40px); /* 10 columnas */
+            grid-template-columns: repeat(10, 40px);
             grid-gap: 5px;
         }
         .seat {
@@ -108,10 +36,21 @@
         .seat.selected {
             background-color: blue;
         }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-<h1 th:text="'Select Seats for Showing ID: ' + ${showingId}"></h1>
+<h1 th:text="'Seleccionar los asientos para la Funcion:' + ${showingId}"></h1>
+<h2>PANTALLA</h2>
 <form action="/booking/bookSeats" method="post" id="seatForm">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="hidden" name="showingId" th:value="${showingId}">
@@ -123,35 +62,9 @@
                      th:classappend="${occupiedSeats.contains(row + ',' + col) ? 'occupied' : ''}"
                      th:attr="data-row=${row}, data-col=${col}">
                 </div>
-                <!--                <div class="seat"-->
-<!--                     th:each="seat : ${occupiedSeats}"-->
-<!--                     th:class="${seat.seatRow == row && seat.seatColumn == col ? 'occupied' : 'seat'}"-->
-<!--                     th:attr="data-row=${row}, data-col=${col}">-->
-<!--                </div>-->
-
 
             </th:block>
         </th:block>
-<!--         Iterar filas y columnas-->
-<!--        <table class="seats-container">-->
-<!--            &lt;!&ndash; Iterar sobre las filas &ndash;&gt;-->
-<!--            <tr th:each="row : ${#numbers.sequence(1, 15)}">-->
-<!--                &lt;!&ndash; Iterar sobre las columnas &ndash;&gt;-->
-<!--                <td th:each="col : ${#numbers.sequence(1, 10)}">-->
-<!--                    <div class="seat"-->
-<!--                         th:class="${occupiedSeats.contains(row + ',' + col) ? 'occupied' : ''}"-->
-<!--                         th:attr="data-row=${row}, data-col=${col}">-->
-<!--                    </div>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--        </table>-->
-
-
-
-
-
-
-
 
     </div>
     <input type="hidden" name="selectedSeats" id="selectedSeats">
@@ -183,78 +96,4 @@
 </script>
 </body>
 </html>
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Seat Selection</title>-->
-<!--    <style>-->
-<!--        .seat-grid {-->
-<!--            display: grid;-->
-<!--            grid-template-columns: repeat(10, 40px);-->
-<!--            grid-gap: 5px;-->
-<!--        }-->
-<!--        .seat {-->
-<!--            width: 40px;-->
-<!--            height: 40px;-->
-<!--            background-color: green;-->
-<!--            border: 1px solid #ccc;-->
-<!--            cursor: pointer;-->
-<!--        }-->
-<!--        .seat.occupied {-->
-<!--            background-color: red;-->
-<!--            cursor: not-allowed;-->
-<!--        }-->
-<!--        .seat.selected {-->
-<!--            background-color: blue;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <h1>Select Seats for Showing ID: ${showingId}</h1>-->
-<!--<form action="/booking/bookSeats" method="post" id="seatForm">-->
-<!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-<!--    <input type="hidden" name="showingId" value="${showingId}">-->
-<!--    <div class="seat-grid">-->
-<!--        &lt;!&ndash; Generar la matriz de asientos &ndash;&gt;-->
-<!--        <th:block th:each="row : ${#numbers.sequence(0, 14)}">-->
-<!--            <th:block th:each="col : ${#numbers.sequence(0, 9)}">-->
-<!--                <div class="seat"-->
-<!--                     th:classappend="${#lists.contains(seatList, seat) ? 'occupied' : ''}"-->
-<!--                     th:attr="data-row=${row}, data-col=${col}">-->
-<!--                </div>-->
-<!--            </th:block>-->
-<!--        </th:block>-->
-<!--    </div>-->
-<!--    <input type="hidden" name="selectedSeats" id="selectedSeats">-->
-<!--    <button type="submit">Book Seats</button>-->
-<!--</form>-->
-
-<!--<script>-->
-<!--    const seatGrid = document.querySelector('.seat-grid');-->
-<!--    const selectedSeatsInput = document.getElementById('selectedSeats');-->
-
-<!--    seatGrid.addEventListener('click', (e) => {-->
-<!--        const seat = e.target;-->
-<!--        if (!seat.classList.contains('seat') || seat.classList.contains('occupied')) return;-->
-
-<!--        // Toggle selection-->
-<!--        seat.classList.toggle('selected');-->
-
-<!--        // Gather selected seats-->
-<!--        const selectedSeats = [];-->
-<!--        document.querySelectorAll('.seat.selected').forEach(seat => {-->
-<!--            const row = seat.getAttribute('data-row');-->
-<!--            const col = seat.getAttribute('data-col');-->
-<!--            selectedSeats.push({ row, col });-->
-<!--        });-->
-
-<!--        // Update the hidden input-->
-<!--        selectedSeatsInput.value = JSON.stringify(selectedSeats);-->
-<!--    });-->
-<!--</script>-->
-<!--</body>-->
-<!--</html>-->
 

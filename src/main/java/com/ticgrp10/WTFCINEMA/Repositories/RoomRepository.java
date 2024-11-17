@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<Room> findByNumberAndTheatreId(int number, long theatreId);
     List<Room> findAllByTheatreId(Long theatreId);
+
     List<Long> findIdsByTheatreId(Long theatreId);
 
     @Query("SELECT DISTINCT s.theatreId FROM Room s WHERE s.id in :roomIds")

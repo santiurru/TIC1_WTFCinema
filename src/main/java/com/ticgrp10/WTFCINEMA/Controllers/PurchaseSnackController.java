@@ -1,9 +1,8 @@
 package com.ticgrp10.WTFCINEMA.Controllers;
 
-import com.ticgrp10.WTFCINEMA.Entities.Booking;
-import com.ticgrp10.WTFCINEMA.Entities.PurchaseSnack;
-import com.ticgrp10.WTFCINEMA.Entities.Snack;
-import com.ticgrp10.WTFCINEMA.Entities.WebUser;
+import com.ticgrp10.WTFCINEMA.Entities.*;
+import com.ticgrp10.WTFCINEMA.Repositories.BookingRepository;
+import com.ticgrp10.WTFCINEMA.Repositories.SeatRepository;
 import com.ticgrp10.WTFCINEMA.Repositories.SnackRepository;
 import com.ticgrp10.WTFCINEMA.Services.BookingService;
 import com.ticgrp10.WTFCINEMA.Services.PurchaseSnackService;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +41,10 @@ public class PurchaseSnackController {
     @Autowired
     WebUserServices userServices;
     @Autowired
-    private BookingService bookingService;
+    BookingRepository bookingRepository;
+
+    @Autowired
+    SeatRepository seatRepository;
 
     // todo ?????????????????????????????????????????????????
     @GetMapping("/home/user")
@@ -93,6 +96,14 @@ public class PurchaseSnackController {
             purchaseSnack.setSnackId(snack.getId());  // Asociar directamente el objeto Snack
             purchaseSnack.setCustomerId(currentUser.getId());
             purchaseSnack.setQuantity(quantity);
+            purchaseSnack.setPaid(false);
+            purchaseSnack.setBookingDate(LocalDateTime.now());
+            List<Seat> seats = seatRepository.getSeatsByUserIdAndPaid(currentUser.getId(), false);
+            if (seats.size()>0){
+                Booking booking = bookingRepository.findById(seats.get(0).getBookingId()).get();
+                purchaseSnack.setShowingId(booking.getShowingId());
+            }
+
 
             // Añadir el PurchaseSnack al servicio
             purchaseSnackServices.addPurchaseSnack(purchaseSnack);

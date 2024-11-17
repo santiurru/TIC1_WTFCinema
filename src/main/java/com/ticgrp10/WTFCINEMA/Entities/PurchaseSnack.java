@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -35,7 +37,7 @@ public class PurchaseSnack {
     @NotNull
     private int quantity = 1;
 
-    private Date bookingDate;
+    private LocalDateTime bookingDate;
 
     private boolean paid;
 }

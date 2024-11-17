@@ -1,9 +1,13 @@
 package com.ticgrp10.WTFCINEMA.Controllers;
 
 import com.ticgrp10.WTFCINEMA.Entities.Movie;
+import com.ticgrp10.WTFCINEMA.Entities.Rating;
 import com.ticgrp10.WTFCINEMA.Entities.Showing;
+import com.ticgrp10.WTFCINEMA.Entities.WebUser;
 import com.ticgrp10.WTFCINEMA.Services.MovieServices;
+import com.ticgrp10.WTFCINEMA.Services.RatingServices;
 import com.ticgrp10.WTFCINEMA.Services.ShowingServices;
+import com.ticgrp10.WTFCINEMA.Services.WebUserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -26,6 +30,12 @@ public class MovieWebController {
 
     @Autowired
     private ShowingServices showingServices;
+
+    @Autowired
+    private WebUserServices userServices;
+
+    @Autowired
+    private RatingServices ratingServices;
 
     @GetMapping("/home/admin")
     @PreAuthorize("hasRole('ADMIN')")
@@ -59,7 +69,6 @@ public class MovieWebController {
         List<Movie> temp = new LinkedList<>();
         for (Showing funcion: funciones){
             Movie pelicula = movieServices.getMovieById(funcion.getMovieId());
-            //todo cambiar lo de la hora
             if ((funcion.getDate().isAfter(LocalDateTime.now())) && !temp.contains(pelicula)){
                 temp.add(pelicula);
             }
@@ -68,6 +77,7 @@ public class MovieWebController {
         if (temp.isEmpty()){
             model.addAttribute("vacio","No hay peliculas para mostrar");
         }
+//        model.addAttribute("ratings", ratingServices.getAll());
         return "Movies/listMovies";
     }
 

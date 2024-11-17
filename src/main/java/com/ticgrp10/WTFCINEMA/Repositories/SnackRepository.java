@@ -9,4 +9,7 @@ import java.util.Optional;
 @Repository
 public interface SnackRepository extends JpaRepository<Snack, Long> {
     Optional<Snack> findByName(String name);
+
+    Optional<Snack> findById(long id);
+
 }

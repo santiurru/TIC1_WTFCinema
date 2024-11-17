@@ -109,16 +109,9 @@ public class WebUserController {
         // Obtener los detalles del usuario autenticado
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        // Supongamos que tienes un servicio para obtener los datos adicionales del usuario
         Optional<WebUser> user = userRepository.findByEmail(userDetails.getUsername());
-        if (user.isPresent()){
-            model.addAttribute("user", user);
-        }else{
-            Optional<Admin> admin = adminServices.findByEmail(userDetails.getUsername());
-            if (admin.isPresent()){
-                model.addAttribute("user", admin);
-            }
-        }
+        model.addAttribute("user", user);
+
         return "User/profile";
     }
 

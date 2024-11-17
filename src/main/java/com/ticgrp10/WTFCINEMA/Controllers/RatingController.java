@@ -2,6 +2,7 @@ package com.ticgrp10.WTFCINEMA.Controllers;
 
 import com.ticgrp10.WTFCINEMA.Entities.Movie;
 import com.ticgrp10.WTFCINEMA.Entities.Rating;
+import com.ticgrp10.WTFCINEMA.Entities.Theatre;
 import com.ticgrp10.WTFCINEMA.Entities.WebUser;
 import com.ticgrp10.WTFCINEMA.Repositories.RatingRepository;
 import com.ticgrp10.WTFCINEMA.Services.RatingServices;
@@ -12,19 +13,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
 @RequestMapping("/ratings")
 public class RatingController {
-
-    @Autowired
-    private RatingServices ratingServices;
 
     @Autowired
     private MovieRepository movieRepository;
@@ -34,6 +30,9 @@ public class RatingController {
 
     @Autowired
     private RatingRepository ratingRepository;
+
+    @Autowired
+    private RatingServices ratingServices;
 
 
     // Endpoint para mostrar la página con el formulario
@@ -85,6 +84,15 @@ public class RatingController {
         // Pasar los ratings al modelo para ser utilizados en la vista
         model.addAttribute("ratings", ratings);
         return "User/myRatings";  // Vista donde se mostrarán los ratings del usuario
+    }
+
+    @GetMapping("/all")
+    @ResponseBody
+    public List<Rating> getRatings(@RequestParam long movieId) {
+        List<Rating> ratings = ratingRepository.findAllByMovieId(movieId);
+        //todo sigo dsp
+
+        return null;
     }
 }
 

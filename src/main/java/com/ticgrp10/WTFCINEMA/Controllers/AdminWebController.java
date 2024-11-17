@@ -10,6 +10,9 @@ import com.ticgrp10.WTFCINEMA.Services.WebUserServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -149,6 +152,18 @@ public class AdminWebController {
     @GetMapping("/snacks/create")
     public String createSnackForm() {
         return "redirect:/snacks/create";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/profile")
+    public String profile(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Optional<Admin> admin = adminServices.findByEmail(userDetails.getUsername());
+        if (admin.isPresent()){
+            model.addAttribute("user", admin);
+        }
+        return "Admin/adminProfile";
     }
 
 }

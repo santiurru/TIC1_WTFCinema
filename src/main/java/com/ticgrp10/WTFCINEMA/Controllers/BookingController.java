@@ -253,7 +253,6 @@ public class BookingController {
     @GetMapping("/theatersByMovieTest")
     @ResponseBody
     public List<Theatre> getTheatres(@RequestParam Long movieId) {
-
         return showingRepository.findTheatres(movieId,LocalDateTime.now());
     }
     @GetMapping("/movies")

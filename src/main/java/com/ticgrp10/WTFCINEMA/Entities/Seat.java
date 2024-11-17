@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -21,7 +22,7 @@ public class Seat {
 
     private Long bookingId;
 
-    private LocalDate bookingDate;
+    private LocalDateTime bookingDate;
 
     private boolean paid;
 

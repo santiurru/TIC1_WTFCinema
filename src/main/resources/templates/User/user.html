@@ -18,8 +18,14 @@
         <a href="/api/users/ratings" class="list-group-item list-group-item-action" sec:authorize="hasRole('USER')">
             Calificar películas
         </a>
-        <a href="/api/users/profile" class="list-group-item list-group-item-action">
-            Ver mis datos
+        <a href="/api/users/creditCard" class="list-group-item list-group-item-action" sec:authorize="hasRole('USER')">
+            Cambiar tarjeta de credito
+        </a>
+        <a href="/api/users/profile" class="list-group-item list-group-item-action" sec:authorize="hasRole('USER')">
+        Ver mis datos
+        </a>
+        <a href="/admin/profile" class ="list-group-item list-group-item-action" sec:authorize="hasRole('ADMIN')">
+        Ver mis datos
         </a>
     </div>
 </div>
