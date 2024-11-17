@@ -91,6 +91,9 @@ public class CheckoutController {
         // Marcar asientos y snacks como pagados
         snacks.forEach(snack -> snack.setName(snackRepository.findById(snack.getSnackId()).get().getName()));
         snacks.forEach(snack -> snack.setPrice(snackRepository.findById(snack.getSnackId()).get().getPrice()));
+        snacks.forEach(snack -> snack.setTotalPrice(snackRepository.findById(snack.getSnackId()).get().getPrice()*snack.getQuantity()));
+
+        seats.forEach(seat -> seat.setPrice(showingRepository.findById(bookingRepository.findById(seat.getBookingId()).get().getShowingId()).get().getTicketPrice()));
 
 
         // Guardar cambios en la base de datos

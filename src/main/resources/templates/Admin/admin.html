@@ -24,7 +24,16 @@
     <a href="/admin/user" class="list-group-item list-group-item-action">Gestión de Usuarios</a>
     <a href="/admin/create" class="list-group-item list-group-item-action">Registrar nuevo administrador</a>
 
+    <section>
+        <form action="/" method="get">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit">Atras</button>
+        </form>
+    </section>
+
 </div>
+
+
 
 <footer style="text-align: center; padding: 10px;">
     <p>&copy; 2024 WTF Cinemas</p>

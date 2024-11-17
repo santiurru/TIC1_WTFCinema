@@ -27,4 +27,6 @@ public class Seat {
 
     private boolean paid;
 
+    @Transient
+    private float price;
 }

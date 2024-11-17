@@ -1,11 +1,7 @@
 package com.ticgrp10.WTFCINEMA.Controllers;
 
-import com.ticgrp10.WTFCINEMA.Entities.Admin;
-import com.ticgrp10.WTFCINEMA.Entities.RegisterDto;
-import com.ticgrp10.WTFCINEMA.Entities.WebUser;
-import com.ticgrp10.WTFCINEMA.Repositories.PurchaseSnackRepository;
-import com.ticgrp10.WTFCINEMA.Repositories.SeatRepository;
-import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
+import com.ticgrp10.WTFCINEMA.Entities.*;
+import com.ticgrp10.WTFCINEMA.Repositories.*;
 import com.ticgrp10.WTFCINEMA.Services.AdminServices;
 import com.ticgrp10.WTFCINEMA.Services.WebUserServices;
 import jakarta.validation.Valid;
@@ -23,9 +19,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api/users")
@@ -41,6 +38,12 @@ public class WebUserController {
     private SeatRepository seatRepository;
     @Autowired
     private PurchaseSnackRepository purchaseSnackRepository;
+    @Autowired
+    private SnackRepository snackRepository;
+    @Autowired
+    private ShowingRepository showingRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -204,14 +207,21 @@ public class WebUserController {
         String email = authentication.getName();
         WebUser user = userRepository.findByEmail(email).get();
 
+        List<PurchaseSnack> snacks=  purchaseSnackRepository.findByCustomerIdAndPaid(user.getId(), true);
+        List<Seat> seats = seatRepository.getSeatsByUserIdAndPaid(user.getId(), true);
 
-        model.addAttribute("seats", seatRepository.getSeatsByUserIdAndPaid(user.getId(), true));
-        model.addAttribute("snacks", purchaseSnackRepository.findByCustomerIdAndPaid(user.getId(), true));
+        snacks.forEach(snack -> snack.setTotalPrice(snackRepository.findById(snack.getSnackId()).get().getPrice()*snack.getQuantity()));
+        seats.forEach(seat -> seat.setPrice(showingRepository.findById(bookingRepository.findById(seat.getBookingId()).get().getShowingId()).get().getTicketPrice()));
+
+
+        model.addAttribute("seats", seats);
+        model.addAttribute("snacks", snacks);
         model.addAttribute("user", user);
 
-        return "User/purchaseHistory";
+        return "User/purchasesHistory";
     }
 
-
-
 }
+
+
+

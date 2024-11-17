@@ -18,3 +18,4 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     public List<Rating> findByMovieId(long movieId);
 
 }
+

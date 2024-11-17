@@ -149,21 +149,6 @@
             }
         });
 
-        // Cargar asientos disponibles al seleccionar una función
-        $('#showing').change(function() {
-            const showingId = $(this).val();
-            $('#seat-selection').empty();
-
-            if (showingId) {
-                $.get("/booking/availableSeatsByShowing", { showingId: showingId }, function(data) {
-                    data.forEach(function(seat) {
-                        $('#seat-selection').append('<input type="checkbox" name="seatIds" value="' + seat + '"> Asiento ' + seat + '<br>');
-                    });
-                });
-            }
-        });
-
-
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

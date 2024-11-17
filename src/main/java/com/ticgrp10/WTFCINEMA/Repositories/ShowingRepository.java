@@ -17,10 +17,13 @@ public interface ShowingRepository extends JpaRepository<Showing, Long> {
     List<Showing> findShowingsByMovieIdAndRoomIdIn(Long movieId, List<Long> roomIds);
 
     List<Showing> findShowingsByMovieId(Long movieId);
+
+    List<Showing> findShowingsByDateBetweenAndAndRoomId(LocalDateTime start, LocalDateTime end, long roomId);
 //
     List<Long> findTheaterIdsByMovieId(Long movieId);
 
     List<Long> findRoomIdsByMovieId(Long movieId);
+
 
     @Query("SELECT DISTINCT s.roomId FROM Showing s WHERE s.date >= :date AND s.movieId = :movieId")
     List<Long> findRoomIdsByMovieIdAndDate(Long movieId,LocalDateTime date);

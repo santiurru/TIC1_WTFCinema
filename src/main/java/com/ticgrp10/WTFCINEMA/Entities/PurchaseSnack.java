@@ -43,4 +43,7 @@ public class PurchaseSnack {
 
     @Transient
     private float price;
+
+    @Transient
+    private float totalPrice;
 }

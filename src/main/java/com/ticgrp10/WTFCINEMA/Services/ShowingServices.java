@@ -59,10 +59,11 @@ public class ShowingServices {
     }
 
     //verificar si la sala está libre en el horario
-    public boolean isRoomAvailable(long roomId, LocalDateTime date) {
-        List<Showing> showings = showingRepository.findByRoomIdAndDate(roomId, date);
+    public boolean isRoomAvailable(long roomId, LocalDateTime date, long length) {
+        List<Showing> showings = showingRepository.findShowingsByDateBetweenAndAndRoomId(date,date.plusMinutes(length),roomId);
         return showings.isEmpty();
     }
+
 
 
 

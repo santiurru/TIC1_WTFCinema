@@ -51,7 +51,8 @@ public class ShowingWebController {
     @PreAuthorize("hasRole('ADMIN')")
     public String createShowing(Showing showing, Model model) {
         // Verificar disponibilidad de la sala
-        boolean isAvailable = showingServices.isRoomAvailable(showing.getRoomId(), showing.getDate());
+        long length = movieServices.getMovieById(showing.getMovieId()).getLength();
+        boolean isAvailable = showingServices.isRoomAvailable(showing.getRoomId(), showing.getDate(),length);
         if (!isAvailable) {
             model.addAttribute("error", "La sala no está disponible en esa hora.");
             model.addAttribute("movies", movieServices.getAll());

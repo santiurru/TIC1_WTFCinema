@@ -43,6 +43,9 @@
         </tbody>
     </table>
 </div>
+<div th:if="${#lists.isEmpty(ratings)}" class="container mt-5">
+    <h1>No tienes reseñas</h1>
+</div>
 <footer style="text-align: center; padding: 10px;">
     <p>&copy; 2024 WTF Cinemas</p>
 </footer>

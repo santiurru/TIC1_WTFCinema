@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ticgrp10.WTFCINEMA.Entities.*;
+import com.ticgrp10.WTFCINEMA.Repositories.RoomRepository;
 import com.ticgrp10.WTFCINEMA.Repositories.ShowingRepository;
 import com.ticgrp10.WTFCINEMA.Repositories.SnackRepository;
 import com.ticgrp10.WTFCINEMA.Services.*;
@@ -53,6 +54,8 @@ public class BookingController {
 
     @Autowired
     SeatServices seatServices;
+    @Autowired
+    private RoomRepository roomRepository;
 
 
     @GetMapping("/home/user")
@@ -65,7 +68,10 @@ public class BookingController {
     @GetMapping("/reserve")
     @PreAuthorize("hasRole('USER')")
     public String createBookingForm(Model model) {
-        model.addAttribute("showings", showingServices.getAll());
+        List<Showing> showings = showingRepository.findAll();
+        showings.forEach(showing -> showing.setRoomNumber(roomRepository.findById(showing.getRoomId()).get().getNumber()));
+
+        model.addAttribute("showings", showings);
         model.addAttribute("user", getCurrentUser());
         model.addAttribute("booking", new Booking());
         return "Bookings/createBooking";
