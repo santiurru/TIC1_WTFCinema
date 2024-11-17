@@ -2,10 +2,88 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Check-out</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="/css/style.css"> <!-- Ajusta el enlace según tu proyecto -->
 </head>
 <body>
+<header>
+    <h1>Checkout</h1>
+</header>
 
+<main>
+    <!-- Verifica si hay un error -->
+    <div th:if="${error}">
+        <p class="error-message" th:text="${error}"></p>
+    </div>
 
+    <!-- Datos del usuario -->
+    <section>
+        <h2>Información del usuario</h2>
+        <p><strong>Nombre:</strong> <span th:text="${user.name} + ' ' + ${user.surname}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+        <p><strong>Tarjeta:</strong> **** **** **** <span th:text="${user.cardNumber % 10000}"></span></p>
+    </section>
+
+    <!-- Información de asientos reservados -->
+    <section>
+        <h2>Asientos reservados</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Fila</th>
+                <th>Columna</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="seat : ${seats}">
+                <td th:text="${seat.seatRow}"></td>
+                <td th:text="${seat.seatColumn}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <p><strong>Costo total de asientos:</strong> $<span th:text="${bookingCost}"></span></p>
+    </section>
+
+    <!-- Información de snacks -->
+    <section>
+        <h2>Snacks comprados</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Snack</th>
+                <th>Cantidad</th>
+                <th>Precio unitario</th>
+                <th>Subtotal</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="snack : ${snacks}">
+                <td th:text="${snack.name}"></td>
+                <td th:text="${snack.quantity}"></td>
+                <td>$<span th:text="${snack.price}"></span></td>
+                <td>$<span th:text="${snack.quantity * snack.price}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+        <p><strong>Costo total de snacks:</strong> $<span th:text="${snackCost}"></span></p>
+    </section>
+
+    <!-- Total -->
+    <section>
+        <h2>Total a pagar</h2>
+        <p><strong>Total:</strong> $<span th:text="${totalCost}"></span></p>
+    </section>
+
+    <!-- Botones -->
+    <section>
+        <form action="/api/payments/confirm" method="post">
+            <button type="submit">Confirmar y pagar</button>
+        </form>
+        <form action="/api/checkout/cancel" method="post">
+            <button type="submit">Cancelar</button>
+        </form>
+    </section>
+</main>
 </body>
 </html>

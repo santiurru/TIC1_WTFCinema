@@ -18,6 +18,7 @@ public class Seat {
     private Long seatId;
 
     private int seatRow;
+
     private int seatColumn;
 
     private Long bookingId;

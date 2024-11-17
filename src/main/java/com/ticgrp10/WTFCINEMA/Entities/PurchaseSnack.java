@@ -1,10 +1,7 @@
 package com.ticgrp10.WTFCINEMA.Entities;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,4 +37,10 @@ public class PurchaseSnack {
     private LocalDateTime bookingDate;
 
     private boolean paid;
+
+    @Transient
+    private String name;
+
+    @Transient
+    private float price;
 }

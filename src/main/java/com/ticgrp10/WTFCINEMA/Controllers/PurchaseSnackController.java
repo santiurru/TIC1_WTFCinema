@@ -109,7 +109,7 @@ public class PurchaseSnackController {
             purchaseSnackServices.addPurchaseSnack(purchaseSnack);
         }
 
-        return "User/buySnackQuestion"; // Confirmación o siguiente paso
+        return "redirect:/api/checkout"; // Confirmación o siguiente paso
     }
 
     @GetMapping("/list")
