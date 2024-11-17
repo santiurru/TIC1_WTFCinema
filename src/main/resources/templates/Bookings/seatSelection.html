@@ -116,7 +116,7 @@
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="hidden" name="showingId" th:value="${showingId}">
     <div class="seat-grid">
-        <!-- Generar la matriz de asientos (15 filas por 10 columnas) -->
+<!--         Generar la matriz de asientos (15 filas por 10 columnas)-->
         <th:block th:each="row : ${#numbers.sequence(1, 15)}"> <!-- 15 filas -->
             <th:block th:each="col : ${#numbers.sequence(1, 10)}"> <!-- 10 columnas -->
 <!--                <div class="seat"-->
@@ -129,8 +129,30 @@
                      th:attr="data-row=${row}, data-col=${col}">
                 </div>
 
+
             </th:block>
         </th:block>
+<!--         Iterar filas y columnas-->
+<!--        <table class="seats-container">-->
+<!--            &lt;!&ndash; Iterar sobre las filas &ndash;&gt;-->
+<!--            <tr th:each="row : ${#numbers.sequence(1, 15)}">-->
+<!--                &lt;!&ndash; Iterar sobre las columnas &ndash;&gt;-->
+<!--                <td th:each="col : ${#numbers.sequence(1, 10)}">-->
+<!--                    <div class="seat"-->
+<!--                         th:class="${occupiedSeats.contains(row + ',' + col) ? 'occupied' : ''}"-->
+<!--                         th:attr="data-row=${row}, data-col=${col}">-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--        </table>-->
+
+
+
+
+
+
+
+
     </div>
     <input type="hidden" name="selectedSeats" id="selectedSeats">
     <button type="submit">Book Seats</button>

@@ -16,6 +16,10 @@ public class SeatServices {
     public List<Seat> getSeatsByShowing(Long showingId){
         return seatRepo.getSeatsByShowingId(showingId);
     }
+//    public List<String> getSeatsByShowingAux(Long showingId){
+//        return seatRepo.getSeatsByShowingIdAux(showingId);
+//    }
+
 
     public Seat bookSeat(Long bookingId, int row, int column){
         Seat seat = new Seat();

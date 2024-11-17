@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -93,8 +94,16 @@ public class BookingController {
     @PreAuthorize("hasRole('USER')")
     public String selectSeatsForm(@PathVariable("showingId") Long showingId, Model model) {
         List<Seat> occupiedSeats = seatServices.getSeatsByShowing(showingId); // Lista de asientos ocupados
+//        List<String> occupiedSeats= new LinkedList<>();
+//        for (int i = 0; i < occupiedSeatsA.size(); i++) {
+//            String seatString = String.format("%d,%d", occupiedSeatsA.get(i).getSeatRow(), occupiedSeatsA.get(i).getSeatColumn());
+//
+//            occupiedSeats.add(seatString);
+//        }
+//        List<String> occupiedSeats = seatServices.getSeatsByShowingAux(showingId); // Lista de asientos ocupados
         model.addAttribute("showingId", showingId);
         model.addAttribute("occupiedSeats", occupiedSeats); // Enviar los asientos ocupados
+
         return "Bookings/seatSelection";
     }
 
@@ -172,6 +181,20 @@ public class BookingController {
     public ResponseEntity<List<Seat>> getSeats(@RequestParam("showingId") Long showingId) {
         List<Seat> seats = seatServices.getSeatsByShowing(showingId); // Llama al servicio
         return ResponseEntity.ok(seats); // Retorna los asientos
+    }
+
+    @GetMapping("/getSeatsAux")
+    @PreAuthorize("hasRole('USER')")
+    @ResponseBody
+    public List<String> getSeatsAux(@RequestParam("showingId") Long showingId) {
+        List<Seat> occupiedSeatsA = seatServices.getSeatsByShowing(showingId); // Lista de asientos ocupados
+        List<String> occupiedSeats= new LinkedList<>();
+        for (int i = 0; i < occupiedSeatsA.size(); i++) {
+            String seatString = String.format("%d,%d", occupiedSeatsA.get(i).getSeatRow(), occupiedSeatsA.get(i).getSeatColumn());
+
+            occupiedSeats.add(seatString);
+        }
+        return occupiedSeats;
     }
 
 
