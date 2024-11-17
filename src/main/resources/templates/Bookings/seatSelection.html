@@ -119,15 +119,15 @@
 <!--         Generar la matriz de asientos (15 filas por 10 columnas)-->
         <th:block th:each="row : ${#numbers.sequence(1, 15)}"> <!-- 15 filas -->
             <th:block th:each="col : ${#numbers.sequence(1, 10)}"> <!-- 10 columnas -->
-<!--                <div class="seat"-->
-<!--                     th:classappend="${#lists.contains(occupiedSeats, {'seat_row': row, 'seat_column': col}) ? 'occupied' : ''}"-->
-<!--                     th:attr="data-row=${row}, data-col=${col}">-->
-<!--                </div>-->
                 <div class="seat"
-                     th:each="seat : ${occupiedSeats}"
-                     th:class="${seat.seatRow == row && seat.seatColumn == col ? 'occupied' : 'seat'}"
+                     th:classappend="${occupiedSeats.contains(row + ',' + col) ? 'occupied' : ''}"
                      th:attr="data-row=${row}, data-col=${col}">
                 </div>
+                <!--                <div class="seat"-->
+<!--                     th:each="seat : ${occupiedSeats}"-->
+<!--                     th:class="${seat.seatRow == row && seat.seatColumn == col ? 'occupied' : 'seat'}"-->
+<!--                     th:attr="data-row=${row}, data-col=${col}">-->
+<!--                </div>-->
 
 
             </th:block>

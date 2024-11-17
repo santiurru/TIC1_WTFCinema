@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/booking")
@@ -93,8 +94,9 @@ public class BookingController {
     @GetMapping("/selectSeats/{showingId}")
     @PreAuthorize("hasRole('USER')")
     public String selectSeatsForm(@PathVariable("showingId") Long showingId, Model model) {
-        List<Seat> occupiedSeats = seatServices.getSeatsByShowing(showingId); // Lista de asientos ocupados
-//        List<String> occupiedSeats= new LinkedList<>();
+        List<String> occupiedSeats = seatServices.getSeatsByShowing(showingId).stream()
+                .map(seat -> seat.getSeatRow() + "," + seat.getSeatColumn()) // "row,column"
+                .collect(Collectors.toList());//        List<String> occupiedSeats= new LinkedList<>();
 //        for (int i = 0; i < occupiedSeatsA.size(); i++) {
 //            String seatString = String.format("%d,%d", occupiedSeatsA.get(i).getSeatRow(), occupiedSeatsA.get(i).getSeatColumn());
 //
