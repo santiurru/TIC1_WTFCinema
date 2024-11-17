@@ -34,8 +34,7 @@ public class RatingController {
     @Autowired
     private RatingServices ratingServices;
 
-
-    // Endpoint para mostrar la página con el formulario
+    //hacer rating
     @GetMapping("/rate-movie")
     @PreAuthorize("hasRole('USER')")
     public String showRateMoviePage(Model model) {
@@ -43,18 +42,16 @@ public class RatingController {
         return "User/movieRating";
     }
 
-    // Endpoint para manejar el envío de la calificación
     @PostMapping("/rate-movie")
     @PreAuthorize("hasRole('USER')")
     public String rateMovie(@RequestParam Long movieId,
                             @RequestParam float rating,
                             Authentication authentication) {
-        // Obtener el usuario logueado
+
         String email = authentication.getName();
         WebUser user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Crear un objeto Rating y asignar la película y el usuario logueado
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new RuntimeException("Película no encontrada"));
 
@@ -63,36 +60,32 @@ public class RatingController {
         ratingToSave.setCustomerId(user.getId());
         ratingToSave.setRating(rating);
 
-        // Guardar la calificación
         ratingServices.addOrUpdateRating(ratingToSave);
 
-        // Redirigir a una página de éxito o confirmación
-        return "redirect:/api/users/ratings";  // Redirige a la página con un parámetro de éxito
+        return "redirect:/api/users/ratings";
     }
 
+    //ver ratings
     @GetMapping("/list")
     @PreAuthorize("hasRole('USER')")
     public String showUserRatings(Model model, Authentication authentication) {
-        // Obtener el usuario logueado
         String email = authentication.getName();
         WebUser user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Obtener todos los ratings del usuario logueado
         List<Rating> ratings = ratingRepository.findByCustomerId(user.getId());
+        ratings.forEach(rating -> rating.setMovieTitle(movieRepository.findById(rating.getMovieId()).get().getTitle()));
 
-        // Pasar los ratings al modelo para ser utilizados en la vista
+
         model.addAttribute("ratings", ratings);
-        return "User/myRatings";  // Vista donde se mostrarán los ratings del usuario
+        return "User/myRatings";
     }
 
-    @GetMapping("/all")
+    //average
+    @GetMapping("/average")
     @ResponseBody
-    public List<Rating> getRatings(@RequestParam long movieId) {
-        List<Rating> ratings = ratingRepository.findAllByMovieId(movieId);
-        //todo sigo dsp
-
-        return null;
+    public Float getAverage(@RequestParam long movieId) {
+        return ratingServices.calculateAverageRating(movieId);
     }
 }
 

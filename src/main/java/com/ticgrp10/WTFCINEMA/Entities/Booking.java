@@ -25,9 +25,7 @@ public class Booking {
     @NotNull
     private long showingId;
 
-//    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
-////    @JoinColumn(name = "booking_id")
-//    private List<Seat> seatList;
-
+    @Transient
+    private String movieTitle;
 
 }

@@ -14,6 +14,5 @@ public interface PurchaseSnackRepository extends JpaRepository<PurchaseSnack, Lo
 
     List<PurchaseSnack> findByCustomerIdAndPaid(Long CustomerId, Boolean Paid);
 
-
     List<PurchaseSnack> findByCustomerIdAndShowingId(long customerId, long showingId);
 }

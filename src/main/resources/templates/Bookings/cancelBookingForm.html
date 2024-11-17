@@ -76,6 +76,8 @@
     </style>
 </head>
 <body>
+<div th:replace="~{navbar :: navbar}"></div>
+
 <h2>Cancelar Asientos</h2>
 <!-- Mostrar mensajes flash -->
 <div id="messageContainer"></div>
@@ -95,6 +97,10 @@
 
     <button type="submit">Cancelar Asientos</button>
 </form>
+
+<footer style="text-align: center; padding: 10px;">
+    <p>&copy; 2024 WTF Cinemas</p>
+</footer>
 
 <script>
     // JavaScript para manejar la carga dinámica

@@ -23,10 +23,6 @@ public class SeatServices {
     public List<Seat> getSeatsByShowing(Long showingId){
         return seatRepo.getSeatsByShowingId(showingId);
     }
-//    public List<String> getSeatsByShowingAux(Long showingId){
-//        return seatRepo.getSeatsByShowingIdAux(showingId);
-//    }
-
     public List<Seat> getSeatsByBookingId(Long bookingId){
         return seatRepo.getSeatsByBookingId(bookingId);
     }
@@ -46,8 +42,6 @@ public class SeatServices {
             }
             seatRepo.delete(seat); // Desasociar asiento
         });
-
-//        seatRepo.saveAll(seats);
         return true;
     }
 
@@ -57,7 +51,6 @@ public class SeatServices {
         seat.setSeatColumn(column);
         seat.setSeatRow(row);
         seat.setPaid(false);
-        seat.setBookingDate(LocalDateTime.now());
 
         return seatRepo.save(seat);
     }

@@ -153,12 +153,12 @@ public class SecurityConfig {
         http
 //                todo verificar nuevas entradas (como mostrar usuarios, etc)
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers("/", "/login", "/register", "/api/users/register", "/logout","/error","/movie/current").permitAll()
+                        .requestMatchers("/", "/login", "/register", "/api/users/register", "/logout","/error","/movie/current","/ratings/average").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/ratings/rate-movie","/booking/reserve/**","/booking/selectSeats/**","/booking/bookSeats","/booking/cancelSeats","/api/users/creditCard").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST,"/ratings/rate-movie","/booking/reserve/**","/booking/selectSeats/**","/booking/bookSeats","/booking/cancelSeats","/api/users/creditCard","/api/checkout/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/movie/**","/showing/**","/snacks/**","/admin/**").hasRole("ADMIN") // Permite solo a ADMIN para crear
                         .requestMatchers("/admin/**", "/movie/**", "/showing/**", "/snacks/**","/login").hasRole("ADMIN")
-                        .requestMatchers("/listShowings/", "snacks/list", "/listMovies/", "/booking/**", "ratings/**").hasRole("USER")
+                        .requestMatchers("/listShowings/", "snacks/list", "/listMovies/", "/booking/**", "ratings/**","/api/checkout/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

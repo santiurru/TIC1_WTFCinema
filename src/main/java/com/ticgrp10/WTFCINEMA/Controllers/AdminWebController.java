@@ -1,11 +1,10 @@
 package com.ticgrp10.WTFCINEMA.Controllers;
 
-import com.ticgrp10.WTFCINEMA.Entities.Admin;
-import com.ticgrp10.WTFCINEMA.Entities.RegisterDto;
-import com.ticgrp10.WTFCINEMA.Entities.Showing;
-import com.ticgrp10.WTFCINEMA.Entities.WebUser;
+import com.ticgrp10.WTFCINEMA.Entities.*;
 import com.ticgrp10.WTFCINEMA.Repositories.AdminRepository;
 import com.ticgrp10.WTFCINEMA.Services.AdminServices;
+import com.ticgrp10.WTFCINEMA.Services.MovieServices;
+import com.ticgrp10.WTFCINEMA.Services.RatingServices;
 import com.ticgrp10.WTFCINEMA.Services.WebUserServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,10 @@ public class AdminWebController {
     private AdminServices adminServices;
     @Autowired
     private WebUserServices repo;
+    @Autowired
+    private MovieServices movieServices;
+    @Autowired
+    private RatingServices ratingServices;
 
 
 
@@ -166,5 +171,34 @@ public class AdminWebController {
         return "Admin/adminProfile";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/allRatings")
+    public String allRatings(Model model){
+//        List<AbstractMap.SimpleEntry<Movie,Float>> res = new ArrayList<>();
+//        List<Movie> allMovies = movieServices.getAll();
+//        for (Movie movie : allMovies){
+//            float ratingTemp = ratingServices.calculateAverageRating(movie.getId());
+//            res.add(new AbstractMap.SimpleEntry<>(movie,ratingTemp));
+//        }
+//
+//        List<Movie> sorted = ratingServices.order(res);
+//
+//
+//        model.addAttribute("movies",sorted);
+
+        List<Movie> allMovies = movieServices.getAll();
+
+        // Ordenar las películas por el promedio de ratings
+        allMovies.sort((movie1, movie2) -> {
+            float avgRating1 = ratingServices.calculateAverageRating(movie1.getId());
+            float avgRating2 = ratingServices.calculateAverageRating(movie2.getId());
+            return Float.compare(avgRating2, avgRating1); // Descendente
+        });
+
+        // Agregar las películas ordenadas al modelo
+        model.addAttribute("movies", allMovies);
+
+        return "Admin/allRatings";
+    }
 }
 

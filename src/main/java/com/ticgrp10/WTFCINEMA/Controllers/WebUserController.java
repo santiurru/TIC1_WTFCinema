@@ -3,6 +3,8 @@ package com.ticgrp10.WTFCINEMA.Controllers;
 import com.ticgrp10.WTFCINEMA.Entities.Admin;
 import com.ticgrp10.WTFCINEMA.Entities.RegisterDto;
 import com.ticgrp10.WTFCINEMA.Entities.WebUser;
+import com.ticgrp10.WTFCINEMA.Repositories.PurchaseSnackRepository;
+import com.ticgrp10.WTFCINEMA.Repositories.SeatRepository;
 import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
 import com.ticgrp10.WTFCINEMA.Services.AdminServices;
 import com.ticgrp10.WTFCINEMA.Services.WebUserServices;
@@ -35,6 +37,10 @@ public class WebUserController {
     private AdminServices adminServices;
     @Autowired
     private WebUserServices webUserServices;
+    @Autowired
+    private SeatRepository seatRepository;
+    @Autowired
+    private PurchaseSnackRepository purchaseSnackRepository;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -189,5 +195,23 @@ public class WebUserController {
     public String listRatings() {
         return "redirect:/ratings/list";
     }
+
+    //purchases
+    @GetMapping("/purchasesHistory")
+    @PreAuthorize("hasRole('USER')")
+    public String purchaseForm(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        WebUser user = userRepository.findByEmail(email).get();
+
+
+        model.addAttribute("seats", seatRepository.getSeatsByUserIdAndPaid(user.getId(), true));
+        model.addAttribute("snacks", purchaseSnackRepository.findByCustomerIdAndPaid(user.getId(), true));
+        model.addAttribute("user", user);
+
+        return "User/purchaseHistory";
+    }
+
+
 
 }

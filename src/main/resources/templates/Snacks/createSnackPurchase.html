@@ -16,7 +16,7 @@
         <div th:each="snack : ${snacks}">
             <label th:for="'snack-' + ${snack.id}">
                 <span th:text="${snack.name}">Snack Name</span> -
-                <span th:text="${snack.price}">Snack Price</span>€
+                <span th:text="|${snack.price}$|">Snack Price</span>
             </label>
             <input type="hidden" name="snackIds" th:value="${snack.id}" />
             <input type="number" name="snackQuantities" min="0" value="0" />
@@ -25,6 +25,9 @@
 
     <button type="submit">Confirmar Compra</button>
 </form>
+<footer style="text-align: center; padding: 10px;">
+    <p>&copy; 2024 WTF Cinemas</p>
+</footer>
 </body>
 </html>
 

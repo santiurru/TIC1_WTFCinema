@@ -68,13 +68,11 @@ public class PurchaseSnackController {
 
         WebUser currentUser = getCurrentUser();
 
-        // Verificación de que las listas tengan el mismo tamaño
         if (snackIds.size() != snackQuantities.size()) {
             model.addAttribute("error", "Las listas de snacks y cantidades no coinciden.");
             return "Snacks/createSnackPurchase";
         }
 
-        // Recorrer las listas de snacks y cantidades
         for (int i = 0; i < snackIds.size(); i++) {
             if (snackQuantities.get(i) == 0){
                 continue;
@@ -82,7 +80,6 @@ public class PurchaseSnackController {
 
             Optional<Snack> snackOptional = snackRepository.findById(snackIds.get(i));
 
-            // Manejar el caso donde el snack no se encuentra en la base de datos
             if (!snackOptional.isPresent()) {
                 model.addAttribute("error", "El snack con ID " + snackIds.get(i) + " no se encuentra disponible.");
                 return "Snacks/createSnackPurchase";
@@ -91,25 +88,21 @@ public class PurchaseSnackController {
             Snack snack = snackOptional.get();
             int quantity = snackQuantities.get(i);
 
-            // Crear la entidad PurchaseSnack
             PurchaseSnack purchaseSnack = new PurchaseSnack();
-            purchaseSnack.setSnackId(snack.getId());  // Asociar directamente el objeto Snack
+            purchaseSnack.setSnackId(snack.getId());
             purchaseSnack.setCustomerId(currentUser.getId());
             purchaseSnack.setQuantity(quantity);
             purchaseSnack.setPaid(false);
-            purchaseSnack.setBookingDate(LocalDateTime.now());
             List<Seat> seats = seatRepository.getSeatsByUserIdAndPaid(currentUser.getId(), false);
             if (seats.size()>0){
                 Booking booking = bookingRepository.findById(seats.get(0).getBookingId()).get();
                 purchaseSnack.setShowingId(booking.getShowingId());
             }
 
-
-            // Añadir el PurchaseSnack al servicio
             purchaseSnackServices.addPurchaseSnack(purchaseSnack);
         }
 
-        return "redirect:/api/checkout"; // Confirmación o siguiente paso
+        return "redirect:/api/checkout";
     }
 
     @GetMapping("/list")

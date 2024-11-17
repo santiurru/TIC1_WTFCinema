@@ -36,13 +36,15 @@
         <tbody>
         <th:block th:each="rating : ${ratings}">
             <tr>
-                <td th:text="${rating.movieId}"></td>
+                <td th:text="${rating.movieTitle}"></td>
                 <td th:text="${rating.rating}"></td>
             </tr>
         </th:block>
         </tbody>
     </table>
 </div>
-
+<footer style="text-align: center; padding: 10px;">
+    <p>&copy; 2024 WTF Cinemas</p>
+</footer>
 </body>
 </html>

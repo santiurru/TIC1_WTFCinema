@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -82,15 +83,29 @@ public class MovieWebController {
     }
 
     @GetMapping("/earnings")
+    @PreAuthorize("hasRole('ADMIN')")
     public String movieEarningsForm(Model model){
         model.addAttribute("movies", movieServices.getAll());
+        model.addAttribute("movieServices", movieServices);
         return "Movies/movieEarnings";
     }
 
-//    @GetMapping("/earningsMovie")
+//    @GetMapping("/earningsMovies")
 //    @ResponseBody
-//    public float movieEarnings(Movie movie){
-//        return movieServices.getEarnings((movie.getId()));
+//    public List<String> movieEarnings(@RequestParam List<Movie> movies){
+//        List<String> earnings = new ArrayList<>(movies.size());
+//        for (Movie movie : movies) {
+//            // Concatenamos todos los datos necesarios en un solo string
+//            String earningDetails = movie.getTitle() + "," +
+//                    movie.getImg() + "," +
+//                    movie.getSynopsis() + "," +
+//                    movie.getGenres() + "," +
+//                    movieServices.getEarnings(movie.getId());
+//
+//            // Añadimos el string con los detalles a la lista
+//            earnings.add(earningDetails);
+//        }
+//        return earnings;
 //    }
 
 

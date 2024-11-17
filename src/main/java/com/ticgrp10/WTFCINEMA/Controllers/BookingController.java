@@ -55,20 +55,6 @@ public class BookingController {
     SeatServices seatServices;
 
 
-    //    @PostMapping("/selectSeats")
-//    @PreAuthorize("hasRole('USER')")
-//    public String selectSeats(@PathVariable("showingId") Long showingId, @RequestParam List<Integer> seatIds){
-//        WebUser currentUser = getCurrentUser();
-//
-////        for (int seatId : seatIds) {
-////            Booking booking = new Booking();
-////            booking.setCustomerId(currentUser.getId());
-////            booking.setShowingId(showingRepository.findById(showingId).get().getId());
-////            booking.setSeatId(seatId);
-////            bookingServices.addBooking(booking);
-////        }
-//        return "User/buySnackQuestion";
-//    }
     @GetMapping("/home/user")
     @PreAuthorize("hasRole('USER')")
     public String home() {
@@ -88,7 +74,6 @@ public class BookingController {
     @PostMapping("/reserve")
     @PreAuthorize("hasRole('USER')")
     public String createBooking(@RequestParam long showingId) {
-//        model.addAttribute("showingId", showingId);
         return "redirect:/booking/selectSeats/" + showingId;
     }
 
@@ -97,27 +82,19 @@ public class BookingController {
     public String selectSeatsForm(@PathVariable("showingId") Long showingId, Model model) {
         List<String> occupiedSeats = seatServices.getSeatsByShowing(showingId).stream()
                 .map(seat -> seat.getSeatRow() + "," + seat.getSeatColumn()) // "row,column"
-                .collect(Collectors.toList());//        List<String> occupiedSeats= new LinkedList<>();
-//        for (int i = 0; i < occupiedSeatsA.size(); i++) {
-//            String seatString = String.format("%d,%d", occupiedSeatsA.get(i).getSeatRow(), occupiedSeatsA.get(i).getSeatColumn());
-//
-//            occupiedSeats.add(seatString);
-//        }
-//        List<String> occupiedSeats = seatServices.getSeatsByShowingAux(showingId); // Lista de asientos ocupados
+                .collect(Collectors.toList());//
+
         model.addAttribute("showingId", showingId);
-        model.addAttribute("occupiedSeats", occupiedSeats); // Enviar los asientos ocupados
+        model.addAttribute("occupiedSeats", occupiedSeats);
 
         return "Bookings/seatSelection";
     }
-
-
-
 
     @PostMapping("/bookSeats")
     @PreAuthorize("hasRole('USER')")
     public String bookSeats(@RequestParam("showingId") Long showingId,
                             @RequestParam("selectedSeats") String selectedSeatsJson) {
-        // Convertir el JSON recibido a una lista de asientos seleccionados
+
         ObjectMapper objectMapper = new ObjectMapper();
         List<Map<String, Integer>> selectedSeats;
         try {
@@ -135,7 +112,6 @@ public class BookingController {
         }
         Booking bookingAux = bookingServices.getBookingByCustomerAndShowing(currentUser.getId(), showingId).get();
 
-        // Procesar los asientos seleccionados (ej. guardarlos en la base de datos)
         selectedSeats.forEach(seat -> {
             int row = seat.get("row");
             int col = seat.get("col");
@@ -146,57 +122,16 @@ public class BookingController {
     }
 
 
-
-
-
-    @GetMapping("/getSeats")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<Seat>> getSeats(@RequestParam("showingId") Long showingId) {
-        List<Seat> seats = seatServices.getSeatsByShowing(showingId); // Llama al servicio
-        return ResponseEntity.ok(seats); // Retorna los asientos
-    }
-
-    @GetMapping("/getSeatsAux")
-    @PreAuthorize("hasRole('USER')")
-    @ResponseBody
-    public List<String> getSeatsAux(@RequestParam("showingId") Long showingId) {
-        List<Seat> occupiedSeatsA = seatServices.getSeatsByShowing(showingId); // Lista de asientos ocupados
-        List<String> occupiedSeats= new LinkedList<>();
-        for (int i = 0; i < occupiedSeatsA.size(); i++) {
-            String seatString = String.format("%d,%d", occupiedSeatsA.get(i).getSeatRow(), occupiedSeatsA.get(i).getSeatColumn());
-
-            occupiedSeats.add(seatString);
-        }
-        return occupiedSeats;
-    }
-
+    //cancelar
     @GetMapping("/cancelForm")
     @PreAuthorize("hasRole('USER')")
     public String getCancelForm(){
         return "Bookings/cancelBookingForm";
     }
 
-
-    @GetMapping("/getBookings")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<Booking>> getBookingsForUser() {
-        WebUser user = getCurrentUser();
-        List<Booking> bookings = bookingServices.getBookingsByCustomerId(user.getId());
-        return ResponseEntity.ok(bookings);
-    }
-
-
-    @GetMapping("/getSeats/{bookingId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<Seat>> getSeatsForBooking(@PathVariable Long bookingId) {
-        List<Seat> seats = seatServices.getSeatsByBookingId(bookingId);
-        return ResponseEntity.ok(seats);
-    }
-
     @PostMapping("/cancelSeats")
     @PreAuthorize("hasRole('USER')")
-    public String cancelSeats(
-            @RequestParam Long bookingId,
+    public String cancelSeats(@RequestParam Long bookingId,
             @RequestParam List<Long> seatIds,
             RedirectAttributes redirectAttributes) {
 
@@ -211,45 +146,38 @@ public class BookingController {
         return "redirect:/booking/home/user";
     }
 
-
-
-
-
-
-
-    //delete
-//    @GetMapping("/cancel/{showingId}")
+//    //list
+//    @GetMapping("/myBookings")
 //    @PreAuthorize("hasRole('USER')")
-//    public String cancelForm(Model model) {
-//        WebUser userNow = getCurrentUser();
-//        model.addAttribute("user", userNow);
-//        model.addAttribute("bookings", bookingServices.getUserBookings(userNow));
-//        return "Bookings/deleteBooking";
-//    }
-//
-//    @DeleteMapping("/cancel/{bookingId}")
-//    @PreAuthorize("hasRole('USER')")
-//    public String cancelBooking(Booking booking) {
-//        bookingServices.cancelBooking(getCurrentUser(), booking.getId());
-//        return "redirect:/bookings/home/user";
+//    public String getUserBookings(Model model) {
+//        WebUser currentUser = getCurrentUser();
+//        model.addAttribute("bookings", bookingServices.getUserBookings(currentUser));
+//        return "Bookings/listBookings";
 //    }
 
-    //list
-    @GetMapping("/myBookings")
+
+    @GetMapping("/getSeats")
     @PreAuthorize("hasRole('USER')")
-    public String getUserBookings(Model model) {
-        WebUser currentUser = getCurrentUser();
-        model.addAttribute("bookings", bookingServices.getUserBookings(currentUser));
-        return "Bookings/listBookings";
+    public ResponseEntity<List<Seat>> getSeats(@RequestParam("showingId") Long showingId) {
+        List<Seat> seats = seatServices.getSeatsByShowing(showingId);
+        return ResponseEntity.ok(seats);
     }
 
-    // Obtener cines donde una película específica tiene funciones
-    @GetMapping("/theatersByMovie")
-    @ResponseBody
-    public List<Theatre> getTheatersByMovie(@RequestParam Long movieId) {
-
-        return showingServices.getTheatersByMovie(movieId);
+    @GetMapping("/getBookings")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Booking>> getBookingsForUser() {
+        WebUser user = getCurrentUser();
+        List<Booking> bookings = bookingServices.getBookingsByCustomerId(user.getId());
+        return ResponseEntity.ok(bookings);
     }
+
+    @GetMapping("/getSeats/{bookingId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Seat>> getSeatsForBooking(@PathVariable Long bookingId) {
+        List<Seat> seats = seatServices.getSeatsByBookingId(bookingId);
+        return ResponseEntity.ok(seats);
+    }
+
     @GetMapping("/theatersByMovieTest")
     @ResponseBody
     public List<Theatre> getTheatres(@RequestParam Long movieId) {
@@ -261,12 +189,6 @@ public class BookingController {
         return showingServices.getMoviesByDate(LocalDateTime.now());
     }
 
-    // Obtener días en los cuales hay funciones para una película en un cine específico
-    @GetMapping("/daysByMovieAndTheater")
-    @ResponseBody
-    public List<LocalDateTime> getDaysByMovieAndTheater(@RequestParam Long movieId, @RequestParam Long theaterId) {
-        return showingServices.getDaysByMovieAndTheater(movieId, theaterId);
-    }
 
     @GetMapping("/daysByMovieAndTheaterTest")
     @ResponseBody
@@ -274,7 +196,6 @@ public class BookingController {
         return showingRepository.findDateByMovieAndTheatre(movieId,theatreId,LocalDateTime.now());
     }
 
-    // Obtener funciones disponibles en un día específico para una película y cine
     @GetMapping("/showingsByMovieTheaterAndDay")
     @ResponseBody
     public List<Showing> getShowingsByMovieTheaterAndDate(@RequestParam Long movieId, @RequestParam Long theatreId, @RequestParam LocalDateTime date) {
@@ -287,7 +208,7 @@ public class BookingController {
         return showingServices.getSeatAvailability(showingId); // implementar en ShowingServices (?
     }
 
-
+    //obtener el usuario en session
     private WebUser getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();

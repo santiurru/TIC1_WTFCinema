@@ -68,19 +68,6 @@ public class MovieServices {
     }
 
     public float getEarnings(Long movieId){
-////        float sum = 0;
-////        List<Showing> showings = showingRepository.findShowingsByMovieId(movieId);
-////        for (int i=0; i < showings.size() ; i++){
-////            List<PurchaseSnack> snackPurchases = purchaseSnackRepository.findByShowingId(showings.get(i).getId());
-////            for (int j = 0; j < snackPurchases.size(); j++){
-////                float price = snackRepository.findById(snackPurchases.get(j).getSnackId()).get().getPrice();
-////                int quantity = snackPurchases.get(j).getQuantity();
-////                sum += price*quantity;
-////            }
-////            int count = showingServices.notAvailableSeats(showings.get(i).getId()).size();
-////            sum += count * showings.get(i).getTicketPrice();
-////        }
-////        return sum;
         float total = 0;
         List<Showing> showings = showingRepository.findShowingsByMovieId(movieId);
         for (Showing showing : showings) {

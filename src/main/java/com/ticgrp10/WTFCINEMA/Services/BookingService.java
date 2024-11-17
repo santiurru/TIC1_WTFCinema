@@ -9,6 +9,7 @@ import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,13 +56,10 @@ public class BookingService {
     }
 
     public List<Booking> getBookingsByCustomerId(long customerId) {
-        return bookingRepository.findByCustomerId(customerId);
+        return bookingRepository.findByCustomerIdAndDate(customerId, LocalDateTime.now());
     }
 
-    // Obtener reservas del usuario
-    public List<Booking> getUserBookings(WebUser user) {
-        return bookingRepository.findByCustomerId(user.getId());
-    }
+
 
     public List<Booking> getShowingBookings(Showing showing){
         return bookingRepository.findByShowingId(showing.getId());

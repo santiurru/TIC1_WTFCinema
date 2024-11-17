@@ -76,25 +76,14 @@
         <option value="">Seleccione una función</option>
     </select>
 
-<!--    &lt;!&ndash; Mostrar Asientos Disponibles &ndash;&gt;-->
-<!--    <h2>Seleccione sus Asientos</h2>-->
-<!--    <label for="seat-selection"></label>-->
-<!--    <select id="seat-selection">-->
-<!--        &lt;!&ndash; Asientos disponibles se mostrarán aquí &ndash;&gt;-->
-<!--    </select>-->
-
 
     <button type="submit">Confirmar Reserva</button>
 </form>
 
-<!--&lt;!&ndash; todo podriamos usar esto para los asientos &ndash;&gt;-->
-<!--<img src="https://scontent.cdninstagram.com/v/t51.2885-19/358521630_796157072228281_7230287311101070150_n.jpg?stp=dst-jpg_s640x640&_nc_ht=scontent.cdninstagram.com&_nc_cat=101&_nc_ohc=YJ66fB7158kQ7kNvgG3mJw2&_nc_gid=64bce9f4cfda443c9f448c42b446776c&edm=APs17CUBAAAA&ccb=7-5&oh=00_AYBVq4FDhvpABpvBiTs_E5GjGA8wFRwfSNMNAEKUMz77Uw&oe=673DC498&_nc_sid=10d13b" onclick="funcion()">-->
-<!--<script>-->
-<!--    function funcion(){-->
-<!--        alert("hola estoy probando algo")-->
-<!--    }-->
-<!--</script>-->
 
+<footer style="text-align: center; padding: 10px;">
+    <p>&copy; 2024 WTF Cinemas</p>
+</footer>
 
 <script>
     $(document).ready(function() {
@@ -173,22 +162,7 @@
                 });
             }
         });
-        // // Cargar asientos disponibles al seleccionar una función
-        // $('#showing').change(function() {
-        //     const showingId = $(this).val();
-        //     $('#seat-selection').empty();
-        //
-        //     if (showingId) {
-        //         $.get("/booking/availableSeatsByShowing", { showingId: showingId }, function(data) {
-        //             Object.keys(data).forEach(function(position) {
-        //                 const status = data[position];
-        //                 $('#seat-selection').append(
-        //                     `<input type="checkbox" name="seatIds" value="${position}" ${status === 'occupied' ? 'disabled' : ''}> Asiento ${position} (${status})<br>`
-        //                 );
-        //             });
-        //         });
-        //     }
-        // });
+
 
     });
 </script>
