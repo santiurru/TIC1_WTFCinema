@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancelar Asientos</title>
+    <style>
+        /* Estilos CSS */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        select, button {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #seatsContainer {
+            margin: 20px 0;
+        }
+
+        .seat-label {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .seat-label input {
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+<h2>Cancelar Asientos</h2>
+<!-- Mostrar mensajes flash -->
+<div id="messageContainer"></div>
+
+<!-- Formulario -->
+<form method="post" action="/booking/cancelSeats">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <label for="bookingSelect">Selecciona una Reserva:</label>
+    <select id="bookingSelect" name="bookingId" required>
+        <option value="">--Selecciona una reserva--</option>
+    </select>
+
+    <div id="seatsContainer">
+        <p>Selecciona los asientos:</p>
+        <!-- Asientos cargados dinámicamente -->
+    </div>
+
+    <button type="submit">Cancelar Asientos</button>
+</form>
+
+<script>
+    // JavaScript para manejar la carga dinámica
+    document.addEventListener('DOMContentLoaded', () => {
+        const bookingSelect = document.getElementById('bookingSelect');
+        const seatsContainer = document.getElementById('seatsContainer');
+        const messageContainer = document.getElementById('messageContainer');
+
+        // Cargar reservas del usuario
+        fetch('/booking/getBookings')
+            .then(response => response.json())
+            .then(bookings => {
+                bookings.forEach(booking => {
+                    const option = document.createElement('option');
+                    option.value = booking.id;
+                    option.textContent = `Reserva ${booking.id} (Showing: ${booking.showingId})`;
+                    bookingSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                showMessage('Error al cargar las reservas. Inténtalo más tarde.', 'error');
+            });
+
+        // Cargar asientos cuando se selecciona una reserva
+        bookingSelect.addEventListener('change', () => {
+            const bookingId = bookingSelect.value;
+            seatsContainer.innerHTML = ''; // Limpiar asientos anteriores
+
+            if (bookingId) {
+                fetch(`/booking/getSeats/${bookingId}`)
+                    .then(response => response.json())
+                    .then(seats => {
+                        if (seats.length > 0) {
+                            seats.forEach(seat => {
+                                const label = document.createElement('label');
+                                label.className = 'seat-label';
+
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.name = 'seatIds';
+                                checkbox.value = seat.seatId;
+
+                                label.appendChild(checkbox);
+                                label.appendChild(document.createTextNode(`Fila ${seat.seatRow}, Columna ${seat.seatColumn}`));
+                                seatsContainer.appendChild(label);
+                            });
+                        } else {
+                            seatsContainer.innerHTML = '<p>No hay asientos asociados a esta reserva.</p>';
+                        }
+                    })
+                    .catch(error => {
+                        showMessage('Error al cargar los asientos. Inténtalo más tarde.', 'error');
+                    });
+            }
+        });
+
+        // Función para mostrar mensajes
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type === 'success' ? 'success-message' : 'error-message'}`;
+            messageDiv.textContent = message;
+            messageContainer.appendChild(messageDiv);
+
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+    });
+</script>
+</body>
+</html>

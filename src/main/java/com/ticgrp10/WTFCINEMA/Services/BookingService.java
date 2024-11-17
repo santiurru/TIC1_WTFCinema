@@ -54,6 +54,10 @@ public class BookingService {
         return "Reserva cancelada exitosamente.";
     }
 
+    public List<Booking> getBookingsByCustomerId(long customerId) {
+        return bookingRepository.findByCustomerId(customerId);
+    }
+
     // Obtener reservas del usuario
     public List<Booking> getUserBookings(WebUser user) {
         return bookingRepository.findByCustomerId(user.getId());

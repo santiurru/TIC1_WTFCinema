@@ -1,13 +1,20 @@
 //package com.ticgrp10.WTFCINEMA.Controllers;
 //
+//import com.ticgrp10.WTFCINEMA.Entities.PurchaseSnack;
+//import com.ticgrp10.WTFCINEMA.Entities.Seat;
+//import com.ticgrp10.WTFCINEMA.Entities.WebUser;
+//import com.ticgrp10.WTFCINEMA.Repositories.PurchaseSnackRepository;
+//import com.ticgrp10.WTFCINEMA.Repositories.SeatRepository;
+//import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
 //import com.ticgrp10.WTFCINEMA.Services.BookingService;
+//import com.ticgrp10.WTFCINEMA.Services.PurchaseSnackService;
 //import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.ui.Model;
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.List;
 //
 //@RestController
 //@RequestMapping("/api/checkout")
@@ -16,61 +23,47 @@
 //    @Autowired
 //    private BookingService bookingService;
 //    @Autowired
-//    private PurchaseSnackServices snackPurchaseService;
+//    private PurchaseSnackService snackPurchaseService;
 //
-//    @GetMapping("/total")
-//    public ResponseEntity<Map<String, Object>> getTotalPrice() {
-//        double total = bookingService.getTotalBookingsPrice() + snackPurchaseService.getTotalSnackPrice();
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("total", total);
-//        return ResponseEntity.ok(response);
-//    }
+//    @Autowired
+//    private UserRepository userRepository;
+//    @Autowired
+//    private SeatRepository seatRepository;
+//    @Autowired
+//    private PurchaseSnackRepository purchaseSnackRepository;
 //
-//    @PostMapping("/pagar")
-//    public ResponseEntity<Map<String, Object>> realizarPago(@RequestBody Map<String, Object> request) {
-//        boolean pagoConfirmado = (boolean) request.get("pagoConfirmado");
+//    @GetMapping("/checkout")
+//    public String checkoutPage(Model model) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        WebUser user = userRepository.findByEmail(authentication.getName()).get();
 //
-//        if (pagoConfirmado) {
-//            try {
-//                // Procesar el pago aquí (esto depende del sistema de pago que uses)
-//                boolean pagoExitoso = procesarPago();
-//
-//                if (pagoExitoso) {
-//                    // Limpiar las compras ya procesadas
-//                    bookingService.finalizarReservas();
-//                    snackPurchaseService.finalizarCompras();
-//                    Map<String, Object> response = new HashMap<>();
-//                    response.put("success", true);
-//                    return ResponseEntity.ok(response);
-//                } else {
-//                    // En caso de que el pago falle
-//                    cancelarProceso();
-//                    Map<String, Object> response = new HashMap<>();
-//                    response.put("success", false);
-//                    return ResponseEntity.ok(response);
-//                }
-//
-//            } catch (Exception e) {
-//                // Manejar cualquier error en el proceso de pago
-//                cancelarProceso();
-//                Map<String, Object> response = new HashMap<>();
-//                response.put("success", false);
-//                return ResponseEntity.ok(response);
-//            }
+//        // Verificar tarjeta
+//        if (user.getCardNumber() == null) {
+//            return "redirect:/api/users/creditCard"; // Redirigir para que agregue la tarjeta
 //        }
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Pago no confirmado"));
+//
+//        // Obtener reservas y snacks asociados
+//        List<Seat> seats = seatRepository.getSeatsByUserIdAndPaid(user.getId(), false);
+//        List<PurchaseSnack> snacks = purchaseSnackRepository.getPurchaseSnackByCustomerIdAndAndPaid();
+//
+//
+//        // Calcular costos
+//        double bookingCost = userBookings.size() * SEAT_PRICE; // Precio por asiento
+//        double snackCost = userSnacks.stream()
+//                .mapToDouble(snack -> snack.getQuantity() * snack.getPrice())
+//                .sum();
+//        double totalCost = bookingCost + snackCost;
+//
+//        // Pasar datos a la vista
+//        model.addAttribute("user", user);
+//        model.addAttribute("bookings", userBookings);
+//        model.addAttribute("snacks", userSnacks);
+//        model.addAttribute("bookingCost", bookingCost);
+//        model.addAttribute("snackCost", snackCost);
+//        model.addAttribute("totalCost", totalCost);
+//
+//        return "User/checkout";
 //    }
 //
-//    private boolean procesarPago() {
-//        // Simulación del proceso de pago, esta lógica se debe conectar con un API de pagos
-//        // Por ejemplo, Stripe, PayPal, etc.
-//        return true; // O falso si el pago falla
-//    }
-//
-//    private void cancelarProceso() {
-//        // Si el pago falla, eliminamos las compras y reservas que están en proceso
-//        bookingService.eliminarReservasEnProceso();
-//        snackPurchaseService.eliminarComprasEnProceso();
-//    }
 //}
-
+//

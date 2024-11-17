@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -146,37 +147,7 @@ public class BookingController {
 
 
 
-//    @PostMapping("/reserve")
-//    @PreAuthorize("hasRole('USER')")
-//    public String createBooking(@RequestParam Long showingId, HttpSession session) {
-//        // Guardar el showingId en la sesión
-//        session.setAttribute("showingId", showingId);
-//        return "redirect:/booking/selectSeats"; // Redirigir a la página de selección de asientos
-//    }
-//
-//    // Método para mostrar el formulario de selección de asientos
-//    @GetMapping("/selectSeats")
-//    @PreAuthorize("hasRole('USER')")
-//    public String selectSeatsForm(HttpSession session, Model model) {
-//        // Recuperar el showingId de la sesión
-//        Long showingId = (Long) session.getAttribute("showingId");
-//
-//        // Verificar si showingId es null (es decir, si no está en la sesión)
-//        if (showingId == null) {
-//            return "redirect:/reserve"; // Redirigir a la página de reserva si no hay un showingId válido
-//        }
-//
-//        System.out.println("Accediendo a selectSeatsForm con Showing ID: " + showingId);
-//
-//        // Obtener los asientos disponibles desde el servicio
-//        Map<String, String> seatMap = showingServices.getSeatAvailability(showingId);
-//
-//        // Agregar atributos al modelo para la vista
-//        model.addAttribute("showingId", showingId);
-//        model.addAttribute("seatMap", seatMap);
-//
-//        return "Bookings/seatSelection"; // Nombre de la plantilla en `templates/Bookings/seatSelection.html`
-//    }
+
 
     @GetMapping("/getSeats")
     @PreAuthorize("hasRole('USER')")
@@ -199,23 +170,69 @@ public class BookingController {
         return occupiedSeats;
     }
 
+    @GetMapping("/cancelForm")
+    @PreAuthorize("hasRole('USER')")
+    public String getCancelForm(){
+        return "Bookings/cancelBookingForm";
+    }
+
+
+    @GetMapping("/getBookings")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Booking>> getBookingsForUser() {
+        WebUser user = getCurrentUser();
+        List<Booking> bookings = bookingServices.getBookingsByCustomerId(user.getId());
+        return ResponseEntity.ok(bookings);
+    }
+
+
+    @GetMapping("/getSeats/{bookingId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Seat>> getSeatsForBooking(@PathVariable Long bookingId) {
+        List<Seat> seats = seatServices.getSeatsByBookingId(bookingId);
+        return ResponseEntity.ok(seats);
+    }
+
+    @PostMapping("/cancelSeats")
+    @PreAuthorize("hasRole('USER')")
+    public String cancelSeats(
+            @RequestParam Long bookingId,
+            @RequestParam List<Long> seatIds,
+            RedirectAttributes redirectAttributes) {
+
+        WebUser user = getCurrentUser();
+        boolean success = seatServices.cancelSeats(bookingId, seatIds, user.getId());
+
+        if (success) {
+            redirectAttributes.addFlashAttribute("message", "Asientos cancelados exitosamente.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "No se pudieron cancelar los asientos.");
+        }
+        return "redirect:/booking/home/user";
+    }
+
+
+
+
+
+
 
     //delete
-    @GetMapping("/cancel/{showingId}")
-    @PreAuthorize("hasRole('USER')")
-    public String cancelForm(Model model) {
-        WebUser userNow = getCurrentUser();
-        model.addAttribute("user", userNow);
-        model.addAttribute("bookings", bookingServices.getUserBookings(userNow));
-        return "Bookings/deleteBooking";
-    }
-
-    @DeleteMapping("/cancel/{bookingId}")
-    @PreAuthorize("hasRole('USER')")
-    public String cancelBooking(Booking booking) {
-        bookingServices.cancelBooking(getCurrentUser(), booking.getId());
-        return "redirect:/bookings/home/user";
-    }
+//    @GetMapping("/cancel/{showingId}")
+//    @PreAuthorize("hasRole('USER')")
+//    public String cancelForm(Model model) {
+//        WebUser userNow = getCurrentUser();
+//        model.addAttribute("user", userNow);
+//        model.addAttribute("bookings", bookingServices.getUserBookings(userNow));
+//        return "Bookings/deleteBooking";
+//    }
+//
+//    @DeleteMapping("/cancel/{bookingId}")
+//    @PreAuthorize("hasRole('USER')")
+//    public String cancelBooking(Booking booking) {
+//        bookingServices.cancelBooking(getCurrentUser(), booking.getId());
+//        return "redirect:/bookings/home/user";
+//    }
 
     //list
     @GetMapping("/myBookings")

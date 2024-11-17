@@ -5,8 +5,10 @@ import com.ticgrp10.WTFCINEMA.Entities.RegisterDto;
 import com.ticgrp10.WTFCINEMA.Entities.WebUser;
 import com.ticgrp10.WTFCINEMA.Repositories.UserRepository;
 import com.ticgrp10.WTFCINEMA.Services.AdminServices;
+import com.ticgrp10.WTFCINEMA.Services.WebUserServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -28,6 +33,8 @@ public class WebUserController {
     private UserRepository userRepository;
     @Autowired
     private AdminServices adminServices;
+    @Autowired
+    private WebUserServices webUserServices;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -56,7 +63,7 @@ public class WebUserController {
         return "User/bookingsManagement";
     }
 
-    @GetMapping("/booking/list")
+    @GetMapping("/bookings/list")
     @PreAuthorize("hasRole('USER')")
     public String listBookings() {
         return "redirect:/booking/myBookings";
@@ -66,6 +73,12 @@ public class WebUserController {
     @PreAuthorize("hasRole('USER')")
     public String createBookingForm() {
         return "redirect:/booking/reserve";
+    }
+
+    @GetMapping("/bookings/cancel")
+    @PreAuthorize("hasRole('USER')")
+    public String cancelBookingForm() {
+        return "redirect:/booking/cancelForm";
     }
 
     //purchase snack
@@ -151,10 +164,19 @@ public class WebUserController {
         return "register";
     }
 
-//    GetMapping("/creditCard")
-//    public String changeCreditCardForm(){
-//
-//    }
+    @GetMapping("/creditCard")
+    public String changeCreditCardForm(){
+        return "User/createCreditCard";
+    }
+
+    @PostMapping("/creditCard")
+    public String changeCreditCard(long cardNumber, String ownerName, String expirationDate, int cvv){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        WebUser user = userRepository.findByEmail(authentication.getName()).get();
+        webUserServices.addCreditCard(user, cardNumber, ownerName, expirationDate, cvv);
+        return "redirect:/api/users/menu";
+    }
+
 
     //rating
     @GetMapping("/ratings")

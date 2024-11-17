@@ -4,16 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @Entity
 @Table
 @Getter
 @Setter
 public class Seat {
-
-    //@ManyToOne
-//    @JoinColumn(name = "booking_id")
-//    private Long bookingId;
-
     @Id
     @GeneratedValue
     private Long seatId;
@@ -23,6 +21,8 @@ public class Seat {
 
     private Long bookingId;
 
+    private LocalDate bookingDate;
 
+    private boolean paid;
 
 }

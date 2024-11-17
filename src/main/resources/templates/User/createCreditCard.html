@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Credit Card</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Enlace a un archivo CSS si tienes uno -->
+</head>
+<body>
+<div class="container">
+    <h1>Update Credit Card</h1>
+    <form action="/api/users/creditCard" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <!-- Tarjeta de crédito -->
+        <div class="form-group">
+            <label for="cardNumber">Card Number:</label>
+            <input type="number" id="cardNumber" name="cardNumber" required>
+        </div>
+        <!-- Nombre del propietario -->
+        <div class="form-group">
+            <label for="ownerName">Owner Name:</label>
+            <input type="text" id="ownerName" name="ownerName" required>
+        </div>
+        <!-- Fecha de expiración -->
+        <div class="form-group">
+            <label for="expirationDate">Expiration Date:</label>
+            <input type="month" id="expirationDate" name="expirationDate" required>
+        </div>
+        <!-- CVV -->
+        <div class="form-group">
+            <label for="cvv">CVV:</label>
+            <input type="number" id="cvv" name="cvv" min="100" max="999" required>
+        </div>
+        <!-- Botón para enviar -->
+        <div class="form-group">
+            <button type="submit">Update</button>
+        </div>
+    </form>
+    <!-- Botón de retorno -->
+    <div>
+        <a href="/api/users/menu" class="back-button">Go Back</a>
+    </div>
+</div>
+</body>
+</html>

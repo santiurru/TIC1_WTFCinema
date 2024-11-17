@@ -77,11 +77,11 @@ public class MovieWebController {
         return "Movies/movieEarnings";
     }
 
-    @GetMapping("/earningsMovie")
-    @ResponseBody
-    public float movieEarnings(Movie movie){
-        return movieServices.getEarnings((movie.getId()));
-    }
+//    @GetMapping("/earningsMovie")
+//    @ResponseBody
+//    public float movieEarnings(Movie movie){
+//        return movieServices.getEarnings((movie.getId()));
+//    }
 
 
 }

@@ -11,6 +11,11 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     @Query("SELECT s FROM Booking b JOIN Seat s On b.id = s.bookingId WHERE b.showingId = :showingId")
     List<Seat> getSeatsByShowingId(Long showingId);
 
+    List<Seat> getSeatsByBookingId(Long bookingId);
+
+    @Query("SELECT s FROM Booking b JOIN Seat s On b.id = s.bookingId WHERE b.customerId =:userId and s.paid =:paid")
+    List<Seat> getSeatsByUserIdAndPaid(long userId, Boolean paid);
+
 //    @Query("SELECT s.seatRow,s.seatColumn FROM Booking b JOIN Seat s On b.id = s.bookingId WHERE b.showingId = :showingId")
 //    List<String> getSeatsByShowingIdAux(Long showingId);
 

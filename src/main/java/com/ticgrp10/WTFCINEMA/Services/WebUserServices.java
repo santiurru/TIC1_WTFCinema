@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +48,15 @@ public class WebUserServices implements UserDetailsService {
     public Optional<WebUser> findById(Long id) {
         return userRepository.findById(id);
     }
+
+    public void addCreditCard(WebUser user, long cardNumber, String ownerName, String expirationDate, int cvv){
+        user.setCardNumber(cardNumber);
+        user.setOwnerName(ownerName);
+        user.setExpirationDate(expirationDate);
+        user.setCvv(cvv);
+        userRepository.save(user);
+    }
+
 
     private boolean isValidEmail(String email) {
         String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
