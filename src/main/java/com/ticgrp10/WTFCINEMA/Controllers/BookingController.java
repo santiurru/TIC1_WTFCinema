@@ -114,11 +114,15 @@ public class BookingController {
             throw new RuntimeException("Error parsing selected seats JSON", e);
         }
         WebUser currentUser = getCurrentUser();
-        Booking booking = new Booking();
-        booking.setCustomerId(currentUser.getId());
-        booking.setShowingId(showingId);
-        bookingServices.addBooking(booking);
-        Booking bookingAux = bookingServices.getBookingByCustomerAndShowing(currentUser.getId(), showingId);
+        Optional<Booking> bookingAuxOpt = bookingServices.getBookingByCustomerAndShowing(currentUser.getId(), showingId);
+        if(bookingAuxOpt.isEmpty()) {
+            Booking booking = new Booking();
+            booking.setCustomerId(currentUser.getId());
+            booking.setShowingId(showingId);
+            bookingServices.addBooking(booking);
+        }
+        Booking bookingAux = bookingServices.getBookingByCustomerAndShowing(currentUser.getId(), showingId).get();
+
         // Procesar los asientos seleccionados (ej. guardarlos en la base de datos)
         selectedSeats.forEach(seat -> {
             int row = seat.get("row");
@@ -126,7 +130,7 @@ public class BookingController {
             seatServices.bookSeat(bookingAux.getId(), row, col); // Implementa este método en tu servicio
         });
 
-        return "redirect:/showings";
+        return "User/buySnackQuestion";
     }
 
 

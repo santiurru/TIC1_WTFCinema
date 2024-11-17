@@ -101,7 +101,7 @@
             border: 1px solid #ccc;
             cursor: pointer;
         }
-        .seat.occupied {
+        .occupied {
             background-color: red;
             cursor: not-allowed;
         }
@@ -117,12 +117,18 @@
     <input type="hidden" name="showingId" th:value="${showingId}">
     <div class="seat-grid">
         <!-- Generar la matriz de asientos (15 filas por 10 columnas) -->
-        <th:block th:each="row : ${#numbers.sequence(0, 14)}"> <!-- 15 filas -->
-            <th:block th:each="col : ${#numbers.sequence(0, 9)}"> <!-- 10 columnas -->
+        <th:block th:each="row : ${#numbers.sequence(1, 15)}"> <!-- 15 filas -->
+            <th:block th:each="col : ${#numbers.sequence(1, 10)}"> <!-- 10 columnas -->
+<!--                <div class="seat"-->
+<!--                     th:classappend="${#lists.contains(occupiedSeats, {'seat_row': row, 'seat_column': col}) ? 'occupied' : ''}"-->
+<!--                     th:attr="data-row=${row}, data-col=${col}">-->
+<!--                </div>-->
                 <div class="seat"
-                     th:classappend="${#lists.contains(occupiedSeats, {'seatRow': row, 'seatColumn': col}) ? 'occupied' : ''}"
+                     th:each="seat : ${occupiedSeats}"
+                     th:class="${seat.seatRow == row && seat.seatColumn == col ? 'occupied' : 'seat'}"
                      th:attr="data-row=${row}, data-col=${col}">
                 </div>
+
             </th:block>
         </th:block>
     </div>

@@ -67,7 +67,7 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public Booking getBookingByCustomerAndShowing(Long customerId, Long showingId){
+    public Optional<Booking> getBookingByCustomerAndShowing(Long customerId, Long showingId){
         return bookingRepository.findBookingByCustomerIdAndShowingId(customerId,showingId);
     }
 
