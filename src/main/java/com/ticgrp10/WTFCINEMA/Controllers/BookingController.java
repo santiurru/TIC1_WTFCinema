@@ -127,7 +127,6 @@ public class BookingController {
         return "User/buySnackQuestion";
     }
 
-
     //cancelar
     @GetMapping("/cancelForm")
     @PreAuthorize("hasRole('USER')")
@@ -151,15 +150,6 @@ public class BookingController {
         }
         return "redirect:/booking/home/user";
     }
-
-//    //list
-//    @GetMapping("/myBookings")
-//    @PreAuthorize("hasRole('USER')")
-//    public String getUserBookings(Model model) {
-//        WebUser currentUser = getCurrentUser();
-//        model.addAttribute("bookings", bookingServices.getUserBookings(currentUser));
-//        return "Bookings/listBookings";
-//    }
 
 
     @GetMapping("/getSeats")

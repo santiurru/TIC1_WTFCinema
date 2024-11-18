@@ -14,28 +14,28 @@
     <h1 class="text-center">¡¡¡Bienvenido a WTFun Cinemas!!! </h1>
 </div>
 
-<!-- Mostrar las peliculas como carrusel -->
-<div class="carousel-inner">
-    <!-- Aquí se recorre la lista de películas y se agrega la clase "active" solo al primer elemento -->
-    <div th:each="movie, movieStat : ${movies}">
-        <div class="carousel-item" th:classappend="${movieStat.index == 0} ? 'active' : ''">
-            <img th:src="${movie.img}" class="d-block w-100" th:alt="${movie.title}">
-<!--            <div class="carousel-caption d-none d-md-block">-->
-<!--                <h5 th:text="${movie.title}">Titulo</h5>-->
-<!--                <p th:text="${movie.synopsis}">Synopsis</p>-->
-<!--            </div>-->
+<!-- Carrusel de películas -->
+<div id="movieCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+    <div class="carousel-inner">
+        <!-- Recorrer las películas -->
+        <div th:each="movie, iterStat : ${movies}">
+            <div class="carousel-item" th:classappend="${iterStat.index == 0} ? ' active' : ''">
+                <img th:src="${movie.img}" class="d-block mx-auto"
+                     style="max-width: 700px; max-height: 700px; object-fit: cover;"
+                     th:alt="${movie.title}">
+            </div>
         </div>
     </div>
+    <!-- Controles del carrusel -->
     <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
+        <span class="visually-hidden">Anterior</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
+        <span class="visually-hidden">Siguiente</span>
     </button>
 </div>
-
 
 
 <div class="container mt-5">
@@ -51,35 +51,9 @@
     </div>
 </div>
 
-<footer>
+<footer class="text-center mt-5">
     <p>&copy; 2024 WTF Cinemas</p>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
-
-
-
-
-
-<!--<!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>WTFun Cinema</title>
-    <base href="/" />
-</head>
-<body>
-<div class="container mt-5">
-    <h1>Bienvenido a WTFun Cinemas!!!</h1>
-    <p>Para registrarte, haz clic en el botón a continuación:</p>
-    <a href="/api/users/register" class="btn btn-primary">Ir a Registro</a>
-
-    <h2 class="mt-4">Administración</h2>
-    <p>Accede al menú de administración para gestionar las películas y otras configuraciones:</p>
-    <a href="/admin/home" class="btn btnd-secondary">Ir al Menú de Admin</a>
-</div>
-
-<script src="js/scripts.js"></script>
-</body>
-</html>-->
