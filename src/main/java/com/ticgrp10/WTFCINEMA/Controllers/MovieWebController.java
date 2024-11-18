@@ -89,25 +89,5 @@ public class MovieWebController {
         model.addAttribute("movieServices", movieServices);
         return "Movies/movieEarnings";
     }
-
-//    @GetMapping("/earningsMovies")
-//    @ResponseBody
-//    public List<String> movieEarnings(@RequestParam List<Movie> movies){
-//        List<String> earnings = new ArrayList<>(movies.size());
-//        for (Movie movie : movies) {
-//            // Concatenamos todos los datos necesarios en un solo string
-//            String earningDetails = movie.getTitle() + "," +
-//                    movie.getImg() + "," +
-//                    movie.getSynopsis() + "," +
-//                    movie.getGenres() + "," +
-//                    movieServices.getEarnings(movie.getId());
-//
-//            // Añadimos el string con los detalles a la lista
-//            earnings.add(earningDetails);
-//        }
-//        return earnings;
-//    }
-
-
 }
 

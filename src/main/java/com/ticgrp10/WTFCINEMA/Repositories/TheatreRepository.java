@@ -17,8 +17,4 @@ public interface TheatreRepository extends JpaRepository<Theatre, Long> {
     @Query("SELECT DISTINCT s FROM Theatre s WHERE s.theatreId in :theatreIds")
     List<Theatre> findByTheatreIdIn(List<Long> theatreIds);
 
-
-//    Optional<Theatre> findByRoomId(Long roomId);
-//
-//    List<Theatre> findTheatresByMovieId(Long movieId);
 }

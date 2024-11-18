@@ -9,12 +9,11 @@
 
 <h1>Califica una Película</h1>
 
-<!-- Mostrar mensaje de éxito si la calificación se ha guardado -->
+<!-- Muestra un mensaje de éxito si la calificación se guardó -->
 <div th:if="${param.success}">
     <p>¡Gracias por tu calificación!</p>
 </div>
 
-<!-- Formulario para calificar la película -->
 <div class="row">
     <div class="col-lg-6 mx-auto rounded border p-4">
         <form action="/ratings/rate-movie" method="post">

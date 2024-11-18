@@ -123,10 +123,10 @@ public class SecurityConfig {
                         .name("Admin")
                         .surname("User")
                         .email(email)
-                        .birthDate(new Date())  // O la fecha que prefieras
+                        .birthDate(new Date())
                         .password(passwordEncoder.encode("admin123"))  // Hardcodea la contraseña aquí
                         .phoneNumber(123456789)
-                        .role("ROLE_ADMIN")  // Asegúrate de que tenga el rol correcto
+                        .role("ROLE_ADMIN")
                         .build();
 
                 adminRepository.save(admin);
@@ -150,12 +150,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-//                todo verificar nuevas entradas (como mostrar usuarios, etc)
-                .authorizeHttpRequests(authRequest -> authRequest
+        http.authorizeHttpRequests(authRequest -> authRequest
                         .requestMatchers("/", "/login", "/register", "/api/users/register", "/logout","/error","/movie/current","/ratings/average").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/ratings/rate-movie","/booking/reserve/**","/booking/selectSeats/**","/booking/bookSeats","/booking/cancelSeats","/api/users/creditCard","/api/checkout/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST,"/ratings/rate-movie","/booking/reserve/**","/booking/selectSeats/**","/booking/bookSeats","/booking/cancelSeats","/api/users/**","/api/checkout/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/movie/**","/showing/**","/snacks/**","/admin/**").hasRole("ADMIN") // Permite solo a ADMIN para crear
                         .requestMatchers("/admin/**", "/movie/**", "/showing/**", "/snacks/**","/login").hasRole("ADMIN")
                         .requestMatchers("/listShowings/", "snacks/list", "/listMovies/", "/booking/**", "ratings/**","/api/checkout/**").hasRole("USER")
@@ -163,19 +161,13 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // Indica la URL personalizada para el login
-                        .defaultSuccessUrl("/") // Redirige tras un login exitoso
+                        .defaultSuccessUrl("/") // Redirige despues del login
                         .permitAll())
 
 
                 .logout(config -> config
                         .logoutSuccessUrl("/")
                         .permitAll());
-
-//                .formLogin(form -> form
-//                        .successHandler(new CustomAuthenticationSuccessHandler())
-//                )
-//                .logout(config -> config.logoutSuccessUrl("/"));
-
         return http.build();
     }
 }

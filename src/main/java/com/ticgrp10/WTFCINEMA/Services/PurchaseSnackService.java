@@ -38,9 +38,7 @@ public class PurchaseSnackService {
             if (snack.getShowingId() != showingId) {
                 throw new IllegalArgumentException("El asiento no pertenece a esta reserva.");
             }
-            if (snack.getCustomerId() != (customerId)) {
-                throw new SecurityException("Acceso no autorizado.");
-            }
+
             purchaseSnackRepository.delete(snack);
         });
         return true;

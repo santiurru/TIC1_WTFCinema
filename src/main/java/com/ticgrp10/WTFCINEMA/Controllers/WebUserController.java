@@ -166,6 +166,7 @@ public class WebUserController {
         return "register";
     }
 
+    //credit card
     @GetMapping("/creditCard")
     public String changeCreditCardForm(){
         return "User/createCreditCard";
@@ -178,7 +179,6 @@ public class WebUserController {
         webUserServices.addCreditCard(user, cardNumber, ownerName, expirationDate, cvv);
         return "redirect:/api/users/menu";
     }
-
 
     //rating
     @GetMapping("/ratings")

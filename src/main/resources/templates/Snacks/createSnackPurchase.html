@@ -1,33 +1,50 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comprar Snacks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-<h2>Compra tus Snacks</h2>
+<div th:replace="~{navbar :: navbar}"></div>
 
-<form action="/purchase/snack/create" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <div>
-        <!-- Iterar sobre los snacks disponibles y crear un campo para cada uno -->
-        <div th:each="snack : ${snacks}">
-            <label th:for="'snack-' + ${snack.id}">
-                <span th:text="${snack.name}">Snack Name</span> -
-                <span th:text="|${snack.price}$|">Snack Price</span>
-            </label>
-            <input type="hidden" name="snackIds" th:value="${snack.id}" />
-            <input type="number" name="snackQuantities" min="0" value="0" />
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto rounded border p-4">
+            <h2 class="text-center mb-4">Compra tus Snacks</h2>
+            <form action="/purchase/snack/create" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <!-- Iterar sobre los snacks disponibles y crear un campo para cada uno -->
+                <div th:each="snack : ${snacks}">
+                    <div class="row mb-3">
+                        <label th:for="'snack-' + ${snack.id}" class="col-sm-4 col-form-label">
+                            <img th:src="${snack.img}" th:alt="|Imagen de ${snack.name}|" style="max-height: 100px; max-width: 100px">
+                            <br>
+                            <span th:text="${snack.name}">Snack Name</span> -
+                            <span th:text="|${snack.price}$|">Snack Price</span>
+                        </label>
+                        <div class="col-sm-8">
+                            <input type="hidden" name="snackIds" th:value="${snack.id}" />
+                            <input type="number" name="snackQuantities" min="0" value="0" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-8 offset-sm-4 d-grid">
+                    <button type="submit" class="btn btn-primary">Confirmar Compra</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <button type="submit">Confirmar Compra</button>
-</form>
+
 <footer style="text-align: center; padding: 10px;">
     <p>&copy; 2024 WTF Cinemas</p>
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
 

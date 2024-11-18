@@ -34,7 +34,7 @@ public class WebUser {
 
     private String role = "ROLE_USER";
 
-    @Email(message = "Email should be valid")
+    @Email(message = "Debe ser un correo válido")
     @Column(unique = true, nullable = false)
     protected String email;
 

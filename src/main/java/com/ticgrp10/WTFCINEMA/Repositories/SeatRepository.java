@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long> {
@@ -19,10 +20,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     @Query("SELECT s.seatId FROM Booking b JOIN Seat s On b.id = s.bookingId WHERE b.customerId =:userId and s.paid =:paid")
     List<Long> findIdsByUserIdAndPaid(long userId, Boolean paid);
 
-
-
-//    @Query("SELECT s.seatRow,s.seatColumn FROM Booking b JOIN Seat s On b.id = s.bookingId WHERE b.showingId = :showingId")
-//    List<String> getSeatsByShowingIdAux(Long showingId);
+    Optional<Seat> findBySeatColumnAndSeatRowAndBookingId(int seatColumn, int seatRow, long bookingId);
 
 
 

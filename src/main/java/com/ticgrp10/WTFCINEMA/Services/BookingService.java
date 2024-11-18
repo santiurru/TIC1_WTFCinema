@@ -32,19 +32,12 @@ public class BookingService {
         Optional<WebUser> userOptional = webUserRepository.findById(booking.getCustomerId());
         if (userOptional.isEmpty()) {throw new IllegalArgumentException("Customer not found");}
 
-//        int seat = booking.getSeatId();
-//        if (seat < 0 || seat > 150){throw new IllegalArgumentException("Asiento invalido");}
         Optional<Showing> showingOptional = showingRepository.findById(booking.getShowingId());
         if (!showingOptional.isPresent()) {throw new IllegalArgumentException("Showing not found");}
         Showing showing = showingOptional.get();
-//        if (!showingServices.notAvailableSeats(showing.getId()).contains(seat)) {
             return bookingRepository.save(booking);
-//      //Suponemos que no se va a poder llegar a este paso seleccionando asientos ocupados
-//        }
-//        else {throw new IllegalArgumentException("El asiento no está disponible.");}
     }
 
-    // Cancelación de reserva
     public String cancelBooking(WebUser user, Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).get();
         WebUser webUser = webUserRepository.findById(booking.getCustomerId()).get();

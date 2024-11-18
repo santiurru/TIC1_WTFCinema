@@ -49,36 +49,57 @@
 <body>
 <div th:replace="~{navbar :: navbar}"></div>
 
-<form action="/booking/reserve" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto rounded border p-4">
+            <form action="/booking/reserve" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-    <!-- Seleccionar Película -->
-    <label for="movie">Película:</label>
-    <select id="movie" name="movieId" required>
-        <option value="">Seleccione una película</option>
-    </select>
+                <div class="row mb-3">
+                    <label for="movie" class="col-sm-4 col-form-label">Película:</label>
+                    <div class="col-sm-8">
+                        <select id="movie" name="movieId" required class="form-control">
+                            <option value="">Seleccione una película</option>
+                        </select>
+                    </div>
+                </div>
 
-    <!-- Seleccionar Cine -->
-    <label for="theatre">Cine:</label>
-    <select id="theatre" name="theatreId" required>
-        <option value="">Seleccione un cine</option>
-    </select>
+                <div class="row mb-3">
+                    <label for="theatre" class="col-sm-4 col-form-label">Cine:</label>
+                    <div class="col-sm-8">
+                        <select id="theatre" name="theatreId" required class="form-control">
+                            <option value="">Seleccione un cine</option>
+                        </select>
+                    </div>
+                </div>
 
-    <!-- Seleccionar Día -->
-    <label for="day">Día:</label>
-    <select id="day" name="day" required>
-        <option value="">Seleccione un día</option>
-    </select>
+                <div class="row mb-3">
+                    <label for="day" class="col-sm-4 col-form-label">Día:</label>
+                    <div class="col-sm-8">
+                        <select id="day" name="day" required class="form-control">
+                            <option value="">Seleccione un día</option>
+                        </select>
+                    </div>
+                </div>
 
-    <!-- Seleccionar Función -->
-    <label for="showing">Función:</label>
-    <select id="showing" name="showingId" required>
-        <option value="">Seleccione una función</option>
-    </select>
+                <div class="row mb-3">
+                    <label for="showing" class="col-sm-4 col-form-label">Función:</label>
+                    <div class="col-sm-8">
+                        <select id="showing" name="showingId" required class="form-control">
+                            <option value="">Seleccione una función</option>
+                        </select>
+                    </div>
+                </div>
 
 
-    <button type="submit">Confirmar Reserva</button>
-</form>
+                <div class="col-sm-8 offset-sm-4 d-grid">
+                    <button type="submit">Confirmar Reserva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
 <footer style="text-align: center; padding: 10px;">
@@ -132,7 +153,6 @@
         });
 
 
-        // Cargar funciones al seleccionar un día todo cambiar ya no se tiene que seleccionar, solo guardar para la parte de los asientos
         $('#day').change(function() {
             const movieId = $('#movie').val();
             const theatreId = $('#theatre').val();

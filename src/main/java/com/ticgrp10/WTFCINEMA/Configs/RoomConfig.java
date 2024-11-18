@@ -11,22 +11,16 @@ import org.springframework.core.annotation.Order;
 @Configuration
 public class RoomConfig {
 
-    @Autowired
-    private RoomService roomService;
 
     @Bean
     @Order(2)
     CommandLineRunner commandLineRunnerRoom (RoomService roomService){
         return args -> {
             // punta carretas, 8 salas
-            //System.out.println("--------agregando rooms-------");
             int lenPC = roomService.roomCount(1);
-//            System.out.println("roomcount para theatre 1: ");
-//            System.out.println(lenPC);
             if(lenPC == 0){
                 for (int i = 0; i <8; i++ ){
                     Room temp = new Room(i,1);
-                    //System.out.println("adding room");
                     roomService.addRoom(1,temp);
                 }
             }

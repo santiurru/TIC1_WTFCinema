@@ -28,7 +28,7 @@ public class RegisterDto {
     @NotEmpty
     private Date birthDate;
 
-    @Size(min = 6, message = "Minimum password lenght is 6 characters")
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
 
     private String confirmPassword;

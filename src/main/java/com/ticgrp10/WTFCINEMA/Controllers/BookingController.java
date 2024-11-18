@@ -5,9 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ticgrp10.WTFCINEMA.Entities.*;
-import com.ticgrp10.WTFCINEMA.Repositories.RoomRepository;
-import com.ticgrp10.WTFCINEMA.Repositories.ShowingRepository;
-import com.ticgrp10.WTFCINEMA.Repositories.SnackRepository;
+import com.ticgrp10.WTFCINEMA.Repositories.*;
 import com.ticgrp10.WTFCINEMA.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +53,15 @@ public class BookingController {
     @Autowired
     SeatServices seatServices;
     @Autowired
-    private RoomRepository roomRepository;
+    RoomRepository roomRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    SeatRepository seatRepository;
+    @Autowired
+    PurchaseSnackService purchaseSnackService;
+    @Autowired
+    PurchaseSnackRepository purchaseSnackRepository;
 
 
     @GetMapping("/home/user")
@@ -68,6 +74,9 @@ public class BookingController {
     @GetMapping("/reserve")
     @PreAuthorize("hasRole('USER')")
     public String createBookingForm(Model model) {
+        if(getCurrentUser().getCardNumber() == 0 || getCurrentUser().getExpirationDate() == null || getCurrentUser().getOwnerName() == null){
+            return "redirect:/api/users/creditCard";
+        }
         List<Showing> showings = showingRepository.findAll();
         showings.forEach(showing -> showing.setRoomNumber(roomRepository.findById(showing.getRoomId()).get().getNumber()));
 
@@ -87,7 +96,7 @@ public class BookingController {
     @PreAuthorize("hasRole('USER')")
     public String selectSeatsForm(@PathVariable("showingId") Long showingId, Model model) {
         List<String> occupiedSeats = seatServices.getSeatsByShowing(showingId).stream()
-                .map(seat -> seat.getSeatRow() + "," + seat.getSeatColumn()) // "row,column"
+                .map(seat -> seat.getSeatRow() + "," + seat.getSeatColumn())
                 .collect(Collectors.toList());//
 
         model.addAttribute("showingId", showingId);
@@ -100,6 +109,22 @@ public class BookingController {
     @PreAuthorize("hasRole('USER')")
     public String bookSeats(@RequestParam("showingId") Long showingId,
                             @RequestParam("selectedSeats") String selectedSeatsJson) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        WebUser user = userRepository.findByEmail(authentication.getName()).orElse(null);
+
+        List<Seat> seats = seatRepository.getSeatsByUserIdAndPaid(user.getId(), false);
+        List<PurchaseSnack> snacks = purchaseSnackRepository.findByCustomerIdAndPaid(user.getId(), false);
+
+        List<Long> seatsIds = seatRepository.findIdsByUserIdAndPaid(user.getId(), false);
+        List<Long> snackIds = purchaseSnackRepository.findIdsByCustomerIdAndPaid(user.getId(), false);
+
+        if (!seats.isEmpty()) {
+            seatServices.cancelSeats(seats.get(0).getBookingId(), seatsIds, user.getId());
+        }
+        if (!snacks.isEmpty()) {
+            purchaseSnackService.cancelPurchases(snacks.get(0).getShowingId(), snackIds, user.getId());
+        }
 
         ObjectMapper objectMapper = new ObjectMapper();
         List<Map<String, Integer>> selectedSeats;

@@ -9,18 +9,18 @@
             border-bottom: 2px;
         }
         .movie {
-            display: flex; /* junta los datos */
+            display: flex;
             align-items: center;
             margin-bottom: 50px;
         }
         .movie img {
-            margin-right: 10px; /*deja un margen entre la foto y el texto*/
-            max-width: 120px; /*si la foto es mas grande, usa estos valores como tamaño maximo*/
+            margin-right: 10px;
+            max-width: 120px;
             max-height: 180px;
         }
         .movie-info {
             display: flex;
-            flex-direction: column; /* muestra los datos agrupados en forma de columna */
+            flex-direction: column;
             text-align: left;
         }
     </style>
@@ -45,17 +45,12 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Itera sobre cada elemento span con la clase 'average-rating'
         $('.average-rating').each(function() {
             const span = $(this);
-            const movieId = span.data('movie-id'); // Obtiene el movieId desde el atributo data-movie-id
-
-            // Realiza una solicitud AJAX para obtener el promedio
+            const movieId = span.data('movie-id');
             $.get('/ratings/average', { movieId: movieId }, function(data) {
-                // Actualiza el contenido del span con el promedio o un mensaje si no hay calificaciones
                 span.text(data !== -1 ? data.toFixed(2) : 'Sin calificaciones');
             }).fail(function() {
-                // Maneja errores en caso de que la solicitud falle
                 span.text('Error al cargar promedio');
             });
         });

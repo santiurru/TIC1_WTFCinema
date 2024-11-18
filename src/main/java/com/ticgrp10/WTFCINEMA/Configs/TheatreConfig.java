@@ -34,7 +34,6 @@ public class TheatreConfig {
             theatreServices.addTheatre(malvin);
             Theatre buceo = new Theatre("Buceo");
             theatreServices.addTheatre(buceo);
-
         };
     }
 }

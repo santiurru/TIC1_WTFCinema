@@ -51,28 +51,31 @@
 <body>
 <div th:replace="~{navbar :: navbar}"></div>
 
+<div class="container mt-8">
+    <h1 th:text="'Seleccionar los asientos para la Funcion:' + ${showingId}"></h1>
+    <h2>PANTALLA</h2>
+    <form action="/booking/bookSeats" method="post" id="seatForm">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" name="showingId" th:value="${showingId}">
+        <div class="seat-grid">
+            <!-- Genera la matriz de asientos (15 filas por 10 columnas)-->
+            <th:block th:each="row : ${#numbers.sequence(1, 15)}"> <!-- 15 filas -->
+                <th:block th:each="col : ${#numbers.sequence(1, 10)}"> <!-- 10 columnas -->
+                    <div class="seat"
+                         th:classappend="${occupiedSeats.contains(row + ',' + col) ? 'occupied' : ''}"
+                         th:attr="data-row=${row}, data-col=${col}">
+                    </div>
 
-<h1 th:text="'Seleccionar los asientos para la Funcion:' + ${showingId}"></h1>
-<h2>PANTALLA</h2>
-<form action="/booking/bookSeats" method="post" id="seatForm">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <input type="hidden" name="showingId" th:value="${showingId}">
-    <div class="seat-grid">
-<!--         Generar la matriz de asientos (15 filas por 10 columnas)-->
-        <th:block th:each="row : ${#numbers.sequence(1, 15)}"> <!-- 15 filas -->
-            <th:block th:each="col : ${#numbers.sequence(1, 10)}"> <!-- 10 columnas -->
-                <div class="seat"
-                     th:classappend="${occupiedSeats.contains(row + ',' + col) ? 'occupied' : ''}"
-                     th:attr="data-row=${row}, data-col=${col}">
-                </div>
-
+                </th:block>
             </th:block>
-        </th:block>
 
-    </div>
-    <input type="hidden" name="selectedSeats" id="selectedSeats">
-    <button type="submit">Book Seats</button>
-</form>
+        </div>
+        <input type="hidden" name="selectedSeats" id="selectedSeats">
+        <button type="submit">Confirmar asientos</button>
+    </form>
+</div>
+
+
 
 <footer style="text-align: center; padding: 10px;">
     <p>&copy; 2024 WTF Cinemas</p>
@@ -85,11 +88,8 @@
     seatGrid.addEventListener('click', (e) => {
         const seat = e.target;
         if (!seat.classList.contains('seat') || seat.classList.contains('occupied')) return;
-
-        // Toggle selection
         seat.classList.toggle('selected');
 
-        // Gather selected seats
         const selectedSeats = [];
         document.querySelectorAll('.seat.selected').forEach(seat => {
             const row = seat.getAttribute('data-row');
@@ -97,7 +97,6 @@
             selectedSeats.push({ row, col });
         });
 
-        // Update the hidden input
         selectedSeatsInput.value = JSON.stringify(selectedSeats);
     });
 </script>

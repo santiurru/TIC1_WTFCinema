@@ -34,36 +34,10 @@ public class RatingServices {
         return null;
     }
 
-//    public List<Movie> order(List<AbstractMap.SimpleEntry<Movie,Float>> list){
-//        int[] count = new int[100];
-//        int size = list.size();
-//        List<Movie>[] aux = new List[size];
-//        List<Movie> sortedList = new ArrayList<>();
-//
-//        // Paso 1: Contamos la frecuencia de cada rating
-//        for (AbstractMap.SimpleEntry<Movie, Float> movie : list) {
-//            int index = (int) (movie.getValue() * 10); // Multiplicamos por 10 para usarlo como índice
-//            count[index]++;
-//            if (aux[index] == null){
-//                aux[index] = new ArrayList<>();
-//            }
-//            aux[index].add(movie.getKey());
-//        }
-//
-//        // Paso 2: Reconstruir la lista pero esta vez ordenada
-//        for (int i = 0; i < 100; i++) {
-//            while (count[i] > 0) {
-//                sortedList.add(aux[i].getFirst());
-//                aux[i].removeFirst();
-//                count[i]--;
-//            }
-//        }
-//
-//        return sortedList;
-//    }
+
 public List<Movie> order(List<AbstractMap.SimpleEntry<Movie, Float>> list) {
-    int[] count = new int[100]; // Para contar la frecuencia de cada rating escalado.
-    List<Movie>[] aux = new List[100]; // Tamaño debe ser 100 para índices de 0 a 99.
+    int[] count = new int[100];
+    List<Movie>[] aux = new List[100];
     List<Movie> sortedList = new ArrayList<>();
 
     // Inicializar cada posición de aux con una lista vacía
@@ -73,7 +47,7 @@ public List<Movie> order(List<AbstractMap.SimpleEntry<Movie, Float>> list) {
 
     // Paso 1: Contamos la frecuencia de cada rating y llenamos los buckets
     for (AbstractMap.SimpleEntry<Movie, Float> movie : list) {
-        int index = (int) (movie.getValue() * 10); // Escalamos el rating.
+        int index = (int) (movie.getValue() * 10);
         if (index == -10){
             count[0]++;
             aux[0].add(movie.getKey());
@@ -98,16 +72,15 @@ public List<Movie> order(List<AbstractMap.SimpleEntry<Movie, Float>> list) {
 
 
     public Rating addOrUpdateRating(Rating rating) {
-        // Verificar si ya existe una calificación de este usuario para la película
         Optional<Rating> existingRating = ratingRepository.findByMovieIdAndCustomerId(rating.getMovieId(), rating.getCustomerId());
 
         if (existingRating.isPresent()) {
-            // Si ya existe una calificación, actualízala
+            // Si ya existe una calificación, la actualiza
             Rating existing = existingRating.get();
             existing.setRating(rating.getRating());
             return ratingRepository.save(existing);
         } else {
-            // Si no existe una calificación, guárdala
+            // Si no existe una calificación, la guarda
             return ratingRepository.save(rating);
         }
     }

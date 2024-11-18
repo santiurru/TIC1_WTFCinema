@@ -30,14 +30,14 @@ public class CheckoutController {
     private PurchaseSnackRepository purchaseSnackRepository;
     @Autowired
     private ShowingRepository showingRepository;
-
     @Autowired
     private BookingRepository bookingRepository;
     @Autowired
     SnackRepository snackRepository;
-
     @Autowired
     SeatServices seatServices;
+    @Autowired
+    PurchaseSnackService purchaseSnackServices;
 
     @GetMapping
     public String checkoutPage(Model model) {
@@ -45,27 +45,17 @@ public class CheckoutController {
         WebUser user = userRepository.findByEmail(authentication.getName()).orElse(null);
 
         if (user == null) {
-            return "redirect:/login"; // Redirigir si el usuario no está autenticado
+            return "redirect:/login";
         }
 
-        // Verificar tarjeta de crédito
-        if (user.getExpirationDate() == null || user.getOwnerName() == null) {
-            return "redirect:/api/users/creditCard"; // Redirigir para agregar tarjeta
-        }
-
-        // Obtener reservas y snacks asociados no pagados
         List<Seat> seats = seatRepository.getSeatsByUserIdAndPaid(user.getId(), false);
         List<PurchaseSnack> snacks = purchaseSnackRepository.findByCustomerIdAndPaid(user.getId(), false);
-
-
-
 
         if (seats.isEmpty()) {
             model.addAttribute("error", "No tienes asientos reservados sin pagar.");
             return "User/checkout"; // O muestra un mensaje informativo
         }
 
-        // Obtener booking y showing
         Optional<Booking> bookingOpt = bookingRepository.findById(seats.get(0).getBookingId());
         if (bookingOpt.isEmpty()) {
             model.addAttribute("error", "No se encontró la reserva asociada a los asientos.");
@@ -81,14 +71,12 @@ public class CheckoutController {
 
         Showing showing = showingOpt.get();
 
-        // Calcular costos
         double bookingCost = seats.size() * showing.getTicketPrice();
         double snackCost = snacks.stream()
                 .mapToDouble(snack -> snack.getQuantity() * snackRepository.findById(snack.getSnackId()).orElse(new Snack()).getPrice())
                 .sum();
         double totalCost = bookingCost + snackCost;
 
-        // Marcar asientos y snacks como pagados
         snacks.forEach(snack -> snack.setName(snackRepository.findById(snack.getSnackId()).get().getName()));
         snacks.forEach(snack -> snack.setPrice(snackRepository.findById(snack.getSnackId()).get().getPrice()));
         snacks.forEach(snack -> snack.setTotalPrice(snackRepository.findById(snack.getSnackId()).get().getPrice()*snack.getQuantity()));
@@ -96,11 +84,9 @@ public class CheckoutController {
         seats.forEach(seat -> seat.setPrice(showingRepository.findById(bookingRepository.findById(seat.getBookingId()).get().getShowingId()).get().getTicketPrice()));
 
 
-        // Guardar cambios en la base de datos
         seatRepository.saveAll(seats);
         purchaseSnackRepository.saveAll(snacks);
 
-        // Pasar datos al modelo
         model.addAttribute("user", user);
         model.addAttribute("booking", booking);
         model.addAttribute("seats", seats);
@@ -143,8 +129,14 @@ public class CheckoutController {
         List<PurchaseSnack> snacks = purchaseSnackRepository.findByCustomerIdAndPaid(user.getId(), false);
 
         List<Long> seatsIds = seatRepository.findIdsByUserIdAndPaid(user.getId(), false);
+        List<Long> snackIds = purchaseSnackRepository.findIdsByCustomerIdAndPaid(user.getId(), false);
 
-        seatServices.cancelSeats(seats.get(0).getBookingId(), seatsIds, user.getId());
+        if (!seats.isEmpty()) {
+            seatServices.cancelSeats(seats.get(0).getBookingId(), seatsIds, user.getId());
+        }
+        if (!snacks.isEmpty()) {
+            purchaseSnackServices.cancelPurchases(snacks.get(0).getShowingId(), snackIds, user.getId());
+        }
 
         return "redirect:/api/users/menu";
     }

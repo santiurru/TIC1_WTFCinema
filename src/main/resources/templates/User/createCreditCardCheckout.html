@@ -12,9 +12,9 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-6 mx-auto rounded border p-4">
-            <h1 class="text-center mb-4">Modificar Tarjeta de Credito</h1>
+            <h1 class="text-center mb-4">Ingresar Tarjeta de Credito</h1>
 
-            <form action="/api/users/creditCard" method="post">
+            <form action="/api/users/creditCardCheckout" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                 <!-- Tarjeta de crédito -->
@@ -53,12 +53,10 @@
                     <button type="submit" class="btn btn-primary">Aceptar</button>
                 </div>
             </form>
-
-
-            <!-- Botón de retorno -->
-            <div>
-                <a href="/api/users/menu" class="back-button">Regresar</a>
-            </div>
+            <form action="/api/checkout/cancel" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit">Cancelar Compra</button>
+            </form>
         </div>
     </div>
 </div>

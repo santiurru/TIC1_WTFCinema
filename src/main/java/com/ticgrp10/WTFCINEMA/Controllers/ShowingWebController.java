@@ -50,7 +50,6 @@ public class ShowingWebController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public String createShowing(Showing showing, Model model) {
-        // Verificar disponibilidad de la sala
         long length = movieServices.getMovieById(showing.getMovieId()).getLength();
         boolean isAvailable = showingServices.isRoomAvailable(showing.getRoomId(), showing.getDate(),length);
         if (!isAvailable) {
@@ -61,7 +60,7 @@ public class ShowingWebController {
             return "Showings/createShowing"; // Volver al formulario si la sala no está disponible
         }
 
-        // Si la sala está disponible, crear el showing
+        // Si la sala está disponible, crea el showing
         showingServices.addShowing(showing);
         return "redirect:/showing/home/admin";
     }

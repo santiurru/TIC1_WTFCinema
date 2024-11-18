@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SeatServices {
@@ -40,12 +41,18 @@ public class SeatServices {
             if (!seat.getBookingId().equals(bookingId)) {
                 throw new IllegalArgumentException("El asiento no pertenece a esta reserva.");
             }
-            seatRepo.delete(seat); // Desasociar asiento
+            seatRepo.delete(seat); // Desasocia el asiento
         });
         return true;
     }
 
     public Seat bookSeat(Long bookingId, int row, int column){
+        Optional<Seat> seatOptional = seatRepo.findBySeatColumnAndSeatRowAndBookingId(column, row, bookingId);
+        if (seatOptional.isPresent()){
+            throw new IllegalArgumentException("El asiento ya está ocupado");
+        }
+
+
         Seat seat = new Seat();
         seat.setBookingId(bookingId);
         seat.setSeatColumn(column);

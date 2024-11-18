@@ -65,7 +65,7 @@ public class AdminWebController {
     public String createAdmin(Model model, @Valid @ModelAttribute RegisterDto registerDto, BindingResult result) {
         if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
             result.addError(
-                    new FieldError("registerDto", "confirmPassword", "Password and Confirm Password do not match")
+                    new FieldError("registerDto", "confirmPassword", "La contraseña se escribió diferente la segunda vez")
             );
         }
 
@@ -73,7 +73,7 @@ public class AdminWebController {
         Optional<WebUser> user = repo.findByEmail(registerDto.getEmail());
         if (admin.isPresent() || user.isPresent()) {
             result.addError(
-                    new FieldError("registerDto", "email", "Email address is already used")
+                    new FieldError("registerDto", "email", "Este correo ya tiene una cuenta")
             );
         }
 
@@ -83,7 +83,6 @@ public class AdminWebController {
 
         try {
             var bcryptEncoder = new BCryptPasswordEncoder();
-
             Admin newUser = new Admin();
             newUser.setName(registerDto.getName());
             newUser.setSurname(registerDto.getSurname());
@@ -100,7 +99,7 @@ public class AdminWebController {
             result.addError(new FieldError("registerDto",
                     "name", e.getMessage()));
         }
-        return "redirect:/admin/home"; // Redirige a la lista de administradores después de la creación
+        return "redirect:/admin/home";
     }
 
     @GetMapping("/list")
@@ -174,28 +173,14 @@ public class AdminWebController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/allRatings")
     public String allRatings(Model model){
-//        List<AbstractMap.SimpleEntry<Movie,Float>> res = new ArrayList<>();
-//        List<Movie> allMovies = movieServices.getAll();
-//        for (Movie movie : allMovies){
-//            float ratingTemp = ratingServices.calculateAverageRating(movie.getId());
-//            res.add(new AbstractMap.SimpleEntry<>(movie,ratingTemp));
-//        }
-//
-//        List<Movie> sorted = ratingServices.order(res);
-//
-//
-//        model.addAttribute("movies",sorted);
-
         List<Movie> allMovies = movieServices.getAll();
-
-        // Ordenar las películas por el promedio de ratings
         allMovies.sort((movie1, movie2) -> {
             float avgRating1 = ratingServices.calculateAverageRating(movie1.getId());
             float avgRating2 = ratingServices.calculateAverageRating(movie2.getId());
             return Float.compare(avgRating2, avgRating1); // Descendente
         });
 
-        // Agregar las películas ordenadas al modelo
+        // Agrega las películas ordenadas al modelo
         model.addAttribute("movies", allMovies);
 
         return "Admin/allRatings";

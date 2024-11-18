@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cancelar Asientos</title>
     <style>
-        /* Estilos CSS */
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -34,12 +33,6 @@
             margin: 20px 0;
         }
 
-        .seat-label {
-            display: flex;
-            align-items: center;
-            margin: 5px 0;
-        }
-
         .seat-label input {
             margin-right: 10px;
         }
@@ -55,31 +48,12 @@
         button:hover {
             background-color: #0056b3;
         }
-
-        .message {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
     </style>
 </head>
 <body>
 <div th:replace="~{navbar :: navbar}"></div>
 
 <h2>Cancelar Asientos</h2>
-<!-- Mostrar mensajes flash -->
 <div id="messageContainer"></div>
 
 <!-- Formulario -->
@@ -92,7 +66,7 @@
 
     <div id="seatsContainer">
         <p>Selecciona los asientos:</p>
-        <!-- Asientos cargados dinámicamente -->
+        <!-- Los asientos se cargan dinámicamente -->
     </div>
 
     <button type="submit">Cancelar Asientos</button>
@@ -103,7 +77,6 @@
 </footer>
 
 <script>
-    // JavaScript para manejar la carga dinámica
     document.addEventListener('DOMContentLoaded', () => {
         const bookingSelect = document.getElementById('bookingSelect');
         const seatsContainer = document.getElementById('seatsContainer');
@@ -157,7 +130,6 @@
             }
         });
 
-        // Función para mostrar mensajes
         function showMessage(message, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type === 'success' ? 'success-message' : 'error-message'}`;

@@ -43,14 +43,6 @@ public class ShowingServices {
         if (!roomOptional.isPresent()) {
             throw new IllegalArgumentException("La sala no existe");
         }
-
-//        Optional<Theatre> theatreOptional = theatreRepository.findByRoomId(showing.getRoomId());
-//        if (!theatreOptional.isPresent()){
-//            throw new IllegalArgumentException("El cine no existe");
-//        }
-
-
-
         return showingRepository.save(showing);
     }
 
@@ -58,7 +50,7 @@ public class ShowingServices {
         return showingRepository.findAll();
     }
 
-    //verificar si la sala está libre en el horario
+    //verifica si la sala está libre en el horario
     public boolean isRoomAvailable(long roomId, LocalDateTime date, long length) {
         List<Showing> showings = showingRepository.findShowingsByDateBetweenAndAndRoomId(date,date.plusMinutes(length),roomId);
         return showings.isEmpty();

@@ -31,11 +31,6 @@ public class Theatre {
         this.neighborhood = neighborhood;
     }
 
-
-//    private List<Movie> billboard = new ArrayList<Movie>();
-//
-//    private List<Room> rooms = new ArrayList<Room>();
-
     @Override
     public String toString() {
         return "Theatre{" +

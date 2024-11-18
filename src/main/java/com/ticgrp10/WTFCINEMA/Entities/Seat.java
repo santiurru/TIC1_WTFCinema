@@ -25,7 +25,7 @@ public class Seat {
 
     private LocalDateTime bookingDate;
 
-    private boolean paid;
+    private boolean paid = false;
 
     @Transient
     private float price;
